@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>PCC Mural Sites</name>
+    <description/>
+    <Style id="icon-1509-1A237E-normal">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1509-1A237E-highlight">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1509-1A237E">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1509-1A237E-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1509-1A237E-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Council mural sites.csv</name>
+      <Placemark>
+        <name>Kenepuru Station alleyway</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>DATE MURAL INSTALLED: ?<br>COATING APPLIED (Y/N): Y<br>COATING TYPE: ?<br>DATE COATING APPLIED: ?<br>NOTES: Murals on both walls facing alleyway. ]]></description>
+        <styleUrl>#icon-1509-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="DATE MURAL INSTALLED">
+            <value>?</value>
+          </Data>
+          <Data name="COATING APPLIED (Y/N)">
+            <value>Y</value>
+          </Data>
+          <Data name="COATING TYPE">
+            <value>?</value>
+          </Data>
+          <Data name="DATE COATING APPLIED">
+            <value>?</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Murals on both walls facing alleyway. </value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.838048,-41.1490819,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

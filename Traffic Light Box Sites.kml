@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Traffic Light Box Sites</name>
+    <description/>
+    <Style id="icon-1884-817717-normal">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1884-817717-highlight">
+      <IconStyle>
+        <color>ff177781</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1884-817717">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1884-817717-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1884-817717-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Assets Map- Traffic light boxes.csv.csv</name>
+      <Placemark>
+        <name>Titahi Bay Rd/Wi Neera Dr</name>
+        <description><![CDATA[SUBURB: Prorirua<br>SURFACE DESCRIPTION: Traffic light box<br>NOTES: West side of Titahi Bay Rd]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Prorirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box</value>
+          </Data>
+          <Data name="NOTES">
+            <value>West side of Titahi Bay Rd</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8367668,-41.1247208,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Niagara St/Warspite Ave</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Traffic light box<br>NOTES: 4 Niagara St]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box</value>
+          </Data>
+          <Data name="NOTES">
+            <value>4 Niagara St</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8799393,-41.1286684,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Whitford Brown Ave</name>
+        <description><![CDATA[SUBURB: Aotea<br>SURFACE DESCRIPTION: Traffic light box<br>NOTES: Opposite Woolworths]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Opposite Woolworths</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8673645,-41.1211809,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Grays Rd</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Traffic light box cluster<br>NOTES: Street parking at 3 Grays Rd]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box cluster</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Street parking at 3 Grays Rd</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8689051,-41.0853358,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Steyne Ave/St Andrews Rd</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Traffic light box cluster<br>NOTES: Parking behind 65A Steyne Ave]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box cluster</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Parking behind 65A Steyne Ave</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8682388,-41.0865314,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Acheron Rd</name>
+        <description><![CDATA[SUBURB: Mana<br>SURFACE DESCRIPTION: Traffic light box cluster<br>NOTES: Street parking at Prestige Jayco]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Mana</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box cluster</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Street parking at Prestige Jayco</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8683138,-41.0916799,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>98 Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: Traffic light box cluster<br>NOTES: Parking at the dental surgery]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box cluster</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Parking at the dental surgery</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8693194,-41.0950498,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>10 Pascoe Ave</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: Traffic light box<br>NOTES: ]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8693884,-41.0974989,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Marina View/Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: Traffic light box<br>NOTES: Near 9 Marina View]]></description>
+        <styleUrl>#icon-1884-817717</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Traffic light box</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Near 9 Marina View</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8698662,-41.1006144,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

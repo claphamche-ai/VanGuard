@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Track Tags | Porirua Field Operations</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --safety-yellow: #f1c40f;
+            --action-blue: #2980b9;
+            --white: #ffffff;
+            --black: #000000;
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Arial Black', Gadget, sans-serif; background: #fff; }
+        #map { height: 100vh; width: 100vw; z-index: 1; }
+
+        /* UI CONTROLS */
+        .overlay-ui { position: absolute; z-index: 1000; pointer-events: auto; }
+        
+        .header {
+            top: 10px; left: 10px; background: var(--safety-yellow);
+            padding: 12px; border: 4px solid #000; font-size: 20px; font-weight: bold;
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .layer-list {
+            top: 80px; left: 10px; background: #fff; border: 4px solid #000;
+            padding: 10px; max-height: 40vh; overflow-y: auto; width: 220px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+        }
+        .layer-item { display: flex; align-items: center; margin: 8px 0; font-size: 14px; font-weight: bold; color: #000; }
+        .layer-item input { width: 28px; height: 28px; margin-right: 12px; cursor: pointer; }
+
+        /* WORK PIN STYLE */
+        .work-pin {
+            border: 3px solid #000;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            cursor: pointer !important;
+        }
+
+        /* DATA ENTRY PANEL (SLIDE UP) */
+        #data-panel {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: var(--white); border-top: 10px solid #000;
+            padding: 25px; box-sizing: border-box; z-index: 2000;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
+        }
+        #data-panel.active { bottom: 0; }
+
+        .location-header { 
+            background: #eee; border: 4px solid #000; padding: 18px; 
+            margin-bottom: 20px;
+        }
+        #site-name { font-size: 26px; line-height: 1.1; margin-bottom: 5px; color: #000; }
+        #site-type { font-size: 16px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+
+        .record-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .record-btn {
+            background: var(--action-blue); color: white; border: 4px solid #000;
+            padding: 30px 10px; border-radius: 15px; font-size: 20px; font-weight: bold;
+            text-align: center; text-transform: uppercase; cursor: pointer;
+            box-shadow: 0 4px 0px #000;
+        }
+        .record-btn:active { background: var(--safety-yellow); color: #000; transform: translateY(4px); box-shadow: none; }
+        
+        .close-btn { 
+            background: #000; color: #fff; border: none; padding: 15px; width: 100%; 
+            margin-top: 25px; font-weight: bold; font-size: 18px; border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay-ui header">TRACK TAGS: PORIRUA</div>
+    
+    <div class="overlay-ui layer-list" id="layer-menu">
+        <div style="font-size: 11px; margin-bottom: 8px; color: #555; font-weight: bold;">SELECT OVERLAY TO VIEW</div>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Data Recording Panel -->
+    <div id="data-panel">
+        <div class="location-header">
+            <div id="site-name">LOADING...</div>
+            <div id="site-type">---</div>
+        </div>
+
+        <div class="record-grid">
+            <div class="record-btn" onclick="alert('Action Recorded: CLEAN UP')">CLEAN UP</div>
+            <div class="record-btn" onclick="alert('Action Recorded: INSPECTION')">INSPECT</div>
+            <div class="record-btn" onclick="alert('Action Recorded: LITTER')">LITTER</div>
+            <div class="record-btn" onclick="alert('Camera Launched')">PHOTO</div>
+        </div>
+
+        <button class="close-btn" onclick="closePanel()">CLOSE / CANCEL</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
+
+    <script>
+        // High Contrast Street Map Initialization
+        const map = L.map('map', { zoomControl: true, tap: false }).setView([-41.135, 174.84], 14);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Track Tags'
+        }).addTo(map);
+
+        const config = [
+            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#f1c40f' },
+            { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#e67e22' },
+            { file: 'PCC Underpasses.kml', label: 'Underpasses', color: '#e74c3c' },
+            { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique Paint', color: '#9b59b6' },
+            { file: 'Traffic Light Box Sites.kml', label: 'Traffic Boxes', color: '#2ecc71' },
+            { file: 'Community Buildings.kml', label: 'Comm. Buildings', color: '#1abc9c' },
+            { file: 'PCC Mural Sites.kml', label: 'Murals', color: '#d35400' },
+            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#3498db' },
+            { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e' }
+        ];
+
+        function createWorkLayer(item) {
+            const group = L.geoJson(null);
+            
+            omnivore.kml(item.file, null, group)
+                .on('ready', function() {
+                    this.eachLayer(function(layer) {
+                        // Extract center point for pins
+                        let latlng;
+                        if (layer.getLatLng) {
+                            latlng = layer.getLatLng();
+                        } else if (layer.getBounds) {
+                            latlng = layer.getBounds().getCenter();
+                        }
+
+                        if (latlng) {
+                            const pin = L.marker(latlng, {
+                                icon: L.divIcon({
+                                    className: 'work-pin',
+                                    html: `<div style="background:${item.color}; width:100%; height:100%; border-radius:50%;"></div>`,
+                                    iconSize: [44, 44],
+                                    iconAnchor: [22, 22]
+                                })
+                            });
+
+                            pin.on('click', (e) => {
+                                L.DomEvent.stopPropagation(e);
+                                document.getElementById('site-name').innerText = layer.feature.properties.name || "Unnamed Work Site";
+                                document.getElementById('site-type').innerText = item.label;
+                                document.getElementById('data-panel').classList.add('active');
+                                map.panTo(latlng);
+                            });
+
+                            pin.addTo(map);
+                        }
+                    });
+                })
+                .addTo(map);
+
+            // Toggle Menu UI
+            const menu = document.getElementById('layer-menu');
+            const div = document.createElement('div');
+            div.className = 'layer-item';
+            div.innerHTML = `<input type="checkbox" checked id="chk-${item.label}"> 
+                             <span style="background:${item.color}; padding:2px 6px; border:2px solid #000; display:inline-block; min-width:120px;">${item.label}</span>`;
+            
+            div.querySelector('input').onchange = (e) => {
+                if(e.target.checked) map.addLayer(group); else map.removeLayer(group);
+            };
+            menu.appendChild(div);
+        }
+
+        config.forEach(createWorkLayer);
+
+        function closePanel() { document.getElementById('data-panel').classList.remove('active'); }
+
+    </script>
+</body>
+</html>

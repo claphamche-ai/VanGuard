@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>PCC Off-street Carparks</name>
+    <description/>
+    <Style id="icon-1644-1A237E-normal">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1644-1A237E-highlight">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1644-1A237E">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1644-1A237E-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1644-1A237E-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Council off street carparks.csv</name>
+      <Placemark>
+        <name>5A Bedford Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8638545,-41.1417318,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>186 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8616522,-41.1413444,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Somerset Place</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.860797,-41.1372324,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>51 Hamphsire Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Entrance via 53 Hampshire St. Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Entrance via 53 Hampshire St. Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8615325,-41.1440118,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>25 Wiltshire Place</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8629684,-41.1402355,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>15L Owhiti Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8442096,-41.0988577,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>69L Owhiti Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Off street carpak<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpak</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8423002,-41.0986644,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13C Chaffey Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8439863,-41.1087737,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1A Hiwi Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.831584,-41.1143195,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>165 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Off street carpark<br>NOTES: Litter collection]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Off street carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Litter collection</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.858476,-41.1402366,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Rori Way</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Carpark<br>NOTES: ]]></description>
+        <styleUrl>#icon-1644-1A237E</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8330647,-41.1149566,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
