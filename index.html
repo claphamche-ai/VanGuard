@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v21</title>
-    
+    <title>Track Tags | Field Ops v23</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -12,9 +11,11 @@
             --action-blue: #2980b9;
             --white: #ffffff;
             --black: #1a1a1a;
-            --menu-bg: rgba(20, 20, 20, 0.85); /* Slightly more opaque for readability but still clear */
+            --menu-bg: rgba(20, 20, 20, 0.85);
             --soft-radius: 12px;
             --urgent-red: #ff4757;
+            --minor-orange: #f39c12;
+            --good-green: #2ecc71;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
@@ -26,15 +27,13 @@
             width: 50px; height: 50px; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            transition: opacity 0.5s ease;
         }
         .menu-trigger span { width: 24px; height: 3px; background: var(--black); margin: 2.5px 0; border-radius: 2px; }
 
         .fs-btn {
             position: absolute; top: 15px; right: 15px; z-index: 2000;
             background: #000; color: #fff; padding: 12px 18px; border: 2px solid var(--safety-yellow);
-            border-radius: 12px; font-weight: 900; font-size: 11px; cursor: pointer;
-            text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-radius: 12px; font-weight: 900; font-size: 11px; cursor: pointer; text-transform: uppercase;
         }
 
         .version-tag {
@@ -42,82 +41,57 @@
             color: rgba(255, 255, 255, 0.4); font-size: 10px; font-weight: bold; pointer-events: none;
         }
 
-        /* SIDEBAR FIX */
         #sidebar {
             position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
             background: var(--menu-bg); backdrop-filter: blur(15px);
             z-index: 3000; transition: left 0.4s ease;
-            color: white; padding: 20px; box-sizing: border-box;
-            border-right: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 20px; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.1);
             overflow-y: auto;
         }
         #sidebar.open { left: 0; }
-        .sidebar-close {
-            position: absolute; top: 15px; right: 15px; width: 35px; height: 35px;
-            background: rgba(255,255,255,0.15); color: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-weight: bold; z-index: 3001;
-        }
-
-        .sidebar-header { font-size: 24px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .sidebar-header { font-size: 22px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: flex; align-items: baseline; gap: 8px; }
+        .sidebar-header span.v-label { font-size: 12px; color: rgba(255, 255, 255, 0.5); font-weight: 400; }
         
-        .nav-item {
-            padding: 14px; margin: 8px 0; border-radius: 10px;
-            background: rgba(255,255,255,0.05); cursor: pointer;
-            display: flex; align-items: center; font-weight: 600;
-            transition: background 0.2s;
-        }
-        .nav-item:active { background: rgba(255,255,255,0.15); }
-        .nav-item i { margin-right: 12px; font-style: normal; font-size: 20px; }
+        .nav-item { padding: 14px; margin: 8px 0; border-radius: 10px; background: rgba(255,255,255,0.05); cursor: pointer; display: flex; align-items: center; font-weight: 600; }
+        #layer-container { display: none; margin: 5px 0 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .layer-row { display: flex; align-items: center; margin: 12px 0; font-size: 13px; cursor: pointer; }
 
-        /* LAYER DROPDOWN FIX */
-        #layer-container { 
-            display: none; 
-            margin: 5px 0 15px 0; 
-            padding: 10px; 
-            background: rgba(0,0,0,0.3); 
-            border-radius: 10px;
-        }
-        .layer-row { 
-            display: flex; 
-            align-items: center; 
-            margin: 12px 0; 
-            font-size: 13px; 
-            cursor: pointer;
-        }
-        .layer-row input { 
-            width: 20px; height: 20px; 
-            margin-right: 12px; 
-            accent-color: var(--safety-yellow); 
-            cursor: pointer;
-        }
-        .layer-label-pill { 
-            display: flex; align-items: center; flex-grow: 1;
-        }
-
-        /* SITE INFO BOX */
-        #site-info {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 340px; background: var(--white); border-radius: 20px;
-            z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            overflow: hidden;
-        }
-        .site-photo { width: 100%; height: 140px; background: #333; display: flex; align-items: center; justify-content: center; position: relative; }
-        .close-site { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
-
+        #site-info { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: var(--white); border-radius: 20px; z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; }
         .details-list { padding: 15px 20px; }
         .detail-item { margin-bottom: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; }
         .detail-label { font-size: 9px; font-weight: 800; color: #999; text-transform: uppercase; }
         .detail-value { font-size: 13px; font-weight: 600; color: #222; }
-
         .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 15px 20px 15px; }
-        .action-btn { 
-            background: var(--action-blue); color: white; border: none; padding: 12px 0; 
-            border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; 
-            text-align: center; text-transform: uppercase;
-        }
+        .action-btn { background: var(--action-blue); color: white; border: none; padding: 12px 0; border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; text-align: center; text-transform: uppercase; }
 
-        .ui-hidden { opacity: 0; pointer-events: none; }
+        /* INSPECTION OVERLAY */
+        #inspection-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8f9fa; z-index: 5000; display: none; flex-direction: column;
+            overflow-y: auto; color: #333;
+        }
+        .insp-header { background: #000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .insp-content { padding: 20px; flex-grow: 1; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-weight: 800; font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
+        
+        /* High-Visibility Radio Buttons */
+        .radio-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .radio-grid input { display: none; }
+        .radio-label { 
+            padding: 15px 5px; border-radius: 12px; text-align: center; 
+            font-weight: 900; font-size: 12px; cursor: pointer; border: 2px solid transparent; background: #eee;
+        }
+        input#cond-good:checked + .radio-label { background: var(--good-green); color: white; border-color: #1b8a4f; }
+        input#cond-minor:checked + .radio-label { background: var(--minor-orange); color: white; border-color: #c87f0a; }
+        input#cond-urgent:checked + .radio-label { background: var(--urgent-red); color: white; border-color: #b3323e; }
+
+        .insp-input, .insp-textarea { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; }
+        .insp-textarea { height: 100px; resize: none; }
+
+        .photo-btn { background: #e2e8f0; border: 2px dashed #cbd5e0; padding: 30px; border-radius: 12px; text-align: center; cursor: pointer; }
+
+        .submit-insp { background: var(--safety-yellow); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; margin-top: 10px; }
         .van-marker { font-size: 38px; text-shadow: 2px 2px 0px #000; }
     </style>
 </head>
@@ -128,30 +102,23 @@
     </div>
 
     <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v21</div>
+    <div class="version-tag">TRACK TAGS v23</div>
 
     <div id="sidebar">
-        <div class="sidebar-close" onclick="closeSidebar()">✕</div>
-        <div class="sidebar-header">TRACK TAGS</div>
-        
+        <div class="sidebar-header">TRACK TAGS <span class="v-label">v23</span></div>
         <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
         <div id="layer-container"></div>
-        
         <div class="nav-item" onclick="alert('Opening Job Bank...')"><i>📋</i> Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode...')"><i>➕</i> Add Site</div>
-        
-        <div style="margin-top: 30px; padding: 10px; font-size: 12px; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.1);">
-            Logged in: Field Ops
-        </div>
         <div class="nav-item" style="color: var(--urgent-red);" onclick="location.reload()"><i>🚪</i> Log Out</div>
     </div>
 
     <div id="map"></div>
 
     <div id="site-info">
-        <div class="site-photo">
-            <div class="close-site" onclick="document.getElementById('site-info').style.display='none'">✕</div>
-            <div style="font-size:40px; color:#555;">📸</div>
+        <div style="height:140px; background:#333; position:relative; display:flex; align-items:center; justify-content:center;">
+            <div style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:white; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer;" onclick="document.getElementById('site-info').style.display='none'">✕</div>
+            <div style="font-size:40px;">📸</div>
         </div>
         <div class="details-list">
             <div class="detail-item"><div class="detail-label">Name</div><div id="s-name" class="detail-value">--</div></div>
@@ -160,9 +127,53 @@
             <div class="detail-item"><div class="detail-label">Last Inspected</div><div id="s-date" class="detail-value">--</div></div>
         </div>
         <div class="action-grid">
-            <button class="action-btn" onclick="alert('Inspection Logged')">Inspection</button>
+            <button class="action-btn" onclick="openInspection()">Inspection</button>
             <button class="action-btn" onclick="alert('Work Logged')">Log Work</button>
             <button class="action-btn" onclick="alert('Loading History')">History</button>
+        </div>
+    </div>
+
+    <!-- New Inspection Overlay -->
+    <div id="inspection-overlay">
+        <div class="insp-header">
+            <span style="font-weight:900; font-size:20px;">SITE INSPECTION</span>
+            <button onclick="closeInspection()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+        </div>
+        <div class="insp-content">
+            <div class="form-group">
+                <label class="form-label">Site Reference</label>
+                <div id="insp-site-display" style="font-weight:bold; font-size:18px;">--</div>
+                <div id="insp-gps-display" style="font-size:11px; color:#888;">GPS: Identifying...</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Surface Condition</label>
+                <div class="radio-grid">
+                    <input type="radio" name="condition" id="cond-good" value="Good" checked>
+                    <label for="cond-good" class="radio-label">GOOD</label>
+                    
+                    <input type="radio" name="condition" id="cond-minor" value="Minor">
+                    <label for="cond-minor" class="radio-label">MINOR</label>
+                    
+                    <input type="radio" name="condition" id="cond-urgent" value="Urgent">
+                    <label for="cond-urgent" class="radio-label">URGENT</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Photos (Select Multiple)</label>
+                <input type="file" id="photo-upload" multiple accept="image/*" style="display:none;" onchange="updatePhotoCount()">
+                <div class="photo-btn" onclick="document.getElementById('photo-upload').click()">
+                    <span id="photo-status" style="font-size:14px; font-weight:bold; color:#4a5568;">📷 Tap to Add Photos</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Field Notes / Comments</label>
+                <textarea id="insp-comments" class="insp-textarea" placeholder="Describe findings..."></textarea>
+            </div>
+
+            <button class="submit-insp" onclick="submitInspection()">SUBMIT REPORT</button>
         </div>
     </div>
 
@@ -173,37 +184,43 @@
         const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        let van = null;
-        let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
+        let vanPos = { lat: 0, lng: 0 };
+        let activeSite = {};
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition((pos) => {
-                const loc = [pos.coords.latitude, pos.coords.longitude];
-                if (!van) {
-                    van = L.marker(loc, { icon: L.divIcon({ className: 'van-marker', html: '🚐', iconSize: [40, 40], iconAnchor: [20, 20] }) }).addTo(map);
-                } else { van.setLatLng(loc); }
-                trail.addLatLng(loc);
+                vanPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             }, null, {enableHighAccuracy: true});
         }
 
-        let idleTimer;
-        function startIdleTimer() {
-            document.getElementById('menu-trigger').classList.remove('ui-hidden');
-            clearTimeout(idleTimer);
-            idleTimer = setTimeout(() => {
-                if (!document.getElementById('sidebar').classList.contains('open')) document.getElementById('menu-trigger').classList.add('ui-hidden');
-            }, 5000);
-        }
-        ['mousedown', 'touchstart', 'mousemove'].forEach(e => window.addEventListener(e, startIdleTimer));
-        startIdleTimer();
-
         function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); startIdleTimer(); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
         
-        function toggleLayers() { 
-            const el = document.getElementById('layer-container');
-            const isOpen = el.style.display === 'block';
-            el.style.display = isOpen ? 'none' : 'block';
+        function openInspection() {
+            document.getElementById('inspection-overlay').style.display = 'flex';
+            document.getElementById('insp-site-display').innerText = activeSite.name;
+            document.getElementById('insp-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
+            document.getElementById('site-info').style.display = 'none';
+        }
+
+        function closeInspection() { document.getElementById('inspection-overlay').style.display = 'none'; }
+
+        function updatePhotoCount() {
+            const count = document.getElementById('photo-upload').files.length;
+            document.getElementById('photo-status').innerText = count > 0 ? `✅ ${count} Photos Selected` : "📷 Tap to Add Photos";
+        }
+
+        function submitInspection() {
+            const cond = document.querySelector('input[name="condition"]:checked').value;
+            const comments = document.getElementById('insp-comments').value;
+            const photos = document.getElementById('photo-upload').files.length;
+
+            const body = `INSPECTION REPORT%0D%0A-------------------%0D%0ASite: ${activeSite.name}%0D%0ACondition: ${cond}%0D%0AGPS: ${vanPos.lat}, ${vanPos.lng}%0D%0APhotos attached in device: ${photos}%0D%0A%0D%0AComments: ${comments}`;
+            
+            window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection: ${activeSite.name} [${cond}]&body=${body}`;
+            
+            alert("Report Prepared. If using a field device, attach your selected photos to the email before sending.");
+            closeInspection();
         }
 
         const config = [
@@ -231,8 +248,7 @@
                 onEachFeature: (feat, layer) => {
                     if (item.isPath && feat.geometry.type === "LineString") {
                         const coords = feat.geometry.coordinates;
-                        const midIndex = Math.floor(coords.length / 2);
-                        const midPoint = [coords[midIndex][1], coords[midIndex][0]];
+                        const midPoint = [coords[Math.floor(coords.length / 2)][1], coords[Math.floor(coords.length / 2)][0]];
                         L.marker(midPoint, {
                             icon: L.divIcon({
                                 className: 'marker-icon',
@@ -250,27 +266,25 @@
             const row = document.createElement('div');
             row.className = 'layer-row';
             row.innerHTML = `<input type="checkbox" checked> <div class="layer-label-pill"><span>${item.icon}</span> <span style="margin-left:10px;">${item.label}</span></div>`;
-            row.onclick = (e) => {
-                const cb = row.querySelector('input');
-                if (e.target !== cb) cb.checked = !cb.checked;
+            row.onclick = () => {
+                const cb = row.querySelector('input'); cb.checked = !cb.checked;
                 if(cb.checked) map.addLayer(group); else map.removeLayer(group);
             };
             container.appendChild(row);
         }
 
         function showSite(feat, item) {
-            document.getElementById('s-name').innerText = feat.properties.name || "Unnamed Site";
-            document.getElementById('s-addr').innerText = feat.properties.address || "No address provided";
+            activeSite = { name: feat.properties.name || "Unnamed Site", addr: feat.properties.address || "Porirua" };
+            document.getElementById('s-name').innerText = activeSite.name;
+            document.getElementById('s-addr').innerText = activeSite.addr;
             document.getElementById('s-type').innerText = item.label;
             document.getElementById('s-date').innerText = (Math.floor(Math.random() * 60)) + " days ago";
             document.getElementById('site-info').style.display = 'block';
         }
 
         config.forEach(loadLayer);
-        function toggleFS() {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-            else document.exitFullscreen();
-        }
+        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function toggleLayers() { const el = document.getElementById('layer-container'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
     </script>
 </body>
 </html>
