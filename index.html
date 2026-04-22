@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TrackTags | Field Ops v2.3</title>
+    <title>Track Tags | Field Ops v35</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,38 +15,29 @@
         <span></span><span></span><span></span>
     </div>
 
-    <!-- Full Screen and GPS buttons explicitly positioned -->
-    <button id="fs-btn" class="map-control-btn fs-btn" onclick="toggleFS()">🔲 FULL SCREEN</button>
-    <button id="gps-btn" class="map-control-btn gps-btn" onclick="centerGPS()">📍</button>
-
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
-        <div class="sidebar-header" style="clear:both;">TrackTags</div>
-        <div class="sidebar-version">Version 2.3</div>
-        <div id="menu-clock" class="sidebar-clock">--</div>
-        
-        <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
-        <div id="layer-container" class="layer-list" style="display:none;"></div>
-        <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
-        <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
+        <div class="sidebar-header" style="clear:both;">TRACK TAGS</div>
+        <div class="nav-item" onclick="alert('Map Layers coming soon')">🗺️ Map Layers</div>
+        <div class="nav-item" onclick="alert('Job Bank coming soon')">📋 Job Bank</div>
         <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
     </div>
 
     <div id="map"></div>
+    
+    <!-- Manual GPS Center Button -->
+    <button id="gps-btn" onclick="centerGPS()">📍</button>
 
     <div id="site-info">
         <div class="info-header">
             <span id="s-name">Select Site</span>
             <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
         </div>
-        <div class="info-body">
-            <div style="font-size:12px; color:#666; margin-bottom:10px;">Type: <span id="s-type">--</span></div>
-        </div>
         <div class="action-grid">
             <button class="action-btn blue" onclick="openOverlay('inspection')">Inspection</button>
             <button class="action-btn blue" onclick="openOverlay('work')">Log Work</button>
-            <button class="action-btn gray" onclick="alert('History View Coming Soon')">History</button>
-            <button class="action-btn green" onclick="alert('Add Site Mode Active')">Add Site</button>
+            <button class="action-btn gray" onclick="alert('History...')">History</button>
+            <button class="action-btn green" onclick="alert('Add Site...')">Add Site</button>
         </div>
     </div>
 
@@ -55,8 +46,8 @@
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             <div class="photo-grid">
-                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
-                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>
+                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE</div>
+                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER</div>
             </div>
             <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
             <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
@@ -75,7 +66,6 @@
                 <option value="Sticker">Sticker / Poster</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
-            
             <label class="label">Surface</label>
             <select id="work-surface" onchange="handleDropdown(this)">
                 <option value="">Select...</option>
@@ -87,7 +77,6 @@
                 <option value="Glass">Glass</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
-
             <label class="label">Property Type</label>
             <select id="work-property" onchange="handleDropdown(this)">
                 <option value="">Select...</option>
@@ -98,10 +87,6 @@
                 <option value="Underpass">Underpass</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
-            
-            <textarea id="work-desc" class="textarea" placeholder="Work Description..."></textarea>
-            <textarea id="work-materials" class="textarea" placeholder="Materials Used..."></textarea>
-
             <div class="footer-btns">
                 <button id="pause-work-btn" class="btn-pause" disabled onclick="pauseJob()">Pause</button>
                 <button id="submit-work-btn" class="btn-submit" disabled onclick="submitWork()">Submit</button>
@@ -114,28 +99,17 @@
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             <div class="photo-grid">
-                <div id="btn-insp-start" class="photo-box" onclick="document.getElementById('photo-insp-start').click()">📸 START<br><small id="time-insp-start" style="font-weight:normal;">Take photo to start</small></div>
-                <div id="btn-insp-end" class="photo-box" onclick="document.getElementById('photo-insp-end').click()">📷 END<br><small id="time-insp-end" style="font-weight:normal;">(Walk length)</small></div>
+                <div id="btn-insp-start" class="photo-box" onclick="document.getElementById('photo-insp-start').click()">📸 START</div>
+                <div id="btn-insp-end" class="photo-box" onclick="document.getElementById('photo-insp-end').click()">📷 END</div>
             </div>
             <input type="file" id="photo-insp-start" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('start')">
             <input type="file" id="photo-insp-end" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('end')">
-            
-            <button class="extra-photo-btn" onclick="document.getElementById('photo-insp-extra').click()">➕ Add Mid-Job Photo</button>
-            <div id="insp-extra-count" class="extra-label">0 extra photos</div>
-            <input type="file" id="photo-insp-extra" multiple style="display:none;" onchange="updateExtraCount('insp')">
-
-            <textarea id="insp-notes" class="textarea" placeholder="Inspection Notes..."></textarea>
-            
+            <textarea id="insp-notes" class="textarea" placeholder="Notes..."></textarea>
             <div class="footer-btns">
                 <button id="pause-insp-btn" class="btn-pause" disabled onclick="pauseInsp()">Pause</button>
                 <button id="submit-insp-btn" class="btn-submit" disabled onclick="submitInsp()">Submit</button>
             </div>
         </div>
-    </div>
-
-    <div id="jobbank-overlay" class="full-overlay">
-        <div class="form-header"><span>JOB BANK</span><button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
-        <div class="form-content" id="job-bank-list"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

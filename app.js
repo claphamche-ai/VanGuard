@@ -1,40 +1,17 @@
 
 let timerInterval;
-let activeSite = { name: "", type: "" };
-let layers = {};
-
-// Work & Insp States
-let workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
-let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
-
-// Update Menu Clock
-function updateClock() {
-    const now = new Date();
-    document.getElementById('menu-clock').innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' });
-}
-updateClock();
-setInterval(updateClock, 1000);
+let activeSite = { name: "" };
 
 const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// Breadcrumb Trail
-let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
-
-// GPS Tracking
+// GPS Tracking - Fixed for Mobile
+// setView: false prevents the map from constantly snapping back to the van
 map.locate({setView: false, watch: true, enableHighAccuracy: true});
-let userMarker = L.marker([0,0], { 
-    icon: L.divIcon({ 
-        className: 'van-icon', 
-        html: '<div style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center;">🚐</div>', 
-        iconSize: [40,40], 
-        iconAnchor: [20,20] 
-    }) 
-}).addTo(map);
+let userMarker = L.circleMarker([0,0], {radius: 8, color: '#fff', weight: 2, fillColor: '#3388ff', fillOpacity: 1}).addTo(map);
 
 map.on('locationfound', e => { 
     userMarker.setLatLng(e.latlng); 
-    trail.addLatLng(e.latlng);
 });
 
 function centerGPS() {
@@ -46,92 +23,41 @@ function centerGPS() {
     }
 }
 
-function toggleFS() {
-    const doc = window.document;
-    const docEl = doc.documentElement;
-    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-    
-    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-        requestFullScreen.call(docEl);
-        document.getElementById('fs-btn').innerText = "🗗 EXIT FS";
-    } else {
-        cancelFullScreen.call(doc);
-        document.getElementById('fs-btn').innerText = "🔲 FULL SCREEN";
-    }
-}
-
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
-function toggleLayerList() {
-    const el = document.getElementById('layer-container');
-    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-}
-
-function toggleLayer(name, show) {
-    if(show) {
-        map.addLayer(layers[name]);
-    } else {
-        map.removeLayer(layers[name]);
-    }
-}
-
 function openOverlay(type) { 
-    document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
     document.getElementById(type + '-overlay').style.display = 'flex'; 
     document.querySelectorAll('.site-display').forEach(el => el.innerText = activeSite.name);
-    document.getElementById('site-info').style.display = 'none';
-    if(type === 'jobbank') renderJobBank();
 }
 function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
-// Live Timer Logic
-function startLiveTimer(startTime, offset = 0) {
-    clearInterval(timerInterval);
-    const widget = document.getElementById('live-timer-widget');
-    widget.style.display = 'block';
-    timerInterval = setInterval(() => {
-        const totalSecs = Math.floor((new Date() - startTime + offset) / 1000);
-        const m = Math.floor(totalSecs / 60); 
-        const s = totalSecs % 60;
-        widget.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
-}
-function stopLiveTimer() {
-    clearInterval(timerInterval);
-    document.getElementById('live-timer-widget').style.display = 'none';
-}
-
 function handleWorkPhoto(step) {
-    const now = new Date();
     document.getElementById('btn-' + step).classList.add('done');
-    document.getElementById('time-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
-    
     if(step === 'before') {
-        workState.startTime = now;
-        workState.hasBefore = true;
+        const start = new Date();
+        document.getElementById('live-timer-widget').style.display = 'block';
         document.getElementById('pause-work-btn').disabled = false;
-        startLiveTimer(now, workState.accumulated);
-    } else {
-        workState.hasAfter = true;
-        document.getElementById('submit-work-btn').disabled = false;
-    }
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const diff = Math.floor((new Date() - start)/1000);
+            const m = Math.floor(diff/60); const s = diff%60;
+            document.getElementById('live-timer-widget').innerText = m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
+        }, 1000);
+    } else { document.getElementById('submit-work-btn').disabled = false; }
 }
 
 function handleInspPhoto(step) {
-    const now = new Date();
     document.getElementById('btn-insp-' + step).classList.add('done');
-    document.getElementById('time-insp-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
-    
     if(step === 'start') {
-        inspState.startTime = now;
-        inspState.hasStart = true;
+        const start = new Date();
+        document.getElementById('live-timer-widget').style.display = 'block';
         document.getElementById('pause-insp-btn').disabled = false;
-        startLiveTimer(now, inspState.accumulated);
-    } else {
-        inspState.hasEnd = true;
-        document.getElementById('submit-insp-btn').disabled = false;
-    }
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const diff = Math.floor((new Date() - start)/1000);
+            document.getElementById('live-timer-widget').innerText = Math.floor(diff/60).toString().padStart(2,'0') + ":" + (diff%60).toString().padStart(2,'0');
+        }, 1000);
+    } else { document.getElementById('submit-insp-btn').disabled = false; }
 }
 
 function handleDropdown(el) {
@@ -148,179 +74,59 @@ function handleDropdown(el) {
 
 function updateExtraCount(type) {
     const input = document.getElementById('photo-'+type+'-extra');
-    document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos added";
-    document.getElementById(type+'-extra-count').style.color = '#2ecc71';
-}
-
-function pauseJob() {
-    const elapsed = new Date() - workState.startTime;
-    const pausedJob = { site: activeSite.name, type: 'WORK', accumulated: workState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
-    let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-    bank.unshift(pausedJob);
-    localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-    
-    stopLiveTimer();
-    closeOverlay('work');
+    document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos";
 }
 
 function submitWork() {
-    const totalMs = (new Date() - workState.startTime) + workState.accumulated;
-    const mins = Math.round(totalMs / 60000);
-    const med = document.getElementById('work-medium').value;
-    const sur = document.getElementById('work-surface').value;
+    const medium = document.getElementById('work-medium').value;
+    const surface = document.getElementById('work-surface').value;
     const prop = document.getElementById('work-property').value;
     
-    if(!med || !sur || !prop) { alert("Please complete dropdown selections."); return; }
+    if(!medium || !surface || !prop) { alert("Please complete all dropdown selections."); return; }
     
-    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0AMedium: ${med}%0D%0ASurface: ${sur}%0D%0AProperty: ${prop}`;
+    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0AMedium: ${medium}%0D%0ASurface: ${surface}%0D%0AProperty: ${prop}`;
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
-    
-    stopLiveTimer();
     closeOverlay('work');
-}
-
-function pauseInsp() {
-    const elapsed = new Date() - inspState.startTime;
-    const pausedJob = { site: activeSite.name, type: 'INSPECTION', accumulated: inspState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
-    let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-    bank.unshift(pausedJob);
-    localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-    
-    stopLiveTimer();
-    closeOverlay('inspection');
+    document.getElementById('live-timer-widget').style.display = 'none';
+    clearInterval(timerInterval);
 }
 
 function submitInsp() {
-    const totalMs = (new Date() - inspState.startTime) + inspState.accumulated;
-    const mins = Math.round(totalMs / 60000);
     const notes = document.getElementById('insp-notes').value;
-    
-    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
+    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ANotes: ${notes}`;
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection Log: ${activeSite.name}&body=${body}`;
-    
-    stopLiveTimer();
     closeOverlay('inspection');
+    document.getElementById('live-timer-widget').style.display = 'none';
+    clearInterval(timerInterval);
 }
 
-function renderJobBank() {
-    const list = document.getElementById('job-bank-list');
-    const data = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-    if (data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666;">No paused jobs.</p>'; return; }
-    list.innerHTML = data.map((item, i) => `
-        <div style="background:#f1f2f6; margin-bottom:10px; padding:15px; border-radius:10px; cursor:pointer;" onclick="resumeAny(${i})">
-            <strong style="color:#2980b9;">${item.type}</strong>: ${item.site}<br>
-            <small style="color:#666;">Paused: ${item.pausedAt}</small>
-        </div>`).join('');
-}
-
-function resumeAny(index) {
-    let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-    const job = bank[index];
-    activeSite.name = job.site;
-    
-    if (job.type === 'INSPECTION') {
-        inspState.startTime = new Date();
-        inspState.accumulated = job.accumulated;
-        inspState.hasStart = true;
-        document.getElementById('btn-insp-start').classList.add('done');
-        document.getElementById('time-insp-start').innerText = "RESUMED";
-        openOverlay('inspection');
-        startLiveTimer(inspState.startTime, inspState.accumulated);
-    } else {
-        workState.startTime = new Date();
-        workState.accumulated = job.accumulated;
-        workState.hasBefore = true;
-        document.getElementById('btn-before').classList.add('done');
-        document.getElementById('time-before').innerText = "RESUMED";
-        openOverlay('work');
-        startLiveTimer(workState.startTime, workState.accumulated);
-    }
-    
-    bank.splice(index, 1);
-    localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-}
-
-// KML Config with Specific Icons
 const config = [
-    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
-    { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
-    { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
-    { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
-    { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
-    { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
-    { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
-    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
-    { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
+    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff' },
+    { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f' },
+    { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c' },
+    { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6' },
+    { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71' },
+    { file: 'Community Buildings.kml', label: 'Community', color: '#3498db' },
+    { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400' },
+    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000' },
+    { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e' }
 ];
 
-const container = document.getElementById('layer-container');
-
 config.forEach(item => {
-    // 1. Build Layer List synchronously so menu works immediately
-    const div = document.createElement('div');
-    div.className = 'layer-item';
-    div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
-    container.appendChild(div);
-
-    // 2. Initialize Layer Group
-    const group = L.featureGroup();
-    layers[item.label] = group;
-
-    // 3. Configure Omnivore Custom Layer (Points and Line/Polygon clicks)
-    const customLayer = L.geoJson(null, {
-        style: function(feature) {
-            return { color: item.color, weight: 6, opacity: 0.7 };
-        },
-        pointToLayer: function(feature, latlng) {
-            return L.marker(latlng, {
-                icon: L.divIcon({
-                    className: 'custom-div-icon',
-                    html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
-                    iconSize: [38, 38],
-                    iconAnchor: [19, 19]
-                })
-            });
-        },
-        onEachFeature: function(feature, layer) {
-            layer.on('click', function(e) {
-                L.DomEvent.stopPropagation(e);
-                activeSite.name = feature.properties.name || "Unknown Site";
-                activeSite.type = item.label;
-                document.getElementById('s-name').innerText = activeSite.name;
-                document.getElementById('s-type').innerText = activeSite.type;
-                document.getElementById('site-info').style.display = 'block';
-            });
-        }
+    const group = L.geoJson(null, {
+        pointToLayer: (f, ll) => L.marker(ll, {
+            icon: L.divIcon({
+                className: 'm-icon',
+                html: `<div style="background:${item.color}; width:20px; height:20px;"></div>`,
+                iconSize: [20, 20]
+            })
+        }),
+        onEachFeature: (f, l) => l.on('click', (e) => {
+            L.DomEvent.stopPropagation(e);
+            activeSite.name = f.properties.name || "Unknown";
+            document.getElementById('s-name').innerText = activeSite.name;
+            document.getElementById('site-info').style.display = 'block';
+        })
     });
-
-    // 4. Load KML and extract centers for Polygons/Lines
-    const runLayer = omnivore.kml(encodeURI(item.file), null, customLayer);
-    
-    runLayer.on('ready', function() {
-        runLayer.eachLayer(function(layer) {
-            if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                const center = layer.getBounds().getCenter();
-                const centerMarker = L.marker(center, {
-                    icon: L.divIcon({
-                        className: 'custom-div-icon',
-                        html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
-                        iconSize: [38, 38],
-                        iconAnchor: [19, 19]
-                    })
-                });
-                centerMarker.on('click', function(e) {
-                    L.DomEvent.stopPropagation(e);
-                    activeSite.name = layer.feature.properties.name || "Unknown Area";
-                    activeSite.type = item.label;
-                    document.getElementById('s-name').innerText = activeSite.name;
-                    document.getElementById('s-type').innerText = activeSite.type;
-                    document.getElementById('site-info').style.display = 'block';
-                });
-                group.addLayer(centerMarker);
-            }
-        });
-        map.addLayer(group);
-    });
-    
-    group.addLayer(runLayer);
+    omnivore.kml(item.file, null, group).addTo(map);
 });
