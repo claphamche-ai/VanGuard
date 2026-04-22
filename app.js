@@ -1,9 +1,4 @@
 
-const BRAND_NAME = "VanGuard";
-
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.4b`;
-document.getElementById('brand-name').innerText = BRAND_NAME;
-
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
@@ -245,9 +240,7 @@ function resumeAny(index) {
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
 }
 
-// ==============================================================
-// ORIGINAL KML NAMES RESTORED - DO NOT RENAME YOUR FILES
-// ==============================================================
+// KML Config with Specific Icons
 const config = [
     { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
     { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
@@ -263,14 +256,17 @@ const config = [
 const container = document.getElementById('layer-container');
 
 config.forEach(item => {
+    // 1. Build Layer List synchronously so menu works immediately
     const div = document.createElement('div');
     div.className = 'layer-item';
     div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
     container.appendChild(div);
 
+    // 2. Initialize Layer Group
     const group = L.featureGroup();
     layers[item.label] = group;
 
+    // 3. Configure Omnivore Custom Layer (Points and Line/Polygon clicks)
     const customLayer = L.geoJson(null, {
         style: function(feature) {
             return { color: item.color, weight: 6, opacity: 0.7 };
@@ -297,9 +293,8 @@ config.forEach(item => {
         }
     });
 
-    // Safely encode the URL to handle spaces and '&' symbols
-    const safeURL = encodeURI(item.file).replace(/&/g, '%26');
-    const runLayer = omnivore.kml(safeURL, null, customLayer);
+    // 4. Load KML and extract centers for Polygons/Lines
+    const runLayer = omnivore.kml(encodeURI(item.file), null, customLayer);
     
     runLayer.on('ready', function() {
         runLayer.eachLayer(function(layer) {
