@@ -34,7 +34,22 @@ body, html { margin:0; padding:0; height:100%; font-family:sans-serif; backgroun
 .layer-item { display:flex; align-items:center; margin-bottom:10px; }
 .layer-item input { margin-right:10px; width:18px; height:18px; }
 
-#site-info { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:95%; max-width:400px; background:#fff; border-radius:15px; z-index:1500; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.4); overflow: hidden; }
+/* CENTERED SITE INFO CARD */
+#site-info { 
+    position:fixed; 
+    top:50%; 
+    left:50%; 
+    transform:translate(-50%, -50%); 
+    width:95%; 
+    max-width:400px; 
+    background:#fff; 
+    border-radius:15px; 
+    z-index:1500; 
+    display:none; 
+    box-shadow:0 10px 30px rgba(0,0,0,0.4); 
+    overflow: hidden; 
+}
+
 .info-header { padding:12px 15px; background:#000; color:#fff; display:flex; justify-content:space-between; font-weight:bold; font-size:16px; }
 
 /* INFO BODY - PHOTO AND FIELDS */

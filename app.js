@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.9`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.10`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -99,7 +99,6 @@ function handleCoverPhoto(input) {
     }
 }
 
-// Live Timer Logic
 function startLiveTimer(startTime, offset = 0) {
     clearInterval(timerInterval);
     const widget = document.getElementById('live-timer-widget');
@@ -304,7 +303,6 @@ config.forEach(item => {
                 document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
                 document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
 
-                // Reset cover photo logic on click
                 const coverFrame = document.getElementById('cover-photo-frame');
                 coverFrame.style.backgroundImage = '';
                 coverFrame.classList.remove('has-photo');
@@ -343,7 +341,6 @@ config.forEach(item => {
                     document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
                     document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
 
-                    // Reset cover photo logic on click
                     const coverFrame = document.getElementById('cover-photo-frame');
                     coverFrame.style.backgroundImage = '';
                     coverFrame.classList.remove('has-photo');
