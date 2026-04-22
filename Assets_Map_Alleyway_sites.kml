@@ -1,0 +1,5145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name><![CDATA[PCC Alleyway & Footpath Sites]]></name>
+    <description/>
+    <Style id="icon-1899-673AB7-normal">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1899-673AB7-highlight">
+      <IconStyle>
+        <color>ffb73a67</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1899-673AB7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-673AB7-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-673AB7-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-673AB7-3131-normal">
+      <LineStyle>
+        <color>ffb73a67</color>
+        <width>3.131</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-673AB7-3131-highlight">
+      <LineStyle>
+        <color>ffb73a67</color>
+        <width>4.6965</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-673AB7-3131">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-673AB7-3131-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-673AB7-3131-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-000000-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff000000</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c000000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-000000-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff000000</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c000000</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-000000-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-000000-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-000000-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-0097A7-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffa79700</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca79700</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-0097A7-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffa79700</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca79700</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-0097A7-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-0097A7-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-0097A7-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-0288D1-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-0288D1-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-0288D1-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-0288D1-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-0288D1-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-097138-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff387109</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c387109</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-097138-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff387109</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c387109</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-097138-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-097138-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-097138-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-673AB7-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffb73a67</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb73a67</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-673AB7-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffb73a67</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb73a67</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-673AB7-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-673AB7-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-673AB7-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-757575-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff757575</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c757575</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-757575-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff757575</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c757575</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-757575-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-757575-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-757575-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-9FA8DA-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffdaa89f</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cdaa89f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-9FA8DA-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffdaa89f</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cdaa89f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-9FA8DA-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-9FA8DA-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-9FA8DA-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-A52714-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff1427a5</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c1427a5</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-A52714-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff1427a5</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c1427a5</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-A52714-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-A52714-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-A52714-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-BCAAA4-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffa4aabc</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca4aabc</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-BCAAA4-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffa4aabc</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca4aabc</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-BCAAA4-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-BCAAA4-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-BCAAA4-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-C2185B-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff5b18c2</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5b18c2</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-C2185B-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff5b18c2</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5b18c2</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-C2185B-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-C2185B-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-C2185B-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F48FB1-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffb18ff4</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb18ff4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-F48FB1-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffb18ff4</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb18ff4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-F48FB1-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F9A825-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff25a8f9</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c25a8f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-F9A825-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff25a8f9</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c25a8f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-F9A825-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F9A825-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F9A825-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FADA80-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff80dafa</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c80dafa</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-FADA80-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff80dafa</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c80dafa</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-FADA80-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FADA80-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FADA80-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FBC02D-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff2dc0fb</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2dc0fb</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-FBC02D-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff2dc0fb</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2dc0fb</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-FBC02D-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FBC02D-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FBC02D-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Alleyway sites.csv</name>
+      <Placemark>
+        <name>130 Paremata Rd</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: High level walkway<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level walkway</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8764334,-41.1031528,0
+            174.8769939,-41.1034438,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>134 Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8688004,-41.092545,0
+            174.8689103,-41.0929472,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>62 Kiriwai Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Runs from Kiriwai Rd to Paremata Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from Kiriwai Rd to Paremata Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8705103,-41.1050289,0
+            174.8702931,-41.1052128,0
+            174.8694696,-41.1049723,0
+            174.869306,-41.1052836,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>12 Livet Place</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Runs from Livet Pl to Doncaster Tce]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from Livet Pl to Doncaster Tce</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8708571,-41.1116675,0
+            174.8710395,-41.1120232,0
+            174.8723055,-41.1121363,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>43 Kinloch Place</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8655468,-41.1152673,0
+            174.8665714,-41.1149197,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Doon Grove</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8649618,-41.1080885,0
+            174.8645621,-41.1085452,0
+            174.865112,-41.1089898,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Yarrow Place</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via the Tricky Way walk]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via the Tricky Way walk</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8667942,-41.1146223,0
+            174.867497,-41.1150184,0
+            174.8676204,-41.1154468,0
+            174.8681836,-41.1157499,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>49 Bayview Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Colemans Track]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Colemans Track</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8759712,-41.1045496,0
+            174.8753315,-41.1045052,0
+            174.8749372,-41.1043283,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>124 Pope Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.868868,-41.0883226,0
+            174.8695681,-41.0876898,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>16 Lagden Steet</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Lagden Reserve]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Lagden Reserve</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8730683,-41.08661,0
+            174.872674,-41.0872003,0
+            174.872733,-41.087358,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>22 Lagden Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8721161,-41.0878452,0
+            174.8717084,-41.0876713,0
+            174.8716789,-41.0872993,0
+            174.8715501,-41.0872144,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>25 Lagden Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Alleyway to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Alleyway to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8717195,-41.0883797,0
+            174.8717034,-41.0884828,0
+            174.8712206,-41.0883939,0
+            174.8710731,-41.0885455,0
+            174.8711643,-41.0887254,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>40 Bodmin Terrace</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8761699,-41.0892593,0
+            174.8770765,-41.0893684,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>45 Bodmin Terrace</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8751319,-41.0887377,0
+            174.8748127,-41.0891663,0
+            174.8747322,-41.0893361,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>40 Truro Road</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8736655,-41.0909549,0
+            174.8735381,-41.091344,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>22 Acheron Road</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Alleyway to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Alleyway to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8697248,-41.0931664,0
+            174.8689349,-41.0934059,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>9 Westridge Road</name>
+        <description><![CDATA[SUBURB: Camborne<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.875555,-41.0866858,0
+            174.8758259,-41.0868606,0
+            174.8755617,-41.0869961,0
+            174.8755496,-41.0870406,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Beach Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Victory Park]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Victory Park</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8644725,-41.0828361,0
+            174.8642311,-41.0825247,0
+            174.8636035,-41.0822316,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>41 Moana Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8594411,-41.0747035,0
+            174.8596516,-41.0746115,0
+            174.8603289,-41.0745074,0
+            174.8604214,-41.074562,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8644724,-41.0806854,0
+            174.864396,-41.0806065,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Moana Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8625642,-41.0777318,0
+            174.8625856,-41.0776954,0
+            174.8628377,-41.0773739,0
+            174.8636773,-41.077111,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>28 Roys Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8596369,-41.072674,0
+            174.8609002,-41.0733575,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>62 Moana Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8565138,-41.0725677,0
+            174.8556394,-41.0731015,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>1Â  Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: 1 to 11 Motuhara Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>1 to 11 Motuhara Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8652498,-41.0815258,0
+            174.8646906,-41.0809537,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>152 Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: 162 to 154 Motuhara Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>162 to 154 Motuhara Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8596897,-41.0734169,0
+            174.8600947,-41.0736433,0
+            174.8605695,-41.0737465,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>8 Roys Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: 14 to 8 Roys Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>14 to 8 Roys Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8615186,-41.0737458,0
+            174.861658,-41.0739197,0
+            174.8618378,-41.0741229,0
+            174.8619504,-41.0741745,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>1 Ogilvy Terrace</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>SURFACE DESCRIPTION: Footpath<br>NOTES: Footpath running from Ogilvy Tce to Airlie Rd along Gordon Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Footpath running from Ogilvy Tce to Airlie Rd along Gordon Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8577463,-41.0722669,0
+            174.8569551,-41.0723822,0
+            174.8566144,-41.0724671,0
+            174.8566064,-41.072275,0
+            174.8565608,-41.0719211,0
+            174.8570972,-41.0714439,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>17 Pukerua Beach Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Near 30 Pukerua Beach Rd. Via nature reserve]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Near 30 Pukerua Beach Rd. Via nature reserve</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8909159,-41.0292428,0
+            174.8907684,-41.0294977,0
+            174.8906477,-41.0295078,0
+            174.8906906,-41.0295524,0
+            174.8905485,-41.0295665,0
+            174.8907014,-41.0296293,0
+            174.8904707,-41.0296394,0
+            174.890637,-41.0296859,0
+            174.8903446,-41.0296879,0
+            174.8905565,-41.0297567,0
+            174.890181,-41.0297749,0
+            174.8900523,-41.029955,0
+            174.8902051,-41.029955,0
+            174.890358,-41.0300238,0
+            174.8905377,-41.0299995,0
+            174.8906853,-41.0299995,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>122 Muri Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via pedestrian rail level crossing]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via pedestrian rail level crossing</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8935625,-41.0337047,0
+            174.8938817,-41.0339819,0
+            174.8937851,-41.0341559,0
+            174.8935544,-41.034166,0
+            174.8935383,-41.0343117,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>4 Te Kura Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Walkway overpass<br>NOTES: Runs over highway  between near 3 Takutai Rd and 2 Wairaka Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Walkway overpass</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs over highway  between near 3 Takutai Rd and 2 Wairaka Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8874851,-41.0347485,0
+            174.8868039,-41.0351734,0
+            174.8870614,-41.0354971,0
+            174.8872545,-41.0351572,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>27 Sea Vista Drive</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to station<br>NOTES: Runs toÂ Pukerua Bay train station.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to station</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs toÂ Pukerua Bay train station.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8882219,-41.0375867,0
+            174.8877793,-41.0377182,0
+            174.8871222,-41.0380803,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>1 Toenga Rd to 3 Teihana Rd</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Footpath<br>NOTES: Runs alongside State Highway 59 for 1.2 KM.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs alongside State Highway 59 for 1.2 KM.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.885465,-41.0377786,0
+            174.8856152,-41.0369289,0
+            174.8861839,-41.0361884,0
+            174.8870958,-41.0351444,0
+            174.8884047,-41.0345051,0
+            174.8889895,-41.033627,0
+            174.8892952,-41.0329634,0
+            174.890352,-41.0324899,0
+            174.8912371,-41.03232,0
+            174.8918648,-41.0324778,0
+            174.8926802,-41.0330039,0
+            174.8933346,-41.0332102,0
+            174.8941929,-41.0332264,0
+            174.894885,-41.0329917,0
+            174.8956252,-41.0326478,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>1 Vella Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Vella St - Terrace Rd Walkway.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Vella St - Terrace Rd Walkway.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8347677,-41.102095,0
+            174.8344754,-41.102193,0
+            174.834124,-41.1023436,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>20 Lambley Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8357866,-41.0997137,0
+            174.8369466,-41.1000725,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>18 John Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street.<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street.</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8398802,-41.1019574,0
+            174.8399674,-41.1020928,0
+            174.8404367,-41.1022464,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>49 Owhiti Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8431878,-41.0983391,0
+            174.8430697,-41.0990182,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>117 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8447057,-41.0998266,0
+            174.8437106,-41.1004006,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>76 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8447548,-41.1044272,0
+            174.8456453,-41.1046071,0
+            174.8460799,-41.1044778,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>20 Park Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street.<br>NOTES: Via Titahi Bay beach]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street.</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via Titahi Bay beach</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8373387,-41.10479,0
+            174.8365327,-41.1047567,0
+            174.8363959,-41.1054317,0
+            174.837277,-41.1054741,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>49 Gloaming Hill Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Joins Spur Gv & Humphreys Gv]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value><![CDATA[Joins Spur Gv & Humphreys Gv]]></value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8468725,-41.1096506,0
+            174.8472104,-41.1092929,0
+            174.8475645,-41.1090363,0
+            174.8472158,-41.109295,0
+            174.8478515,-41.1098366,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>25 Tireti Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to service lane<br>NOTES: Runs to Marines Hall Memorial]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to service lane</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs to Marines Hall Memorial</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8364444,-41.1075762,0
+            174.8371283,-41.107847,0
+            174.8374636,-41.1083887,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>11 Potts Lane</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to service lane<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to service lane</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8381083,-41.1084016,0
+            174.838115,-41.1084107,0
+            174.8384074,-41.1089059,0
+            174.8378924,-41.1090504,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>67 Matatiro Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8369794,-41.1092048,0
+            174.8357778,-41.1097404,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>37 Matatiro Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8326294,-41.1096137,0
+            174.833587,-41.1103291,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>2 Patiki Place</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8298456,-41.1117247,0
+            174.8302587,-41.1120653,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>39 Pikarere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8304301,-41.1130078,0
+            174.82962,-41.1132665,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>21 Arene Grove</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via a mural?]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via a mural?</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8321164,-41.1151274,0
+            174.8331142,-41.1150102,0
+            174.8339564,-41.115188,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>14 Arene Grove</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.834729,-41.114907,0
+            174.8342569,-41.1151657,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7 Ron Parlane Place</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8364821,-41.1149746,0
+            174.8371259,-41.115017,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>125 Te Pene Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8391097,-41.1153274,0
+            174.8386537,-41.116649,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>21 Waiuta Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8418334,-41.1126798,0
+            174.8428151,-41.1122473,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>63 Whanga Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8360247,-41.1179146,0
+            174.8357324,-41.1182844,0
+            174.8361267,-41.1191492,0
+            174.8369581,-41.119426,0
+            174.8369769,-41.1196867,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>35 Whanga Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Runs to bus stop on Titahi Bay Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs to bus stop on Titahi Bay Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8382322,-41.1186602,0
+            174.8381061,-41.1190361,0
+            174.8388384,-41.1195493,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>34 Downes St</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street & high level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Street to street & high level footpath]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8463263,-41.1042514,0
+            174.8462539,-41.1044353,0
+            174.8465114,-41.1047304,0
+            174.8469566,-41.1048597,0
+            174.8472463,-41.1050537,0
+            174.8475548,-41.1050436,0
+            174.8481261,-41.1052397,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>44 Downes Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: 44 to 34 Downes St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>44 to 34 Downes St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8465355,-41.1038529,0
+            174.8463102,-41.1042672,0
+            174.84627,-41.1044471,0
+            174.8464953,-41.1047361,0
+            174.8464309,-41.1050473,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>4 Downes Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 4 to 26 Downes St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 4 to 26 Downes St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8448225,-41.1059917,0
+            174.8454609,-41.1062888,0
+            174.8457747,-41.1062645,0
+            174.8459249,-41.1061797,0
+            174.8459169,-41.1058199,0
+            174.8457291,-41.1054582,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>26 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 26 to 74 Dimock St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 26 to 74 Dimock St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8448078,-41.1045856,0
+            174.8445879,-41.1050606,0
+            174.8443787,-41.1057437,0
+            174.843971,-41.1074777,0
+            174.8438127,-41.1081644,0
+            174.8435392,-41.1084514,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>15 Morere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 15 to 37 Morere st]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 15 to 37 Morere st</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8434232,-41.1038031,0
+            174.8432998,-41.1040012,0
+            174.8432461,-41.1042336,0
+            174.8432542,-41.1044175,0
+            174.843163,-41.1046661,0
+            174.8428572,-41.1049996,0
+            174.8427419,-41.1051593,0
+            174.8426453,-41.1057332,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>26 Spur Grove</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath & alleyway<br>NOTES: Runs from near 28 Spur Gv to Onepoto Park]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[High level footpath & alleyway]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from near 28 Spur Gv to Onepoto Park</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8434201,-41.1103016,0
+            174.8440531,-41.1102127,0
+            174.8443428,-41.1100914,0
+            174.8447344,-41.1100874,0
+            174.8448578,-41.1103743,0
+            174.845185,-41.110439,0
+            174.8456571,-41.1103784,0
+            174.8458127,-41.1103218,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>3 Chaffey Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Alleyway & high level footpath<br>NOTES: Via carpark]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Alleyway & high level footpath]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via carpark</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8446271,-41.109019,0
+            174.8441645,-41.108704,0
+            174.8433987,-41.1089543,0
+            174.8437581,-41.1094191,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>28 Chaffey Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 28 to near 46 Chaffey Cres]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 28 to near 46 Chaffey Cres</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.845209,-41.1087422,0
+            174.8452385,-41.108714,0
+            174.8452787,-41.1084149,0
+            174.845209,-41.1082067,0
+            174.8451902,-41.1079682,0
+            174.8453753,-41.1076368,0
+            174.8454719,-41.107469,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Pikarere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 18 to 45 Pikarere St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 18 to 45 Pikarere St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8327142,-41.1139553,0
+            174.8326901,-41.1139593,0
+            174.8319176,-41.1139816,0
+            174.8312765,-41.1138077,0
+            174.8310405,-41.1136986,0
+            174.8306918,-41.1134561,0
+            174.8304102,-41.1131086,0
+            174.8302553,-41.1128539,0
+            174.8301963,-41.1125104,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>65 Pikarere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 65 to 79 Pikarere St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 65 to 79 Pikarere St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8284593,-41.1130277,0
+            174.828108,-41.1131045,0
+            174.8278451,-41.1131045,0
+            174.8275447,-41.1130136,0
+            174.8273221,-41.112765,0
+            174.8272926,-41.1124902,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>8 Hiwi Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8304354,-41.1143098,0
+            174.829848,-41.1144897,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>21 Hiwi Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8294913,-41.1146109,0
+            174.8293572,-41.1144998,0
+            174.829325,-41.11433,0
+            174.829376,-41.1142209,0
+            174.8294671,-41.1140148,0
+            174.8295315,-41.1136753,0
+            174.829553,-41.1134287,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>32 Matatiro Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8339727,-41.1102443,0
+            174.8347063,-41.1099846,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>4 Piko Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 4 to 24 Piko St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 4 to 24 Piko St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8358182,-41.1132493,0
+            174.8360274,-41.113902,0
+            174.8360435,-41.1141001,0
+            174.8360086,-41.1142395,0
+            174.8357323,-41.1148518,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>57 Piko Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8359768,-41.1173922,0
+            174.8363845,-41.117374,0
+            174.8367144,-41.1172993,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7 Arene Grove</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8339129,-41.1152983,0
+            174.8338217,-41.1154297,0
+            174.8338029,-41.1156317,0
+            174.8338512,-41.1158076,0
+            174.8339183,-41.115854,0
+            174.8339987,-41.1159106,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>87 Te Pene Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 87 to 117 Te Pene Ave]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 87 to 117 Te Pene Ave</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8375984,-41.1139171,0
+            174.8373945,-41.1150366,0
+            174.8374965,-41.115655,0
+            174.8376359,-41.1159338,0
+            174.8378532,-41.1161602,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>88 Te Pene Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 88 to 120 Te Pene Ave]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 88 to 120 Te Pene Ave</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8374804,-41.1134038,0
+            174.8371259,-41.115017,0
+            174.8371907,-41.115562,0
+            174.8372926,-41.1157035,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>26 Waiuta Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 4 to 26 Waiuta St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 4 to 26 Waiuta St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8406726,-41.1112588,0
+            174.841716,-41.1127037,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>76 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 76 to 96 Dimock St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 76 to 96 Dimock St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8449216,-41.1043408,0
+            174.8450933,-41.103882,0
+            174.8452972,-41.1028027,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Mataiwhetu Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8359725,-41.120146,0
+            174.8369354,-41.1199339,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>9 Chapel Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Runs to Takapuwahia Reserve]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs to Takapuwahia Reserve</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8362916,-41.1210735,0
+            174.8364284,-41.1215301,0
+            174.8362836,-41.1216736,0
+            174.8367262,-41.1216291,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Hukatai Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8312338,-41.1297973,0
+            174.8313947,-41.1307751,0
+            174.8318882,-41.1313569,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>23 Kotuku Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.828849,-41.1323872,0
+            174.8277251,-41.1326357,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>51 Kotuku Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8280049,-41.1301808,0
+            174.826932,-41.130397,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>36 Waiho Terrace</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8268854,-41.1304711,0
+            174.8271429,-41.1307338,0
+            174.8271027,-41.1311681,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>33 Waiho Terrace</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Mural insitu on retainer wall]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Mural insitu on retainer wall</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8277908,-41.1331041,0
+            174.8276057,-41.1328274,0
+            174.8274448,-41.132393,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7 Waiho Terrace</name>
+        <description><![CDATA[SUBURB: Elsdon<br>SURFACE DESCRIPTION: Low level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Low level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8274394,-41.1320395,0
+            174.8276432,-41.1325385,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>14 Princess Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Joins Mugavin Ave pathway.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Joins Mugavin Ave pathway.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8455067,-41.1386075,0
+            174.8452707,-41.1391125,0
+            174.8448684,-41.1405911,0
+            174.8448576,-41.140886,0
+            174.8449649,-41.1410193,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>31 Huanui Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Passes through median strip.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Passes through median strip.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8452935,-41.1417611,0
+            174.8453257,-41.1423287,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>75 Huanui Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8460579,-41.1445976,0
+            174.8465836,-41.1454015,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>47 Jackson Terrace</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8491188,-41.1420232,0
+            174.8492677,-41.142606,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>81 Arawhata Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8537591,-41.144816,0
+            174.8537136,-41.1452502,0
+            174.8535446,-41.1452846,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>28 Champion Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via parkland]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via parkland</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8500016,-41.1354023,0
+            174.8500204,-41.1357882,0
+            174.8503906,-41.1360387,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>61 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8556461,-41.140199,0
+            174.8548897,-41.1408575,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>74 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8555574,-41.1414814,0
+            174.8550478,-41.1418046,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>165 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8572607,-41.1399365,0
+            174.8578776,-41.13968,0
+            174.858184,-41.1398497,0
+            174.8583443,-41.139989,0
+            174.8583926,-41.1400598,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>71 Dorset Grove</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Includes high level footpath]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Includes high level footpath</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8594958,-41.1366905,0
+            174.8594958,-41.1368198,0
+            174.8593724,-41.1370259,0
+            174.8592249,-41.1372016,0
+            174.8597694,-41.1374016,0
+            174.8602603,-41.1373167,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>97 Hereford Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8641335,-41.1386399,0
+            174.8649516,-41.1384803,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>189 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8627691,-41.14023,0
+            174.8628361,-41.1406663,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>110 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8581924,-41.1437485,0
+            174.8587074,-41.1441747,0
+            174.8587047,-41.1445403,0
+            174.8592385,-41.1446231,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>9 Berkshire Grove</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.86186,-41.1424986,0
+            174.8621738,-41.1432358,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>84 Hampshire Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8626169,-41.1459867,0
+            174.8626384,-41.1456534,0
+            174.8619464,-41.1452353,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>34 Hampshire Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via reserve land]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via reserve land</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8608296,-41.1425333,0
+            174.8598532,-41.1425333,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>48 Leicester Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8654544,-41.1454849,0
+            174.8648375,-41.1462564,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Leicester Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8651265,-41.1434166,0
+            174.8656361,-41.1427056,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>18 Champion Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 18 to 60 Champion st]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 18 to 60 Champion st</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8487797,-41.1359062,0
+            174.8489004,-41.1357183,0
+            174.8491311,-41.1356133,0
+            174.8497238,-41.1354517,0
+            174.8500189,-41.1353931,0
+            174.8503381,-41.1353547,0
+            174.8506143,-41.1353042,0
+            174.851073,-41.1351325,0
+            174.8514485,-41.1348476,0
+            174.8516121,-41.1346012,0
+            174.8519796,-41.134282,0
+            174.852221,-41.1341769,0
+            174.8526448,-41.1341749,0
+            174.8529398,-41.1341992,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>92 Champion Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 92 to 130 CHampion St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 92 to 130 CHampion St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8571166,-41.1352214,0
+            174.8577791,-41.135185,0
+            174.8583811,-41.1351004,0
+            174.8588987,-41.1349408,0
+            174.8595451,-41.1349307,0
+            174.8601433,-41.135161,0
+            174.8607924,-41.1355185,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>181 Champion Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8638211,-41.1392843,0
+            174.8642422,-41.1402357,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>10 Thompson Grove</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street & high level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Street to street & high level footpath]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8540199,-41.1366171,0
+            174.8540467,-41.1366049,0
+            174.8541272,-41.1365383,0
+            174.8541487,-41.1361343,0
+            174.8539716,-41.1356838,0
+            174.8542828,-41.1354151,0
+            174.8543176,-41.1353686,0
+            174.8550982,-41.1361383,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>27 Windley Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8524406,-41.1354268,0
+            174.8525747,-41.1351703,0
+            174.8530924,-41.1348349,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>9 McKillop Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 9 to 29 McKillop st]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 9 to 29 McKillop st</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8492266,-41.1375279,0
+            174.8494653,-41.1373339,0
+            174.8497818,-41.1372228,0
+            174.8501788,-41.1371784,0
+            174.8504926,-41.1371784,0
+            174.8505972,-41.1372026,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>46 McKillop Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to reserve & low level footpath<br>NOTES: Footpath runs from 24 to 54 McKillop St. Laneway via Mungavin Park.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Street to reserve & low level footpath]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value>Footpath runs from 24 to 54 McKillop St. Laneway via Mungavin Park.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8505655,-41.1373889,0
+            174.8521668,-41.1383283,0
+            174.8518181,-41.1386454,0
+            174.8521668,-41.1383303,0
+            174.8525664,-41.1385585,0
+            174.8530063,-41.138702,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>19 Kings Crescent</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8571291,-41.1404668,0
+            174.8573196,-41.1405799,0
+            174.8573786,-41.1407436,0
+            174.8573276,-41.140889,0
+            174.8571586,-41.1413475,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>78 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 76 to 98 Mungavin Ave]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 76 to 98 Mungavin Ave</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8557183,-41.1417916,0
+            174.8557425,-41.1420098,0
+            174.8561958,-41.1430924,0
+            174.8562038,-41.1434702,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>187 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 177 to 187 Mungavin Ave]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 177 to 187 Mungavin Ave</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8612378,-41.1405508,0
+            174.8613826,-41.1407306,0
+            174.8616884,-41.1408114,0
+            174.861954,-41.1407892,0
+            174.8622141,-41.1407245,0
+            174.8626057,-41.1406538,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>6 Gear Terrace</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Via parkland]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Via parkland</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8520454,-41.1404045,0
+            174.8517638,-41.1403853,0
+            174.8516552,-41.1404499,0
+            174.8515023,-41.1406196,0
+            174.8514929,-41.1408065,0
+            174.8515506,-41.141161,0
+            174.8515211,-41.1411761,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>12 Arawhata Crescent</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8462498,-41.1416072,0
+            174.8466307,-41.1417385,0
+            174.8467594,-41.1418112,0
+            174.8468452,-41.1419829,0
+            174.8469472,-41.1422758,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>36 Hereford Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Low level footpath<br>NOTES: Runs from 36 to 48 Hereford St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Low level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 36 to 48 Hereford St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8625092,-41.136169,0
+            174.8624582,-41.1363589,0
+            174.8625253,-41.1365427,0
+            174.8626594,-41.1366801,0
+            174.8628257,-41.1368336,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>20 Gloucester Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 2 to 20 Gloucester St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 2 to 20 Gloucester St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8607286,-41.1391357,0
+            174.8612302,-41.1396205,0
+            174.8612946,-41.1397538,0
+            174.861316,-41.1399174,0
+            174.8612758,-41.1400629,0
+            174.86119,-41.1402406,0
+            174.8611417,-41.1403033,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>11 Cornwall Crescent</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8565244,-41.1353458,0
+            174.8565432,-41.1355235,0
+            174.8566799,-41.1356831,0
+            174.8571735,-41.136067,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>17 Hampshire Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: High level footpath<br>NOTES: Runs from 17 to 35 Hampshire St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>High level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 17 to 35 Hampshire St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8613895,-41.141914,0
+            174.8610998,-41.1420109,0
+            174.8610193,-41.1421725,0
+            174.8610193,-41.142427,0
+            174.8610135,-41.1428064,0
+            174.860976,-41.1435648,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>20 Bedford Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Low level footpath<br>NOTES: Runs from 4 to 20 Bedford St]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Low level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from 4 to 20 Bedford St</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8634346,-41.1413534,0
+            174.8632441,-41.1415635,0
+            174.8631744,-41.1417513,0
+            174.8632012,-41.1418927,0
+            174.8632656,-41.142026,0
+            174.8634212,-41.1421674,0
+            174.8635875,-41.1422523,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7 Dido Place</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8711955,-41.1363616,0
+            174.8702728,-41.1367455,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>69 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8704776,-41.1379843,0
+            174.8700189,-41.1373682,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>111 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8742467,-41.1361607,0
+            174.8736217,-41.1354132,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>124 Castor Crescent</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8739942,-41.1335105,0
+            174.8747425,-41.132961,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>52 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8693851,-41.139235,0
+            174.8702488,-41.1396531,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>78 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8722379,-41.1372295,0
+            174.872769,-41.1378597,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>102 Warpsite Avenue</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8746869,-41.1360824,0
+            174.875108,-41.1367349,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>13 Justine Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8735255,-41.1389964,0
+            174.874491,-41.1387237,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>25 Levant Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8746547,-41.1389439,0
+            174.8756578,-41.1387722,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>19 Gloucester Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Low level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Low level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.860345,-41.1390393,0
+            174.8601063,-41.1388231,0
+            174.8600902,-41.1385767,0
+            174.8601358,-41.1384737,0
+            174.8602887,-41.1385545,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>93 Hampshire Street</name>
+        <description><![CDATA[SUBURB: Cannon's Creek<br>SURFACE DESCRIPTION: Low level footpath<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value><![CDATA[Cannon's Creek]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Low level footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8622732,-41.1444118,0
+            174.8624878,-41.1440502,0
+            174.8628177,-41.143828,0
+            174.8630269,-41.1437593,0
+            174.8633085,-41.1437472,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>24 Corinna Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8819814,-41.134373,0
+            174.8827753,-41.1350801,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>171 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8787978,-41.133234,0
+            174.8797742,-41.1333612,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>50 Kokiri Crescent</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8778797,-41.1327223,0
+            174.8774023,-41.1328738,0
+            174.8769007,-41.1331344,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>27 Kalingo Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8823022,-41.1323068,0
+            174.8833805,-41.1318098,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>23 Kaituna Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8828178,-41.1312056,0
+            174.8836627,-41.1306843,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Louisa Grove</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to stree<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to stree</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8777892,-41.1284308,0
+            174.8787575,-41.1282934,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>325 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8808902,-41.1254173,0
+            174.8798683,-41.1253688,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>425 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8748056,-41.1226071,0
+            174.8746178,-41.1233547,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>25 Stipulate Street</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8750903,-41.1201343,0
+            174.8759151,-41.1198352,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>6 Desert Gold Street</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8717296,-41.1207989,0
+            174.871963,-41.1210798,0
+            174.8723895,-41.1212233,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Desert Gold Reserve</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to reserve<br>NOTES: 3 laneways that enter Desert Gold Reserve]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to reserve</value>
+          </Data>
+          <Data name="NOTES">
+            <value>3 laneways that enter Desert Gold Reserve</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8726335,-41.1202635,0
+            174.8729661,-41.120514,0
+            174.873575,-41.1205868,0
+            174.8738647,-41.120514,0
+            174.8738915,-41.1205484,0
+            174.873465,-41.1206797,0
+            174.8730654,-41.1210394,0
+            174.8729796,-41.1213687,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>36 Desert Gold Street</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8731381,-41.1194781,0
+            174.8740929,-41.1197317,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>79 Conclusion Street</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8727496,-41.1172557,0
+            174.8730848,-41.1178214,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>136 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8791382,-41.1349659,0
+            174.8794547,-41.1352467,0
+            174.8802272,-41.1355234,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>37 Bosun Terrace</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8850396,-41.1061922,0
+            174.885053,-41.105982,0
+            174.8849779,-41.1058628,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>33 Hicks Close</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8856362,-41.1147487,0
+            174.8852821,-41.1153408,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>20 Molyneux Close</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.9016664,-41.1065155,0
+            174.9017361,-41.1064711,0
+            174.9017951,-41.1063094,0
+            174.9022243,-41.1060507,0
+            174.9027768,-41.1061558,0
+            174.9030236,-41.1062124,0
+            174.9029994,-41.1064185,0
+            174.9027822,-41.1067702,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>40 Leeward Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8839284,-41.1066414,0
+            174.8842476,-41.1068415,0
+            174.8843039,-41.1071305,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>46 Navigation Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.9074474,-41.1129773,0
+            174.9071416,-41.1127085,0
+            174.9070183,-41.1124155,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7 Postgate Place</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Laneway runs between Postgate Dv Azimuth Pl & Ensign Ln]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value><![CDATA[Laneway runs between Postgate Dv Azimuth Pl & Ensign Ln]]></value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.883287,-41.1133883,0
+            174.8828686,-41.113465,0
+            174.8827586,-41.113562,0
+            174.8828686,-41.1134671,0
+            174.8824582,-41.1129477,0
+            174.8826057,-41.1129962,0
+            174.8831609,-41.1127679,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Staithes Drive North</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8794439,-41.1122203,0
+            174.8788511,-41.1128669,0
+            174.8783817,-41.1129134,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>24 Staithes Drive North</name>
+        <description><![CDATA[SUBURB: Whitby<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8813509,-41.1118626,0
+            174.8812356,-41.1117232,0
+            174.8808976,-41.1115089,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>75 Jones Deviation</name>
+        <description><![CDATA[SUBURB: Pauatahanui<br>SURFACE DESCRIPTION: Wooden foot bridge<br>NOTES: Check nearby Chorus power poles. Low tempo area.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pauatahanui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Wooden foot bridge</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Check nearby Chorus power poles. Low tempo area.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.9195611,-41.0962914,0
+            174.9193412,-41.0966107,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>11 Abel Glen</name>
+        <description><![CDATA[SUBURB: Aotea<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8677134,-41.1209474,0
+            174.8679508,-41.1212272,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>150 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8423724,-41.0990263,0
+            174.8423201,-41.0987766,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>138 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8441782,-41.0989498,0
+            174.8440025,-41.0992247,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>23 Pikarere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8317527,-41.1142898,0
+            174.83186,-41.1139381,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>3 McKillop Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Access way via carpark<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Access way via carpark</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8477252,-41.1377292,0
+            174.848275,-41.1379201,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>36 Brendan Beach</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES:  via Brendan Beach. Other access is via 7 Onepu Rd]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value> via Brendan Beach. Other access is via 7 Onepu Rd</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8956016,-41.0294841,0
+            174.8959235,-41.0292939,0
+            174.8964706,-41.0290916,0
+            174.8970285,-41.0292413,0
+            174.8972699,-41.0294194,0
+            174.89705,-41.0294922,0
+            174.8969588,-41.0296339,0
+            174.8970124,-41.0296784,0
+            174.8969749,-41.0298079,0
+            174.8970875,-41.0298484,0
+            174.8968783,-41.0298322,0
+            174.8970929,-41.0299576,0
+            174.896873,-41.0299738,0
+            174.8969052,-41.0305039,0
+            174.8965618,-41.0313173,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>3 Haunui Way</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to street<br>NOTES: ]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8909254,-41.0306352,0
+            174.8915436,-41.0306777,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>8 Te Motu Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Footpath<br>NOTES: Connects to footpath that follows alongside SH59]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Footpath</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Connects to footpath that follows alongside SH59</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8863113,-41.0363417,0
+            174.8862456,-41.0361363,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>5 Raroa Street</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Street to beach<br>NOTES: Entrance area only.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to beach</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Entrance area only.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8845569,-41.0334357,0
+            174.8848492,-41.0335268,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>7A Rawhiti Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Access to beach<br>NOTES: Carpark & pump station]]></description>
+        <styleUrl>#icon-1899-673AB7</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Access to beach</value>
+          </Data>
+          <Data name="NOTES">
+            <value><![CDATA[Carpark & pump station]]></value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.88894,-41.0295391,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>32 Ocean Parade</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>SURFACE DESCRIPTION: Ocean Parade<br>NOTES: Drain grill]]></description>
+        <styleUrl>#icon-1899-673AB7</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Ocean Parade</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Drain grill</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8891302,-41.0284742,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9 Kivell Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>SURFACE DESCRIPTION: Street to street<br>NOTES: Runs from Kivell st to Mungavin St underpass entrance.]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Street to street</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Runs from Kivell st to Mungavin St underpass entrance.</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8458448,-41.1385505,0
+            174.8462498,-41.1392514,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Kenepuru Station Alleyway</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>SURFACE DESCRIPTION: Coated murals and painted concrete<br>NOTES: Pitstop has unique colour]]></description>
+        <styleUrl>#line-673AB7-3131</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Coated murals and painted concrete</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Pitstop has unique colour</value>
+          </Data>
+        </ExtendedData>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            174.8380932,-41.1488442,0
+            174.8380691,-41.1494118,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Assets Map- Suburb divider for power pole sweeps.csv</name>
+      <Placemark>
+        <name>Titahi Bay North</name>
+        <styleUrl>#poly-097138-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8327984,-41.0998309,0
+                174.8323692,-41.1029031,0
+                174.8350729,-41.1036469,0
+                174.8361565,-41.1054658,0
+                174.8373957,-41.1058659,0
+                174.8382379,-41.1057002,0
+                174.8442997,-41.1142527,0
+                174.8495353,-41.1142851,0
+                174.8524536,-41.1121834,0
+                174.8526682,-41.1085943,0
+                174.8504366,-41.105102,0
+                174.8500503,-41.1012538,0
+                174.8482479,-41.0996692,0
+                174.8470462,-41.0970497,0
+                174.844643,-41.0948181,0
+                174.8430551,-41.0930393,0
+                174.8403085,-41.0931686,0
+                174.8364462,-41.0962088,0
+                174.832455,-41.0989254,0
+                174.8327984,-41.0998309,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Titahi Bay South</name>
+        <styleUrl>#poly-C2185B-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.835001,-41.1047775,0
+                174.8287354,-41.1082536,0
+                174.8235212,-41.1094985,0
+                174.8229203,-41.1116488,0
+                174.8278341,-41.1150275,0
+                174.8309885,-41.1240152,0
+                174.8377047,-41.1245809,0
+                174.8443995,-41.1145749,0
+                174.8381768,-41.1058446,0
+                174.8373527,-41.1060438,0
+                174.8363099,-41.1057153,0
+                174.835001,-41.1047775,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Pukerua Bay</name>
+        <styleUrl>#poly-000000-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8869042,-41.0276308,0
+                174.882441,-41.0315157,0
+                174.8815827,-41.0357888,0
+                174.8788361,-41.0396085,0
+                174.8821835,-41.0425864,0
+                174.8874191,-41.0447226,0
+                174.891024,-41.0407738,0
+                174.8945431,-41.0351414,0
+                174.8993496,-41.0330049,0
+                174.8989205,-41.0274366,0
+                174.8917965,-41.0280193,0
+                174.8869042,-41.0276308,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Plimmerton & Airlie Rd]]></name>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8675557,-41.0766832,0
+                174.8672983,-41.0757288,0
+                174.8653241,-41.0735612,0
+                174.8619338,-41.0713936,0
+                174.8614189,-41.0678993,0
+                174.8597022,-41.0673493,0
+                174.8597022,-41.0653756,0
+                174.8627063,-41.0623016,0
+                174.8717614,-41.0599071,0
+                174.8711606,-41.0588392,0
+                174.866912,-41.0592923,0
+                174.8621699,-41.0604087,0
+                174.8586723,-41.0619133,0
+                174.8576423,-41.0663139,0
+                174.8569342,-41.0671228,0
+                174.8546382,-41.0687082,0
+                174.852868,-41.0667912,0
+                174.851838,-41.0672037,0
+                174.8528358,-41.0685464,0
+                174.8531576,-41.0699377,0
+                174.8548743,-41.0733833,0
+                174.8567411,-41.073998,0
+                174.8584362,-41.0746289,0
+                174.8626849,-41.0790448,0
+                174.8630282,-41.0814548,0
+                174.8620626,-41.0828781,0
+                174.8632857,-41.0834765,0
+                174.8654744,-41.0833471,0
+                174.8668476,-41.0861937,0
+                174.8667833,-41.0884902,0
+                174.8681136,-41.0864848,0
+                174.8677274,-41.0864201,0
+                174.8675557,-41.085385,0
+                174.8659679,-41.0818429,0
+                174.8661181,-41.0795138,0
+                174.8675557,-41.0766832,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Camborne & Ngati Toa Domain]]></name>
+        <styleUrl>#poly-9FA8DA-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8701766,-41.0757541,0
+                174.8677304,-41.0776628,0
+                174.8667434,-41.0802507,0
+                174.8670867,-41.0828386,0
+                174.8680738,-41.0852647,0
+                174.8680308,-41.0862027,0
+                174.8688891,-41.086979,0
+                174.8673442,-41.0894373,0
+                174.8661855,-41.0890168,0
+                174.8636964,-41.0987518,0
+                174.8678163,-41.1007246,0
+                174.8676875,-41.1033763,0
+                174.8709062,-41.1033763,0
+                174.8718074,-41.0997867,0
+                174.8715928,-41.0973612,0
+                174.8739102,-41.0955824,0
+                174.8762706,-41.0935772,0
+                174.8799613,-41.0932215,0
+                174.8822787,-41.0911515,0
+                174.8825362,-41.0898901,0
+                174.8825362,-41.0885639,0
+                174.8807338,-41.0869143,0
+                174.8776868,-41.0859439,0
+                174.8756269,-41.0830327,0
+                174.8714641,-41.0831297,0
+                174.8687604,-41.0816417,0
+                174.873009,-41.0765305,0
+                174.8701766,-41.0757541,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Elsdon & Porirua City]]></name>
+        <styleUrl>#poly-FADA80-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8291047,-41.1241848,0
+                174.8272995,-41.1235234,0
+                174.8250249,-41.1242669,0
+                174.8241237,-41.1255277,0
+                174.8257116,-41.1286633,0
+                174.8259262,-41.1302796,0
+                174.8267416,-41.1328332,0
+                174.8283294,-41.1350311,0
+                174.8271278,-41.137229,0
+                174.8361829,-41.1506732,0
+                174.8365692,-41.1501562,0
+                174.837127,-41.1502854,0
+                174.8375133,-41.1507055,0
+                174.8384146,-41.1510771,0
+                174.839423,-41.1503824,0
+                174.8403457,-41.1500592,0
+                174.8408392,-41.1499299,0
+                174.8413972,-41.1497926,0
+                174.8428241,-41.1387481,0
+                174.8428376,-41.134949,0
+                174.842623,-41.1306177,0
+                174.8419364,-41.1287105,0
+                174.8406918,-41.1249607,0
+                174.8291047,-41.1241848,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Whitby East</name>
+        <styleUrl>#poly-673AB7-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.9017975,-41.1054478,0
+                174.9016664,-41.1065155,0
+                174.9007246,-41.1077113,0
+                174.9013185,-41.1084448,0
+                174.9024412,-41.1092958,0
+                174.9026129,-41.1101365,0
+                174.9020979,-41.1117208,0
+                174.9013684,-41.1139518,0
+                174.9016688,-41.1158594,0
+                174.9020121,-41.1185429,0
+                174.9027416,-41.1194804,0
+                174.9036,-41.1202887,0
+                174.9087069,-41.1201594,0
+                174.9142859,-41.1163767,0
+                174.9160025,-41.1126908,0
+                174.9155733,-41.1109448,0
+                174.9154017,-41.108455,0
+                174.9149296,-41.1079053,0
+                174.9155304,-41.1073556,0
+                174.9143717,-41.1065472,0
+                174.9104664,-41.104025,0
+                174.907119,-41.1040573,0
+                174.9017975,-41.1054478,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Ascot Park</name>
+        <styleUrl>#poly-757575-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8580356,-41.1179086,0
+                174.8543878,-41.1211739,0
+                174.8557181,-41.1229196,0
+                174.8574777,-41.1227257,0
+                174.8597951,-41.1218205,0
+                174.8615117,-41.1215942,0
+                174.8632283,-41.1215618,0
+                174.8655028,-41.1220468,0
+                174.8673053,-41.1210446,0
+                174.8685927,-41.1206243,0
+                174.8706956,-41.1209153,0
+                174.872026,-41.1218851,0
+                174.8738818,-41.1222751,0
+                174.8759313,-41.1224024,0
+                174.8768325,-41.1219498,0
+                174.8794074,-41.1221438,0
+                174.8806949,-41.1226933,0
+                174.8812124,-41.1238896,0
+                174.8808902,-41.1254173,0
+                174.8828432,-41.1252797,0
+                174.8867914,-41.1249564,0
+                174.8882076,-41.1224995,0
+                174.888551,-41.1201395,0
+                174.8889801,-41.1186847,0
+                174.8861906,-41.1166478,0
+                174.8808691,-41.1161305,0
+                174.8794529,-41.1165185,0
+                174.8793671,-41.1174884,0
+                174.8761913,-41.1172944,0
+                174.875333,-41.1157749,0
+                174.8724148,-41.11238,0
+                174.8695395,-41.1169388,0
+                174.8671362,-41.118717,0
+                174.8664495,-41.1190403,0
+                174.8643038,-41.1204628,0
+                174.8579952,-41.1194283,0
+                174.8580356,-41.1179086,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua</name>
+        <styleUrl>#poly-0097A7-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8742154,-41.1304456,0
+                174.8789234,-41.1389491,0
+                174.8804254,-41.1385936,0
+                174.8815413,-41.138238,0
+                174.8827858,-41.1370583,0
+                174.8863477,-41.1350221,0
+                174.8884506,-41.1314019,0
+                174.8860473,-41.1294947,0
+                174.8838157,-41.127232,0
+                174.8826999,-41.1261329,0
+                174.8821849,-41.1258419,0
+                174.8800821,-41.1258742,0
+                174.8808117,-41.1248721,0
+                174.8805112,-41.1232557,0
+                174.8788805,-41.1224799,0
+                174.8784942,-41.1228355,0
+                174.8780651,-41.1244519,0
+                174.8744387,-41.1275552,0
+                174.8733444,-41.1293008,0
+                174.8734732,-41.1298827,0
+                174.8742154,-41.1304456,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Ranui</name>
+        <styleUrl>#poly-BCAAA4-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8565917,-41.1351637,0
+                174.8565274,-41.1349051,0
+                174.8567419,-41.134291,0
+                174.8566132,-41.1339193,0
+                174.8554545,-41.1338707,0
+                174.8541241,-41.1325132,0
+                174.85112,-41.1335476,0
+                174.8502805,-41.1354669,0
+                174.847601,-41.1367151,0
+                174.8458527,-41.1366755,0
+                174.8454981,-41.1356808,0
+                174.8443394,-41.1360041,0
+                174.8439961,-41.1392038,0
+                174.8442536,-41.1424358,0
+                174.8454981,-41.1428882,0
+                174.8451977,-41.1458291,0
+                174.8441677,-41.1495131,0
+                174.8463993,-41.1494808,0
+                174.8486309,-41.1478004,0
+                174.85215,-41.1471864,0
+                174.8524075,-41.146637,0
+                174.8545103,-41.146637,0
+                174.857214,-41.146734,0
+                174.8579436,-41.1449889,0
+                174.8577504,-41.1448112,0
+                174.8579007,-41.1444718,0
+                174.8580294,-41.144084,0
+                174.8583405,-41.1440921,0
+                174.8586195,-41.1440436,0
+                174.8589789,-41.1438699,0
+                174.8590808,-41.1431225,0
+                174.8591452,-41.1428236,0
+                174.8590701,-41.1415712,0
+                174.8592737,-41.1411349,0
+                174.8599602,-41.1408683,0
+                174.8575571,-41.139236,0
+                174.8566561,-41.1363919,0
+                174.8565917,-41.1351637,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Cannon's Creek]]></name>
+        <styleUrl>#poly-0288D1-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8636045,-41.1332686,0
+                174.8609223,-41.1325091,0
+                174.8579397,-41.1333656,0
+                174.8566308,-41.1341575,0
+                174.8564591,-41.1359837,0
+                174.8578539,-41.1394582,0
+                174.8599782,-41.1407833,0
+                174.8592057,-41.1413328,0
+                174.8590126,-41.1424801,0
+                174.8589482,-41.1437405,0
+                174.8580041,-41.1443222,0
+                174.8586478,-41.1456472,0
+                174.8592272,-41.1501876,0
+                174.8601928,-41.1513832,0
+                174.8625102,-41.1522395,0
+                174.8652139,-41.1523365,0
+                174.8658361,-41.1503168,0
+                174.8693337,-41.1456149,0
+                174.8683252,-41.1433042,0
+                174.8636045,-41.1332686,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua East</name>
+        <styleUrl>#poly-FBC02D-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8725697,-41.1309,0
+                174.8724195,-41.1309162,0
+                174.8648879,-41.1336152,0
+                174.865596,-41.1363787,0
+                174.8675057,-41.1412429,0
+                174.8687288,-41.1435537,0
+                174.872677,-41.1442324,0
+                174.8770544,-41.1423741,0
+                174.8782131,-41.1399178,0
+                174.8767755,-41.1352636,0
+                174.874326,-41.1314826,0
+                174.8725697,-41.1309,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Paremata</name>
+        <styleUrl>#poly-A52714-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8692508,-41.1057755,0
+                174.8692508,-41.1066647,0
+                174.8702593,-41.1072306,0
+                174.8706455,-41.1078935,0
+                174.8723836,-41.1083462,0
+                174.8730273,-41.1082815,0
+                174.8731852,-41.1112705,0
+                174.8724148,-41.11238,0
+                174.8739001,-41.1135825,0
+                174.8740503,-41.1142453,0
+                174.8748335,-41.114803,0
+                174.8753807,-41.1153688,0
+                174.8758528,-41.1162418,0
+                174.8761854,-41.1168722,0
+                174.8775694,-41.1167672,0
+                174.8791358,-41.1170662,0
+                174.8793504,-41.1164358,0
+                174.8802409,-41.1159993,0
+                174.8859808,-41.1156356,0
+                174.8861739,-41.1140028,0
+                174.8868498,-41.1133723,0
+                174.8883304,-41.1117233,0
+                174.887676,-41.1114081,0
+                174.8872683,-41.11005,0
+                174.8869035,-41.107156,0
+                174.8885343,-41.1060566,0
+                174.8881695,-41.105135,0
+                174.8869464,-41.1061374,0
+                174.8866567,-41.1057656,0
+                174.884747,-41.1059353,0
+                174.8837599,-41.1062668,0
+                174.8834595,-41.105806,0
+                174.8811528,-41.1054422,0
+                174.8802516,-41.1023944,0
+                174.882215,-41.101303,0
+                174.8837599,-41.0990635,0
+                174.8832235,-41.0987724,0
+                174.8759064,-41.1016102,0
+                174.8759064,-41.1024591,0
+                174.8739645,-41.1043912,0
+                174.8725698,-41.1032513,0
+                174.8679778,-41.1036394,0
+                174.8692508,-41.1057755,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Papakowhai</name>
+        <styleUrl>#poly-F9A825-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8582073,-41.1176178,0
+                174.8582932,-41.1192667,0
+                174.8644086,-41.1200588,0
+                174.8672195,-41.1183614,0
+                174.8692795,-41.1162438,0
+                174.8730131,-41.1109897,0
+                174.8729487,-41.1084353,0
+                174.8702022,-41.1079664,0
+                174.8696013,-41.106964,0
+                174.8687216,-41.1063819,0
+                174.8688289,-41.1057029,0
+                174.8673483,-41.1042962,0
+                174.8596235,-41.1105047,0
+                174.8583361,-41.1144655,0
+                174.8582073,-41.1176178,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

@@ -1,0 +1,5065 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Wellington Electricity substation sites </name>
+    <description/>
+    <Style id="icon-1141-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1141-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1141">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1141-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1141-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-01579B-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff9b5701</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c9b5701</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-01579B-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff9b5701</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c9b5701</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-01579B-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-01579B-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-01579B-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-097138-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff387109</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c387109</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-097138-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff387109</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c387109</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-097138-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-097138-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-097138-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-3949AB-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffab4939</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cab4939</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-3949AB-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffab4939</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cab4939</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-3949AB-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-3949AB-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-3949AB-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-4E342E-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff2e344e</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2e344e</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-4E342E-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff2e344e</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2e344e</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-4E342E-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-4E342E-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-4E342E-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-558B2F-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff2f8b55</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2f8b55</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-558B2F-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff2f8b55</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c2f8b55</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-558B2F-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-558B2F-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-558B2F-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-795548-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff485579</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c485579</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-795548-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff485579</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c485579</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-795548-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-795548-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-795548-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-880E4F-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff4f0e88</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c4f0e88</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-880E4F-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff4f0e88</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c4f0e88</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-880E4F-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-880E4F-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-880E4F-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-9C27B0-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffb0279c</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb0279c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-9C27B0-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffb0279c</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb0279c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-9C27B0-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-9C27B0-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-9C27B0-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-A1C2FA-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>fffac2a1</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cfac2a1</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-A1C2FA-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>fffac2a1</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cfac2a1</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-A1C2FA-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-A1C2FA-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-A1C2FA-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-C2185B-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff5b18c2</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5b18c2</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-C2185B-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff5b18c2</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5b18c2</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-C2185B-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-C2185B-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-C2185B-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F48FB1-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffb18ff4</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb18ff4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-F48FB1-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffb18ff4</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cb18ff4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-F48FB1-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F9A825-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff25a8f9</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c25a8f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-F9A825-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff25a8f9</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c25a8f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-F9A825-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F9A825-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F9A825-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFEA00-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff00eaff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c00eaff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-FFEA00-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff00eaff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c00eaff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-FFEA00-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFEA00-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFEA00-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFFF8D-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ff8dffff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c8dffff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-FFFF8D-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ff8dffff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c8dffff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-FFFF8D-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFFF8D-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFFF8D-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFFFFF-1200-76-nodesc-normal">
+      <LineStyle>
+        <color>ffffffff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cffffff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-FFFFFF-1200-76-nodesc-highlight">
+      <LineStyle>
+        <color>ffffffff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cffffff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-FFFFFF-1200-76-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFFFFF-1200-76-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFFFFF-1200-76-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name><![CDATA[Assets Map- Wellington Electricity boxes & substations.csv]]></name>
+      <Placemark>
+        <name>2 Wi Neera Drive</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8399558,-41.1288043,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>75 Paremata Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8775189,-41.1034011,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>7 Kalingo Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8809554,-41.13172675,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Sievers Grove</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8591647,-41.1421236,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>8 Hagley Street</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: Paint required. "Chamois".]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value><![CDATA[Paint required. "Chamois".]]></value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8389411,-41.1350935,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Civic Place</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8400399,-41.1344002,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>389 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8765694,-41.12218643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>125 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8751233,-41.13579238,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Queen Charlotte Drive (#1)</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8581902,-41.1274606,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Topsail Way</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8854996,-41.11957083,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Gloucester Street</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8610042,-41.14033379,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>20A Caduceus Place</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8732099,-41.1210611,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>111 Leeward Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8841046,-41.1128829,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>51 Kapiti Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8409112,-41.1073876,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 The Bollard</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8835757,-41.1190311,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Omapere Street</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8808679,-41.1200052,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>28 Hicks Close</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8847326,-41.1144815,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>104 Omapere Street</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8819279,-41.1140584,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>135 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8432495,-41.09913622,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>45A Acheron Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8721596,-41.09248617,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Mungavin Ave</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8493013,-41.1389545,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>24 Mckillop Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8503351,-41.13729694,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Hagley Street</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8379843,-41.1366603,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>30 Pukerua Beach Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8903919,-41.0301802,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>25 Broken Hill Road</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8243325,-41.15160618,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Rangituhi Crescent</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8291949,-41.1264677,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5A Jillett Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8395801,-41.1052798,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>58 Rangituhi Crescent</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8255354,-41.1264942,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3/3 Niagara Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: Mural insitu]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Mural insitu</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8788325,-41.12926236,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>139 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8780522,-41.1352512,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>40 Niagara Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8764719,-41.1295728,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>326 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8810806,-41.1253589,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>54A Takapuwahia Drive</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8316978,-41.1246633,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1A Lyttelton Avenue</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8423274,-41.1362552,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Ngatitoa Street</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8352488,-41.1264194,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Main Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.838323,-41.1035833,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13 Raiha Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8301964,-41.13610824,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>61 Whanga Crescent</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8359628,-41.1179407,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Kahu Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8723965,-41.1057124,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>64 Rawhiti Road</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8861423,-41.0335435,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>51 Moana Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8578282,-41.0737767,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9 Heriot Drive</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8371192,-41.13597809,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4/12 Ulric Street</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8705323,-41.0790828,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>89 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8728525,-41.1368154,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1/16 Parumoana Street</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8406147,-41.13156927,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>97 Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.868838,-41.0939953,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>167B Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8796705,-41.1337232,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>45 Waitaria Terrace</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8512716,-41.12963956,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Natone Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8785617,-41.1331183,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>60 Raiha Street</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8321762,-41.14843496,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>106 Aotea Drive</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8585879,-41.12684036,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>372 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8802034,-41.1225915,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>44 Discovery Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8880108,-41.1137215,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Longitude Place</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8901332,-41.11858648,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>66 Discovery Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8893087,-41.11546998,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Tutuira Place</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8377292,-41.12759947,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>10 Wi Neera Drive</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8400008,-41.1300462,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>50 Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: Opposite 50 Mana Esplanade]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Opposite 50 Mana Esplanade</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8676713,-41.1054735,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>40 Grays Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8713859,-41.0850173,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>83A Kokiri Crescent</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8763122,-41.1317574,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>40 Waihemo Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8776139,-41.12654132,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>87 Waihemo Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8795143,-41.1242865,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12B Loongana Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8785224,-41.1274859,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Tangare Drive</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8370796,-41.1236511,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>140 Rangituhi Crescent</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8292165,-41.12559986,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>112 Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8627337,-41.0745955,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>66 Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8638711,-41.0773456,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9 Mo Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8752201,-41.08513016,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>137B Pope Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8687958,-41.08920519,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>69G Discovery Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.892501,-41.1189516,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Okowai Road</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8552911,-41.1229855,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Abbey Way</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8805077,-41.1168148,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Mentor Lane</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8652505,-41.1416015,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Gennaker Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8771159,-41.11282208,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Tutuira Place</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.838236,-41.12729906,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 The Masthead</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9081176,-41.10747635,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5 Dimock Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8412661,-41.1092321,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>7 Cluny Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8587465,-41.0733571,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Pascoe Avenue</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8696946,-41.09751614,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>16 Bromley View</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8551326,-41.141827,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 John Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8357347,-41.10073684,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Kivell Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8465754,-41.1391737,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Mana Esplanade</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8701907,-41.101685,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>100 Paremata Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8749118,-41.10443848,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Onepoto Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8442381,-41.1134288,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13B Prosser Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.832709,-41.1337513,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>21A Kenepuru Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8420145,-41.1411324,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>36 Resolution Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8968205,-41.11904387,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>91 St Andrews Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8685472,-41.08514512,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>222 Warspite Avenue</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.880309,-41.1286048,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Mana Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.839671,-41.1053671,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>8 Martin Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8499549,-41.1399605,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>51 Kalingo Street</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8828033,-41.1335466,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>96 Waihora Crescent</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8801449,-41.1358532,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>7 Dolly Varden Crescent</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8684788,-41.0950285,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>130 Rangituhi Crescent</name>
+        <description><![CDATA[SUBURB: Takapuwahia<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Takapuwahia</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8284659,-41.1252509,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14 Whitehouse Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8381278,-41.1082432,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14A Wall Place</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8328569,-41.15084767,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>181 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Cannons Creek<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.862019,-41.1408621,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14 Conclusion Street</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8765606,-41.12078149,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>67A Main Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.841013,-41.1092972,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6 Hospital Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8324194,-41.1473042,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9 Airlie Road </name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8575976,-41.0724693,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Titahi Bay Road</name>
+        <description><![CDATA[SUBURB: Porirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8401114,-41.1384919,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>29 Kenepuru Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8425669,-41.1418591,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Queen Charlotte Drive (#2)</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8582203,-41.1272194,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Castor Crescent</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8692579,-41.1386457,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Broken Hill Road</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8295542,-41.1460771,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14 Raiha Street</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8281269,-41.137206,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bluff Road</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8386173,-41.1434493,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>9 Upper Main Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8346694,-41.1409883,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Upper Main Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8355932,-41.1407853,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Upper Main Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.830281,-41.1414904,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14 Makaro Drive</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8309629,-41.1378969,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>11 Matiu Close</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8315336,-41.1392913,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Heriot Drive</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8357274,-41.133572,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Kinleith Gron</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8253306,-41.1518136,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Beattie Grove</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8265974,-41.1472738,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>29 Raiha Street</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8283751,-41.1385198,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Clipper Street </name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8511464,-41.1104518,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>25 Mappleback</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8484148,-41.106845,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>39 Rothwell Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8490193,-41.1041668,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>77 Awatea</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8468456,-41.1453601,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Apple Terrace</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8456742,-41.1481612,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Waitaria Terrace</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8531939,-41.1277172,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Sasanof View</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8742022,-41.1235144,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Passive Grove</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8763664,-41.123662,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>16 Lagden Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8726559,-41.0873557,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>28 Pope Street</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8737301,-41.0888885,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Bodmin Terrace</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8739542,-41.0899388,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>48 Bodmin Terrace</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8757175,-41.0886285,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 St Ives Drive</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8779331,-41.091604,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Pendennis Point</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8780822,-41.0898881,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Saint Austell Close</name>
+        <description><![CDATA[SUBURB: Camborne<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Camborne</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8789269,-41.0889865,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>136 Motuhara Road</name>
+        <description><![CDATA[SUBURB: Plimmerton<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.861321,-41.0749916,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Paremata Drive</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8674549,-41.1084919,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>39 Kahu Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8790895,-41.1072193,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>20 Tirowhanga Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.872184,-41.1097976,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Tweed Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8655983,-41.1118108,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>30 Tweed Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8656594,-41.113663,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>58 Tweed Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8632916,-41.1153486,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>78 Tweed Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8614564,-41.1171015,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>134B Eskdale Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8671699,-41.1176797,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>71 Eskdale Road</name>
+        <description><![CDATA[SUBURB: Papakowhai<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Papakowhai</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8698427,-41.1118107,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>29 Sombrero View</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8748627,-41.1151026,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Excellency Terrace</name>
+        <description><![CDATA[SUBURB: Ascot Park<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8728224,-41.1190297,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Staithes Drive North (#1)</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8810167,-41.112059,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Staithes Drive North (#2)</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8815169,-41.1119024,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Thimble Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8778119,-41.1116469,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6 Bosun Terrace</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8817767,-41.1074903,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>71 Leeward Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8832158,-41.1088412,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>75 Spinnaker Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8887495,-41.1110197,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>26 Spinnaker Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.888749,-41.1060738,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>39 Paekakariki HIll Road</name>
+        <description><![CDATA[SUBURB: Pauatahanui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pauatahanui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9177906,-41.1020368,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>53 Ayton Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.894336,-41.1113334,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Shackle Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.895498,-41.1084856,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>25 The Layline</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8938803,-41.1067735,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Mooring Close</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8981487,-41.109018,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>44 Trade Winds Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8993109,-41.1115503,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Starboard Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8947573,-41.1152926,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>69 Discovery Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8941102,-41.1173554,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Musket Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9008082,-41.1161519,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>43 James Cook Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9019811,-41.1164549,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Antipodes Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9021905,-41.1090996,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Shoal Place</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9013185,-41.1084448,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>52 Exploration Way</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.892235,-41.1225398,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>32 Banks Boulevard</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8966945,-41.1254981,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Banks Boulevard</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8956856,-41.121556,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Holystone Road</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.898826,-41.1243216,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Pilot Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8992363,-41.1198752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Spyglass Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9015537,-41.1183713,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>143 Navigation Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.903109,-41.119262,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>53 Navigation Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9058807,-41.1145362,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>41 Navigation Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9075195,-41.1132166,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3 Scoresby Road</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9113081,-41.1108111,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Navigation Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9109833,-41.1092235,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Port Lane</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9087662,-41.1137303,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>47 Endeavour Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9089076,-41.1158875,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>122 Endeavour Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9126478,-41.1162319,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>54 Samwell Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9068332,-41.1123382,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6 Samwell Drive</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.906796,-41.1086138,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>20 Upper Main Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8329462,-41.1407008,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>3A Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8462019,-41.1381874,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>6 Mungavin Avenue</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8458693,-41.1384434,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>36B Waihora Crescent</name>
+        <description><![CDATA[SUBURB: Waitangirua<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8795643,-41.1384291,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>67 Kenepuru Drive</name>
+        <description><![CDATA[SUBURB: Kenepuru<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8366338,-41.1496154,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>21 Mohuia Crescent</name>
+        <description><![CDATA[SUBURB: Elsdon<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8306378,-41.1332196,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>17 Main Road</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8382249,-41.1048046,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>13 John Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8378795,-41.1012547,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Mana Avenue</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8409515,-41.1072482,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Inlet View</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8481715,-41.1118325,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>56 Gloaming Hill</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8481652,-41.1097378,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Clipper Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8503737,-41.1092891,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Paparoa Creascent</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8647184,-41.1285014,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>5 Kaimai Place</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8608028,-41.1294488,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>22 Nelson Avenue</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8663557,-41.1296806,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2C Observatory Close</name>
+        <description><![CDATA[SUBURB: Whitby<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Whitby</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9018897,-41.1099958,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>145 Te Puia Drive</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8652962,-41.1269628,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2 Dusky Crescent</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.867756,-41.1257028,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>58 Te Puia Drive</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: Hiding behind the shrubs]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Hiding behind the shrubs</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8692523,-41.1290656,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>88 Queen Charlotte Drive</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8466965,-41.1305811,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>4 Margaret Shields Avenue</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8504534,-41.1266118,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Frances Brown Avenue</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8529108,-41.1250072,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>12 Frances Brown Avenue</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8549459,-41.1268003,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Queen Charlotte Avenue</name>
+        <description><![CDATA[SUBURB: Aotea<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Aotea</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8568979,-41.131668,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>116 Pikarere Street</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.825122,-41.1112741,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1 Tuna Terrace</name>
+        <description><![CDATA[SUBURB: Titahi Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Titahi Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.828694,-41.1120153,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>27 Gray Street</name>
+        <description><![CDATA[SUBURB: Pukerua Bay<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Pukerua Bay</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8871018,-41.0420584,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>41 Mana Road</name>
+        <description><![CDATA[SUBURB: Paremata<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Paremata</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8695646,-41.0986105,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>14 Awatea Street</name>
+        <description><![CDATA[SUBURB: Ranui<br>NOTES: ]]></description>
+        <styleUrl>#icon-1141</styleUrl>
+        <ExtendedData>
+          <Data name="SUBURB">
+            <value>Ranui</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8469259,-41.1393558,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Area divider for WE box sweeps</name>
+      <Placemark>
+        <name>Titahi Bay North</name>
+        <styleUrl>#poly-880E4F-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8327984,-41.0998309,0
+                174.8323692,-41.1029031,0
+                174.8350729,-41.1036469,0
+                174.8361565,-41.1054658,0
+                174.8373957,-41.1058659,0
+                174.8382379,-41.1057002,0
+                174.8442997,-41.1142527,0
+                174.8495353,-41.1142851,0
+                174.8524536,-41.1121834,0
+                174.8526682,-41.1085943,0
+                174.8504366,-41.105102,0
+                174.8500503,-41.1012538,0
+                174.8482479,-41.0996692,0
+                174.8470462,-41.0970497,0
+                174.844643,-41.0948181,0
+                174.8430551,-41.0930393,0
+                174.8403085,-41.0931686,0
+                174.8364462,-41.0962088,0
+                174.832455,-41.0989254,0
+                174.8327984,-41.0998309,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Titahi Bay South</name>
+        <styleUrl>#poly-F9A825-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.835001,-41.1047775,0
+                174.8287354,-41.1082536,0
+                174.8235212,-41.1094985,0
+                174.8229203,-41.1116488,0
+                174.8278341,-41.1150275,0
+                174.8309885,-41.1240152,0
+                174.8377047,-41.1245809,0
+                174.8443995,-41.1145749,0
+                174.8381768,-41.1058446,0
+                174.8373527,-41.1060438,0
+                174.8363099,-41.1057153,0
+                174.835001,-41.1047775,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Pukerua Bay</name>
+        <styleUrl>#poly-A1C2FA-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8869042,-41.0276308,0
+                174.882441,-41.0315157,0
+                174.8815827,-41.0357888,0
+                174.8788361,-41.0396085,0
+                174.8821835,-41.0425864,0
+                174.8874191,-41.0447226,0
+                174.891024,-41.0407738,0
+                174.8945431,-41.0351414,0
+                174.8993496,-41.0330049,0
+                174.8989205,-41.0274366,0
+                174.8917965,-41.0280193,0
+                174.8869042,-41.0276308,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Camborne & Ngati Toa Domain]]></name>
+        <styleUrl>#poly-F9A825-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8701766,-41.0757541,0
+                174.8677304,-41.0776628,0
+                174.8667434,-41.0802507,0
+                174.8670867,-41.0828386,0
+                174.8680738,-41.0852647,0
+                174.8680308,-41.0862027,0
+                174.8688891,-41.086979,0
+                174.8673442,-41.0894373,0
+                174.8661855,-41.0890168,0
+                174.8636964,-41.0987518,0
+                174.8678163,-41.1007246,0
+                174.8676875,-41.1033763,0
+                174.8709062,-41.1033763,0
+                174.8718074,-41.0997867,0
+                174.8715928,-41.0973612,0
+                174.8739102,-41.0955824,0
+                174.8762706,-41.0935772,0
+                174.8799613,-41.0932215,0
+                174.8822787,-41.0911515,0
+                174.8825362,-41.0898901,0
+                174.8825362,-41.0885639,0
+                174.8807338,-41.0869143,0
+                174.8776868,-41.0859439,0
+                174.8756269,-41.0830327,0
+                174.8714641,-41.0831297,0
+                174.8687604,-41.0816417,0
+                174.873009,-41.0765305,0
+                174.8701766,-41.0757541,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Elsdon & Porirua City]]></name>
+        <styleUrl>#poly-097138-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8291047,-41.1241848,0
+                174.8272995,-41.1235234,0
+                174.8250249,-41.1242669,0
+                174.8241237,-41.1255277,0
+                174.8257116,-41.1286633,0
+                174.8259262,-41.1302796,0
+                174.8267416,-41.1328332,0
+                174.8283294,-41.1350311,0
+                174.8271278,-41.137229,0
+                174.8274282,-41.1398793,0
+                174.8312906,-41.1398793,0
+                174.8325351,-41.1389743,0
+                174.8338226,-41.1391682,0
+                174.8365692,-41.1391197,0
+                174.8385647,-41.1392975,0
+                174.8393801,-41.1386188,0
+                174.8409465,-41.1389097,0
+                174.8413971,-41.1396853,0
+                174.8428563,-41.1396773,0
+                174.8428241,-41.1387481,0
+                174.8428376,-41.134949,0
+                174.842623,-41.1306177,0
+                174.8419364,-41.1287105,0
+                174.8406918,-41.1249607,0
+                174.8291047,-41.1241848,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Kenepuru to Tawa border</name>
+        <styleUrl>#poly-01579B-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8182133,-41.1583693,0
+                174.819014,-41.15908,0
+                174.8221039,-41.1575291,0
+                174.8242712,-41.1546533,0
+                174.826374,-41.1545402,0
+                174.8265457,-41.1531346,0
+                174.8279619,-41.1523106,0
+                174.8301935,-41.150501,0
+                174.8296785,-41.1498224,0
+                174.8291635,-41.1492731,0
+                174.8297858,-41.147932,0
+                174.8322534,-41.1486914,0
+                174.8329401,-41.1492084,0
+                174.8326329,-41.1501134,0
+                174.8321179,-41.1519069,0
+                174.8332766,-41.1521735,0
+                174.8346284,-41.1511677,0
+                174.8362056,-41.1498711,0
+                174.8387698,-41.148837,0
+                174.8401431,-41.147916,0
+                174.8405293,-41.1484169,0
+                174.8413662,-41.1479645,0
+                174.842718,-41.1462517,0
+                174.8430613,-41.1427776,0
+                174.8421815,-41.1398042,0
+                174.8413876,-41.1398527,0
+                174.8407868,-41.1389801,0
+                174.8394564,-41.13877,0
+                174.8385767,-41.1395295,0
+                174.8367528,-41.1392871,0
+                174.8350576,-41.1393033,0
+                174.8338131,-41.1393679,0
+                174.8326114,-41.1391901,0
+                174.8313454,-41.1400789,0
+                174.8266676,-41.1401436,0
+                174.827998,-41.1447328,0
+                174.8262814,-41.1467365,0
+                174.8217753,-41.1525532,0
+                174.8182133,-41.1583693,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Whitby East</name>
+        <styleUrl>#poly-C2185B-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.9017975,-41.1054478,0
+                174.9016664,-41.1065155,0
+                174.9007246,-41.1077113,0
+                174.9013185,-41.1084448,0
+                174.9024412,-41.1092958,0
+                174.9026129,-41.1101365,0
+                174.9020979,-41.1117208,0
+                174.9013684,-41.1139518,0
+                174.9016688,-41.1158594,0
+                174.9020121,-41.1185429,0
+                174.9027416,-41.1194804,0
+                174.9036,-41.1202887,0
+                174.9087069,-41.1201594,0
+                174.9142859,-41.1163767,0
+                174.9160025,-41.1126908,0
+                174.9155733,-41.1109448,0
+                174.9154017,-41.108455,0
+                174.9149296,-41.1079053,0
+                174.9155304,-41.1073556,0
+                174.9206373,-41.1037662,0
+                174.9179122,-41.1006941,0
+                174.9104664,-41.104025,0
+                174.907119,-41.1040573,0
+                174.9017975,-41.1054478,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Whitby West</name>
+        <styleUrl>#poly-FFEA00-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.9014113,-41.1053508,0
+                174.8963473,-41.1035722,0
+                174.8912832,-41.1043807,0
+                174.8885367,-41.1036046,0
+                174.8865626,-41.1048981,0
+                174.8869917,-41.1059975,0
+                174.8882792,-41.1048981,0
+                174.888749,-41.1060738,0
+                174.8872063,-41.107194,0
+                174.8894379,-41.1082287,0
+                174.8880217,-41.1113975,0
+                174.8887083,-41.1117532,0
+                174.8865626,-41.1137578,0
+                174.8866913,-41.1165384,0
+                174.8893521,-41.1186399,0
+                174.8890087,-41.120224,0
+                174.8897383,-41.1232629,0
+                174.8901674,-41.1271745,0
+                174.8921845,-41.1262694,0
+                174.8951027,-41.1280473,0
+                174.899008,-41.1288554,0
+                174.8988793,-41.1267543,0
+                174.9029991,-41.1259784,0
+                174.9035141,-41.1220991,0
+                174.9042437,-41.1211292,0
+                174.9029133,-41.1199654,0
+                174.9013684,-41.1187045,0
+                174.9007675,-41.1143721,0
+                174.9014971,-41.1119472,0
+                174.9022696,-41.1096838,0
+                174.9001238,-41.108067,0
+                174.9011538,-41.1064179,0
+                174.9014113,-41.1053508,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Ascot Park</name>
+        <styleUrl>#poly-3949AB-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8580356,-41.1179086,0
+                174.8543878,-41.1211739,0
+                174.8557181,-41.1229196,0
+                174.8574777,-41.1227257,0
+                174.8597951,-41.1218205,0
+                174.8615117,-41.1215942,0
+                174.8632283,-41.1215618,0
+                174.8655028,-41.1220468,0
+                174.8673053,-41.1210446,0
+                174.8685927,-41.1206243,0
+                174.8706956,-41.1209153,0
+                174.872026,-41.1218851,0
+                174.8738818,-41.1222751,0
+                174.8759313,-41.1224024,0
+                174.8768325,-41.1219498,0
+                174.8794074,-41.1221438,0
+                174.8806949,-41.1226933,0
+                174.8812124,-41.1238896,0
+                174.8808902,-41.1254173,0
+                174.8828432,-41.1252797,0
+                174.8867914,-41.1249564,0
+                174.8882076,-41.1224995,0
+                174.888551,-41.1201395,0
+                174.8889801,-41.1186847,0
+                174.8861906,-41.1166478,0
+                174.8808691,-41.1161305,0
+                174.8794529,-41.1165185,0
+                174.8793671,-41.1174884,0
+                174.8761913,-41.1172944,0
+                174.875333,-41.1157749,0
+                174.8724148,-41.11238,0
+                174.8695395,-41.1169388,0
+                174.8671362,-41.118717,0
+                174.8664495,-41.1190403,0
+                174.8643038,-41.1204628,0
+                174.8579952,-41.1194283,0
+                174.8580356,-41.1179086,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Aotea</name>
+        <styleUrl>#poly-FFFF8D-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8509981,-41.1250473,0
+                174.8464062,-41.1278597,0
+                174.8447325,-41.1322882,0
+                174.8456337,-41.1361022,0
+                174.8482087,-41.1361022,0
+                174.8504403,-41.1330962,0
+                174.8539593,-41.1319972,0
+                174.8570492,-41.1333548,0
+                174.85868,-41.1307689,0
+                174.8615553,-41.1313184,0
+                174.8639157,-41.1330962,0
+                174.8665764,-41.1323851,0
+                174.8689368,-41.1312215,0
+                174.8715117,-41.129476,0
+                174.8719408,-41.1268253,0
+                174.8748591,-41.1259524,0
+                174.8776915,-41.1241421,0
+                174.8778632,-41.1221701,0
+                174.8765694,-41.1221864,0
+                174.8744299,-41.1226227,0
+                174.872026,-41.1218851,0
+                174.8702671,-41.1211356,0
+                174.8683359,-41.1209093,0
+                174.8670914,-41.1213296,0
+                174.8657181,-41.1223318,0
+                174.8630574,-41.1218792,0
+                174.8610403,-41.1218145,0
+                174.8584225,-41.1224287,0
+                174.8569634,-41.1231723,0
+                174.8545601,-41.1230106,0
+                174.8538306,-41.1225257,0
+                174.8525002,-41.1226874,0
+                174.8514273,-41.1232693,0
+                174.8509981,-41.1250473,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua</name>
+        <styleUrl>#poly-4E342E-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8742154,-41.1304456,0
+                174.8789234,-41.1389491,0
+                174.8804254,-41.1385936,0
+                174.8815413,-41.138238,0
+                174.8827858,-41.1370583,0
+                174.8863477,-41.1350221,0
+                174.8884506,-41.1314019,0
+                174.8860473,-41.1294947,0
+                174.8838157,-41.127232,0
+                174.8826999,-41.1261329,0
+                174.8821849,-41.1258419,0
+                174.8800821,-41.1258742,0
+                174.8808117,-41.1248721,0
+                174.8805112,-41.1232557,0
+                174.8788805,-41.1224799,0
+                174.8784942,-41.1228355,0
+                174.8780651,-41.1244519,0
+                174.8744387,-41.1275552,0
+                174.8733444,-41.1293008,0
+                174.8734732,-41.1298827,0
+                174.8742154,-41.1304456,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Ranui</name>
+        <styleUrl>#poly-F48FB1-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8563128,-41.1350991,0
+                174.8562485,-41.1348405,0
+                174.856463,-41.1342264,0
+                174.8563343,-41.1338547,0
+                174.8551756,-41.1338061,0
+                174.8538452,-41.1324486,0
+                174.8508411,-41.133483,0
+                174.8500016,-41.1354023,0
+                174.8473221,-41.1366505,0
+                174.8455738,-41.1366109,0
+                174.8452192,-41.1356162,0
+                174.8440605,-41.1359395,0
+                174.8437172,-41.1391392,0
+                174.8439747,-41.1423712,0
+                174.8452192,-41.1428236,0
+                174.8449188,-41.1457645,0
+                174.8438888,-41.1494485,0
+                174.8461204,-41.1494162,0
+                174.848352,-41.1477358,0
+                174.8518711,-41.1471218,0
+                174.8521286,-41.1465724,0
+                174.8542314,-41.1465724,0
+                174.8569351,-41.1466694,0
+                174.8576647,-41.1449243,0
+                174.8574715,-41.1447466,0
+                174.8576218,-41.1444072,0
+                174.8577505,-41.1440194,0
+                174.8580616,-41.1440275,0
+                174.8583406,-41.143979,0
+                174.8587,-41.1438053,0
+                174.8588019,-41.1430579,0
+                174.8588663,-41.142759,0
+                174.8587912,-41.1415066,0
+                174.8589948,-41.1410703,0
+                174.8596813,-41.1408037,0
+                174.8572782,-41.1391714,0
+                174.8563772,-41.1363273,0
+                174.8563128,-41.1350991,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Cannon's Creek]]></name>
+        <styleUrl>#poly-558B2F-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8636045,-41.1332686,0
+                174.8609223,-41.1325091,0
+                174.8579397,-41.1333656,0
+                174.8566308,-41.1341575,0
+                174.8564591,-41.1359837,0
+                174.8578539,-41.1394582,0
+                174.8599782,-41.1407833,0
+                174.8592057,-41.1413328,0
+                174.8590126,-41.1424801,0
+                174.8589482,-41.1437405,0
+                174.8580041,-41.1443222,0
+                174.8586478,-41.1456472,0
+                174.8592272,-41.1501876,0
+                174.8601928,-41.1513832,0
+                174.8625102,-41.1522395,0
+                174.8652139,-41.1523365,0
+                174.8658361,-41.1503168,0
+                174.8693337,-41.1456149,0
+                174.8683252,-41.1433042,0
+                174.8636045,-41.1332686,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua East</name>
+        <styleUrl>#poly-9C27B0-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8725697,-41.1309,0
+                174.8724195,-41.1309162,0
+                174.8648879,-41.1336152,0
+                174.865596,-41.1363787,0
+                174.8675057,-41.1412429,0
+                174.8687288,-41.1435537,0
+                174.872677,-41.1442324,0
+                174.8770544,-41.1423741,0
+                174.8782131,-41.1399178,0
+                174.8767755,-41.1352636,0
+                174.874326,-41.1314826,0
+                174.8725697,-41.1309,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Paremata</name>
+        <styleUrl>#poly-795548-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8692508,-41.1057755,0
+                174.8692508,-41.1066647,0
+                174.8702593,-41.1072306,0
+                174.8706455,-41.1078935,0
+                174.8723836,-41.1083462,0
+                174.8730273,-41.1082815,0
+                174.8731852,-41.1112705,0
+                174.8724148,-41.11238,0
+                174.8739001,-41.1135825,0
+                174.8740503,-41.1142453,0
+                174.8748335,-41.114803,0
+                174.8753807,-41.1153688,0
+                174.8758528,-41.1162418,0
+                174.8761854,-41.1168722,0
+                174.8775694,-41.1167672,0
+                174.8791358,-41.1170662,0
+                174.8793504,-41.1164358,0
+                174.8802409,-41.1159993,0
+                174.8859808,-41.1156356,0
+                174.8861739,-41.1140028,0
+                174.8868498,-41.1133723,0
+                174.8883304,-41.1117233,0
+                174.887676,-41.1114081,0
+                174.8872683,-41.11005,0
+                174.8869035,-41.107156,0
+                174.8885343,-41.1060566,0
+                174.8881695,-41.105135,0
+                174.8869464,-41.1061374,0
+                174.8866567,-41.1057656,0
+                174.884747,-41.1059353,0
+                174.8837599,-41.1062668,0
+                174.8834595,-41.105806,0
+                174.8811528,-41.1054422,0
+                174.8802516,-41.1023944,0
+                174.882215,-41.101303,0
+                174.8837599,-41.0990635,0
+                174.8832235,-41.0987724,0
+                174.8759064,-41.1016102,0
+                174.8759064,-41.1024591,0
+                174.8739645,-41.1043912,0
+                174.8725698,-41.1032513,0
+                174.8679778,-41.1036394,0
+                174.8692508,-41.1057755,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Papakowhai</name>
+        <styleUrl>#poly-FFFFFF-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8582073,-41.1176178,0
+                174.8582932,-41.1192667,0
+                174.8644086,-41.1200588,0
+                174.8672195,-41.1183614,0
+                174.8692795,-41.1162438,0
+                174.8730131,-41.1109897,0
+                174.8729487,-41.1084353,0
+                174.8702022,-41.1079664,0
+                174.8696013,-41.106964,0
+                174.8687216,-41.1063819,0
+                174.8688289,-41.1057029,0
+                174.8673483,-41.1042962,0
+                174.8596235,-41.1105047,0
+                174.8583361,-41.1144655,0
+                174.8582073,-41.1176178,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Plimmerton & Airlie Rd]]></name>
+        <styleUrl>#poly-C2185B-1200-76-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                174.8675557,-41.0766832,0
+                174.8672983,-41.0757288,0
+                174.8653241,-41.0735612,0
+                174.8619338,-41.0713936,0
+                174.8614189,-41.0678993,0
+                174.8597022,-41.0673493,0
+                174.8597022,-41.0653756,0
+                174.8627063,-41.0623016,0
+                174.8717614,-41.0599071,0
+                174.8711606,-41.0588392,0
+                174.866912,-41.0592923,0
+                174.8621699,-41.0604087,0
+                174.8586723,-41.0619133,0
+                174.8576423,-41.0663139,0
+                174.8569342,-41.0671228,0
+                174.8546382,-41.0687082,0
+                174.852868,-41.0667912,0
+                174.851838,-41.0672037,0
+                174.8528358,-41.0685464,0
+                174.8531576,-41.0699377,0
+                174.8548743,-41.0733833,0
+                174.8567411,-41.073998,0
+                174.8584362,-41.0746289,0
+                174.8626849,-41.0790448,0
+                174.8630282,-41.0814548,0
+                174.8620626,-41.0828781,0
+                174.8632857,-41.0834765,0
+                174.8654744,-41.0833471,0
+                174.8668476,-41.0861937,0
+                174.8667833,-41.0884902,0
+                174.8681136,-41.0864848,0
+                174.8677274,-41.0864201,0
+                174.8675557,-41.085385,0
+                174.8659679,-41.0818429,0
+                174.8661181,-41.0795138,0
+                174.8675557,-41.0766832,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

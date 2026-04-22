@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Community Buildings</name>
+    <description/>
+    <Style id="icon-1603-3949AB-normal">
+      <IconStyle>
+        <color>ffab4939</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1603-3949AB-highlight">
+      <IconStyle>
+        <color>ffab4939</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1603-3949AB">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1603-3949AB-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1603-3949AB-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Community building sites.csv</name>
+      <Placemark>
+        <name>Cook Islands building</name>
+        <description>14 Bedford Crt. Side and rear walls. </description>
+        <styleUrl>#icon-1603-3949AB</styleUrl>
+        <Point>
+          <coordinates>
+            174.8667682,-41.1417113,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Whitford Brown Community Centre</name>
+        <description>47 Kapiti Crescent. Retainer walls and mural. </description>
+        <styleUrl>#icon-1603-3949AB</styleUrl>
+        <Point>
+          <coordinates>
+            174.8412308,-41.1073815,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Factories facing Kenepuru Station</name>
+        <description>Rear of warehouses that face the railway. Ask Cathy for specific surfaces to paint out (not all owners wish to have their walls painted over). From Linden Park to Kenepuru Link Road</description>
+        <styleUrl>#icon-1603-3949AB</styleUrl>
+        <Point>
+          <coordinates>
+            174.8370634,-41.1495867,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

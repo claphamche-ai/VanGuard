@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name><![CDATA[Thompson Property Group & Unique Paint SItes]]></name>
+    <description/>
+    <Style id="icon-503-62AF44-normal">
+      <IconStyle>
+        <color>ff44af62</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-62AF44-highlight">
+      <IconStyle>
+        <color>ff44af62</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-62AF44">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-62AF44-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-62AF44-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name><![CDATA[Thompson Property Group & non standard paint sites]]></name>
+      <Placemark>
+        <name>BedsRus Porirua</name>
+        <description><![CDATA[ADDRESS: 2/10 Semple Street<br>SUBURB:  Porirua<br>COLOURS: Blue Night<br>SURFACE DESCRIPTION: Thompson Property Group<br>NOTES: <br>PAINT BRAND: Weathershield]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>2/10 Semple Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Blue Night</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Thompson Property Group</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Weathershield</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8377436,-41.1306772,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Briscoes Porirua</name>
+        <description><![CDATA[ADDRESS: 24 Parumoana Street<br>SUBURB:  Porirua<br>COLOURS: Briscoe Group Yellow/Briscoe Group Exterior Blue<br>SURFACE DESCRIPTION: Thompson Property Group<br>NOTES: <br>PAINT BRAND: Lumbersider]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>24 Parumoana Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Briscoe Group Yellow/Briscoe Group Exterior Blue</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Thompson Property Group</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Lumbersider</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.839101,-41.130436,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Repco Porirua</name>
+        <description><![CDATA[ADDRESS: 5 Semple Street<br>SUBURB:  Porirua<br>COLOURS: Fuel Yellow<br>SURFACE DESCRIPTION: Thompson Property Group<br>NOTES: <br>PAINT BRAND: Lumbersider]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>5 Semple Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Fuel Yellow</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Thompson Property Group</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Lumbersider</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8377811,-41.1290237,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>JB Hi Fi Porirua</name>
+        <description><![CDATA[ADDRESS: 10 Semple Street<br>SUBURB:  Porirua<br>COLOURS: JB Yellow/JB Black/JB Grey?<br>SURFACE DESCRIPTION: TBC<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>10 Semple Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>JB Yellow/JB Black/JB Grey?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>TBC</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8370832,-41.1306788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rebel Sport Porirua</name>
+        <description><![CDATA[ADDRESS: 4 Semple Street<br>SUBURB:  Porirua<br>COLOURS: Rebel White?<br>SURFACE DESCRIPTION: Thompson Property Group<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>4 Semple Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Rebel White?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Thompson Property Group</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8369444,-41.13,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>New World Porirua City</name>
+        <description><![CDATA[ADDRESS: 1 Lyttleton Avenue<br>SUBURB:  Porirua<br>COLOURS: Titania (half)/Grey?/Green?<br>SURFACE DESCRIPTION: Surfaces facing Walton Leigh & Lyttleton Ave<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>1 Lyttleton Avenue</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Titania (half)/Grey?/Green?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Surfaces facing Walton Leigh & Lyttleton Ave]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8422019,-41.136067,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Tony's Tyre & Auto Care - Porirua]]></name>
+        <description><![CDATA[ADDRESS: 8 Parumoana Street<br>SUBURB:  Porirua<br>COLOURS: Tonys Tyre Yellow<br>SURFACE DESCRIPTION: <br>NOTES: <br>PAINT BRAND: Sonyx]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>8 Parumoana Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value> Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Tonys Tyre Yellow</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value/>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Sonyx</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8423242,-41.1327438,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Idea Services</name>
+        <description><![CDATA[ADDRESS: 24 Prosser Street<br>SUBURB: Elsdon<br>COLOURS: Perfect Taupe?<br>SURFACE DESCRIPTION: <br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>24 Prosser Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Elsdon</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Perfect Taupe?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value/>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8332542,-41.1332011,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua Pharmacy</name>
+        <description><![CDATA[ADDRESS: 201 Warspite Avenue<br>SUBURB: Waitangirua<br>COLOURS: Unknown "white" & "beige"<br>SURFACE DESCRIPTION: White for rear doors & beige for street facing walls. <br>NOTES: Building AKA "Ora Toa Pharmacy" or "Waitangirua Health Centre"<br>PAINT BRAND: Resene?]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>201 Warspite Avenue</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value><![CDATA[Unknown "white" & "beige"]]></value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[White for rear doors & beige for street facing walls. ]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value><![CDATA[Building AKA "Ora Toa Pharmacy" or "Waitangirua Health Centre"]]></value>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Resene?</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8800268,-41.1305899,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Holy Family Parish</name>
+        <description><![CDATA[ADDRESS: 167 Mungavin Avenue<br>SUBURB: Cannons Creek<br>COLOURS: Blue?<br>SURFACE DESCRIPTION: Border of geometric style mural<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>167 Mungavin Avenue</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Blue?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Border of geometric style mural</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8585921,-41.1403118,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Outlet City Tawa</name>
+        <description><![CDATA[ADDRESS: 24 Main Road<br>SUBURB: Tawa<br>COLOURS: Rich Red<br>SURFACE DESCRIPTION: <br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>24 Main Road</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Tawa</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Rich Red</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value/>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.825052,-41.1826432,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Linden Park factorties</name>
+        <description><![CDATA[ADDRESS: 6 Wall Place<br>SUBURB: Kenepuru<br>COLOURS: Red or Kandallah Brown<br>SURFACE DESCRIPTION: Factory walls that face Linden Park<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>6 Wall Place</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Red or Kandallah Brown</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Factory walls that face Linden Park</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8329773,-41.1518064,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pit Stop - Porirua</name>
+        <description><![CDATA[ADDRESS: 61 Kenepuru Drive<br>SUBURB: Kenepuru<br>COLOURS: Red? Orange? TBC<br>SURFACE DESCRIPTION: At laneway entrance<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>61 Kenepuru Drive</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Kenepuru</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Red? Orange? TBC</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>At laneway entrance</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8379046,-41.1488987,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Kai Hub Dairy & Takeaways]]></name>
+        <description><![CDATA[ADDRESS: 432 Warpsite Avenue<br>SUBURB: Ascot Park<br>COLOURS: ?<br>SURFACE DESCRIPTION: <br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>432 Warpsite Avenue</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Ascot Park</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value/>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8738818,-41.1222751,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fantame Food Market</name>
+        <description><![CDATA[ADDRESS: 19 Fantame Street<br>SUBURB: Cannons Creek<br>COLOURS: ?<br>SURFACE DESCRIPTION: Top of street verandah<br>NOTES: <br>PAINT BRAND: ]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>19 Fantame Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Cannons Creek</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>?</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Top of street verandah</value>
+          </Data>
+          <Data name="NOTES">
+            <value/>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8712493,-41.1350881,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Waitangirua Mall</name>
+        <description><![CDATA[ADDRESS: 201Wapsite Avenue<br>SUBURB: Waitangirua<br>COLOURS: TBC <br>SURFACE DESCRIPTION: Concrete panels & murals<br>NOTES: Paint out tags on panels. Clean murals, facing carpark. Is a vacant supermarket. <br>PAINT BRAND: Resene recycled? TBC]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>201Wapsite Avenue</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Waitangirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>TBC </value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value><![CDATA[Concrete panels & murals]]></value>
+          </Data>
+          <Data name="NOTES">
+            <value>Paint out tags on panels. Clean murals, facing carpark. Is a vacant supermarket. </value>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Resene recycled? TBC</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8793935,-41.1303756,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Hagley St substation</name>
+        <description><![CDATA[ADDRESS: 8 Hagley Street<br>SUBURB: Porirua<br>COLOURS: Chamois<br>SURFACE DESCRIPTION: Main wall surfaces<br>NOTES: Doors are Brunswick Green<br>PAINT BRAND: Resene Lumbersider low sheen]]></description>
+        <styleUrl>#icon-503-62AF44</styleUrl>
+        <ExtendedData>
+          <Data name="ADDRESS">
+            <value>8 Hagley Street</value>
+          </Data>
+          <Data name="SUBURB">
+            <value>Porirua</value>
+          </Data>
+          <Data name="COLOURS">
+            <value>Chamois</value>
+          </Data>
+          <Data name="SURFACE DESCRIPTION">
+            <value>Main wall surfaces</value>
+          </Data>
+          <Data name="NOTES">
+            <value>Doors are Brunswick Green</value>
+          </Data>
+          <Data name="PAINT BRAND">
+            <value>Resene Lumbersider low sheen</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8389718,-41.1351009,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

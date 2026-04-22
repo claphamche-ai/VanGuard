@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>PCC Underpasses</name>
+    <description/>
+    <Style id="icon-1467-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1467-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1467">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1467-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1467-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Assets Map- Underpasses - PCC Roads assets.csv</name>
+      <Placemark>
+        <name>1 Walton Leigh Avenue</name>
+        <description><![CDATA[Suburb: Porirua<br>Description: Underpass<br>Notes: Paid carpark commences at 8AM. ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Porirua</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value>Paid carpark commences at 8AM. </value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8416827,-41.137636,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Postgate Drive</name>
+        <description><![CDATA[Suburb: Whitby<br>Description: Undepass<br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Whitby</value>
+          </Data>
+          <Data name="Description">
+            <value>Undepass</value>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.882365,-41.1131752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Spinnaker Drive/Pullen Lane</name>
+        <description><![CDATA[Suburb: Whitby<br>Description: Underpass<br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Whitby</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8886217,-41.1106079,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>103 Spinnaker Drive</name>
+        <description><![CDATA[Suburb: Whitby<br>Description: Underpass<br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Whitby</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8870123,-41.1126651,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>82 Paremata Road</name>
+        <description><![CDATA[Suburb: Paremata<br>Description: Underpass<br>Notes: Walkway linking Ivey Bay carpark & Paremata Kindergarten. DO NOT remove graffiti on the road barrier (this is NZTA asset).]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Paremata</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value><![CDATA[Walkway linking Ivey Bay carpark & Paremata Kindergarten. DO NOT remove graffiti on the road barrier (this is NZTA asset).]]></value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8743188,-41.1047124,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>80 Discovery Drive</name>
+        <description><![CDATA[Suburb: Whitby<br>Description: Underpass<br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Whitby</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8955758,-41.115108,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>2C Observatory Close</name>
+        <description><![CDATA[Suburb: Whitby<br>Description: Underpass<br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Whitby</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.902433,-41.1098964,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>19 Marina View</name>
+        <description><![CDATA[Suburb: Paremata<br>Description: Highway underpass<br>Notes: Paremata Bridge North. Access via Marina View.]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Paremata</value>
+          </Data>
+          <Data name="Description">
+            <value>Highway underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value>Paremata Bridge North. Access via Marina View.</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8698221,-41.1028401,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>470 Paremata Road</name>
+        <description><![CDATA[Suburb: Pauatahanui<br>Description: Underpass<br>Notes: Footpath that goes under Paremata Rd bridge. Access north wall via carpark at 470 Paremata Rd. Access south wall by parking in the clearing between the stream & Paekakariki Rd. ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Pauatahanui</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value><![CDATA[Footpath that goes under Paremata Rd bridge. Access north wall via carpark at 470 Paremata Rd. Access south wall by parking in the clearing between the stream & Paekakariki Rd. ]]></value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.916179,-41.107627,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1C Mepham Place</name>
+        <description><![CDATA[Suburb: Ranui<br>Description: Underpass<br>Notes: Links Mepham Pl to park n Ride. Best access via Mepham Pl.]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Ranui</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value>Links Mepham Pl to park n Ride. Best access via Mepham Pl.</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8448627,-41.1362089,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>62 Steyn Avenue</name>
+        <description><![CDATA[Suburb: Plimmerton<br>Description: Underpass <br>Notes: Facing Taupo Stream. Accessed via 65 Steyn Ave on-street carspark.]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Plimmerton</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass </value>
+          </Data>
+          <Data name="Notes">
+            <value>Facing Taupo Stream. Accessed via 65 Steyn Ave on-street carspark.</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.867463,-41.0862814,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park here to access south wall of the underpass.</name>
+        <description><![CDATA[Suburb: <br>Description: <br>Notes: ]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value/>
+          </Data>
+          <Data name="Description">
+            <value/>
+          </Data>
+          <Data name="Notes">
+            <value/>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.9170381,-41.1077801,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>64 Paremata Road</name>
+        <description><![CDATA[Suburb: Paremata<br>Description: Highway underpass<br>Notes: Paremata Bridge South]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Paremata</value>
+          </Data>
+          <Data name="Description">
+            <value>Highway underpass</value>
+          </Data>
+          <Data name="Notes">
+            <value>Paremata Bridge South</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8697068,-41.1040819,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mungavin St underpass - Ranui end</name>
+        <description><![CDATA[Suburb: Ranui<br>Description: Underpass to Porirua Station. <br>Notes: Park near 14 Kivell St for best access. Do not stray beyond the guard rails (they are not PCC property).]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Ranui</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass to Porirua Station. </value>
+          </Data>
+          <Data name="Notes">
+            <value>Park near 14 Kivell St for best access. Do not stray beyond the guard rails (they are not PCC property).</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8454103,-41.1384505,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Titahi Bay Rd underpass - Porirua Station end</name>
+        <description><![CDATA[Suburb: Porirua<br>Description: Underpass to Porirua Station. <br>Notes: Park in station carpark for best access. Do not stray beyond the guard rails (they are not PCC property).]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="Suburb">
+            <value>Porirua</value>
+          </Data>
+          <Data name="Description">
+            <value>Underpass to Porirua Station. </value>
+          </Data>
+          <Data name="Notes">
+            <value>Park in station carpark for best access. Do not stray beyond the guard rails (they are not PCC property).</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            174.8444613,-41.1381482,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
