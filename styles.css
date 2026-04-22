@@ -4,18 +4,16 @@ body, html { margin:0; padding:0; height:100%; font-family:sans-serif; backgroun
 
 .van-icon { font-size:40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; }
 
-/* TIMER POSITIONED TO NOT OVERLAP FS BUTTON */
-#live-timer-widget { position:fixed; top:15px; right:160px; background:#ff4757; color:white; padding:10px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+#live-timer-widget { position:fixed; top:15px; right:165px; background:#ff4757; color:white; padding:12px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
 
 #menu-trigger { position:fixed; top:15px; left:15px; z-index:2000; background:var(--y); padding:12px; border-radius:10px; border:2px solid #000; cursor:pointer; }
 .menu-trigger span { display:block; width:22px; height:3px; background:#000; margin:4px 0; }
 
-.map-control-btn { position:fixed; z-index:2000; background:#fff; border:2px solid #ccc; font-weight:900; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; }
-.map-control-btn:active { background:#eee; }
+.fs-btn { position:fixed; top:15px; right:15px; padding:12px 15px; font-size:12px; border-radius:8px; background:#000; color:#fff; border:2px solid var(--y); text-transform:uppercase; z-index:2000; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-weight:900; cursor:pointer;}
+.fs-btn:active { background:#333; }
 
-/* MOVED FS BUTTON TO TOP RIGHT */
-.fs-btn { top:15px; right:15px; padding:10px 12px; font-size:11px; border-radius:8px; background:#000; color:#fff; border-color:var(--y); text-transform:uppercase; }
-.gps-btn { bottom:20px; right:20px; width:55px; height:55px; border-radius:50%; font-size:24px; }
+.gps-btn { position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; font-size:24px; z-index:2000; background:#fff; border:2px solid #ccc; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;}
+.gps-btn:active { background:#eee; }
 
 #sidebar { 
     position:fixed; top:0; left:-320px; width:300px; height:100%; 

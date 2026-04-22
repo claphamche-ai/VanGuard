@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.4</title>
+    <title id="page-title">VanGuard | Field Ops v2.5</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,16 +15,14 @@
         <span></span><span></span><span></span>
     </div>
 
-    <!-- Full Screen Button Top Right -->
-    <button id="fs-btn" class="map-control-btn fs-btn" onclick="toggleFS()">🔲 FULL SCREEN</button>
-    <button id="gps-btn" class="map-control-btn gps-btn" onclick="centerGPS()">📍</button>
+    <button id="fs-btn" class="fs-btn" onclick="toggleFS()">🔲 FULL SCREEN</button>
+    <button id="gps-btn" class="gps-btn" onclick="centerGPS()">📍</button>
 
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
-        <!-- Dynamic Branding -->
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.4</div>
+        <div class="sidebar-version">Version 2.5</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
