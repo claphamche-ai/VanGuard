@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v23</title>
+    <title>Track Tags | Field Ops v26</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -16,6 +16,8 @@
             --urgent-red: #ff4757;
             --minor-orange: #f39c12;
             --good-green: #2ecc71;
+            --pause-grey: #636e72;
+            --disabled-grey: #bdc3c7;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
@@ -50,7 +52,6 @@
         }
         #sidebar.open { left: 0; }
         .sidebar-header { font-size: 22px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: flex; align-items: baseline; gap: 8px; }
-        .sidebar-header span.v-label { font-size: 12px; color: rgba(255, 255, 255, 0.5); font-weight: 400; }
         
         .nav-item { padding: 14px; margin: 8px 0; border-radius: 10px; background: rgba(255,255,255,0.05); cursor: pointer; display: flex; align-items: center; font-weight: 600; }
         #layer-container { display: none; margin: 5px 0 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
@@ -64,35 +65,39 @@
         .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 15px 20px 15px; }
         .action-btn { background: var(--action-blue); color: white; border: none; padding: 12px 0; border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; text-align: center; text-transform: uppercase; }
 
-        /* INSPECTION OVERLAY */
-        #inspection-overlay {
+        .full-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #f8f9fa; z-index: 5000; display: none; flex-direction: column;
             overflow-y: auto; color: #333;
         }
-        .insp-header { background: #000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .insp-content { padding: 20px; flex-grow: 1; }
+        .form-header { background: #000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .form-content { padding: 20px; flex-grow: 1; }
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-weight: 800; font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
         
-        /* High-Visibility Radio Buttons */
-        .radio-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .radio-grid input { display: none; }
-        .radio-label { 
-            padding: 15px 5px; border-radius: 12px; text-align: center; 
-            font-weight: 900; font-size: 12px; cursor: pointer; border: 2px solid transparent; background: #eee;
+        .insp-textarea { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: white; height: 80px; resize: none; }
+
+        .photo-step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .photo-step-btn { 
+            background: #fff; border: 2px dashed #cbd5e0; padding: 20px 10px; 
+            border-radius: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        input#cond-good:checked + .radio-label { background: var(--good-green); color: white; border-color: #1b8a4f; }
-        input#cond-minor:checked + .radio-label { background: var(--minor-orange); color: white; border-color: #c87f0a; }
-        input#cond-urgent:checked + .radio-label { background: var(--urgent-red); color: white; border-color: #b3323e; }
+        .photo-step-btn.done { border-style: solid; border-color: var(--good-green); background: #f0fff4; }
 
-        .insp-input, .insp-textarea { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; }
-        .insp-textarea { height: 100px; resize: none; }
+        .dual-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 10px; }
+        .submit-btn { background: var(--safety-yellow); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; text-transform: uppercase; }
+        .submit-btn:disabled { background: var(--disabled-grey); cursor: not-allowed; opacity: 0.7; }
+        .pause-btn { background: var(--pause-grey); color: #fff; border: none; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; text-transform: uppercase; }
 
-        .photo-btn { background: #e2e8f0; border: 2px dashed #cbd5e0; padding: 30px; border-radius: 12px; text-align: center; cursor: pointer; }
+        /* LISTS */
+        .list-item { background: white; margin-bottom: 10px; padding: 15px; border-radius: 12px; border-left: 5px solid var(--action-blue); cursor: pointer; position: relative; }
+        .list-item.paused { border-left-color: var(--pause-grey); }
+        .list-title { font-weight: 900; font-size: 16px; }
+        .list-meta { font-size: 11px; color: #888; text-transform: uppercase; margin-top: 5px; }
+        .badge { position: absolute; top: 15px; right: 15px; font-size: 9px; padding: 4px 8px; border-radius: 5px; font-weight: 900; background: #eee; }
+        .badge.p { background: var(--pause-grey); color: white; }
 
-        .submit-insp { background: var(--safety-yellow); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; margin-top: 10px; }
-        .van-marker { font-size: 38px; text-shadow: 2px 2px 0px #000; }
+        #job-bank-empty { text-align: center; color: #888; padding: 40px 20px; }
     </style>
 </head>
 <body>
@@ -102,13 +107,13 @@
     </div>
 
     <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v23</div>
+    <div class="version-tag">TRACK TAGS v26</div>
 
     <div id="sidebar">
-        <div class="sidebar-header">TRACK TAGS <span class="v-label">v23</span></div>
+        <div class="sidebar-header">TRACK TAGS <span class="v-label">v26</span></div>
         <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
         <div id="layer-container"></div>
-        <div class="nav-item" onclick="alert('Opening Job Bank...')"><i>📋</i> Job Bank</div>
+        <div class="nav-item" onclick="openOverlay('jobbank')"><i>📋</i> Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode...')"><i>➕</i> Add Site</div>
         <div class="nav-item" style="color: var(--urgent-red);" onclick="location.reload()"><i>🚪</i> Log Out</div>
     </div>
@@ -127,53 +132,91 @@
             <div class="detail-item"><div class="detail-label">Last Inspected</div><div id="s-date" class="detail-value">--</div></div>
         </div>
         <div class="action-grid">
-            <button class="action-btn" onclick="openInspection()">Inspection</button>
-            <button class="action-btn" onclick="alert('Work Logged')">Log Work</button>
-            <button class="action-btn" onclick="alert('Loading History')">History</button>
+            <button class="action-btn" onclick="openOverlay('inspection')">Inspection</button>
+            <button class="action-btn" onclick="openOverlay('work')">Log Work</button>
+            <button class="action-btn" onclick="openOverlay('history')">History</button>
         </div>
     </div>
 
-    <!-- New Inspection Overlay -->
-    <div id="inspection-overlay">
-        <div class="insp-header">
-            <span style="font-weight:900; font-size:20px;">SITE INSPECTION</span>
-            <button onclick="closeInspection()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+    <!-- Log Work Overlay -->
+    <div id="work-overlay" class="full-overlay">
+        <div class="form-header">
+            <span style="font-weight:900; font-size:20px;">LOG WORK</span>
+            <button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
         </div>
-        <div class="insp-content">
+        <div class="form-content">
             <div class="form-group">
-                <label class="form-label">Site Reference</label>
-                <div id="insp-site-display" style="font-weight:bold; font-size:18px;">--</div>
-                <div id="insp-gps-display" style="font-size:11px; color:#888;">GPS: Identifying...</div>
+                <label class="form-label">Site: <span class="insp-site-display">--</span></label>
+                <div class="insp-gps-display" style="font-size:11px; color:#888;">GPS: Identifying...</div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Surface Condition</label>
-                <div class="radio-grid">
-                    <input type="radio" name="condition" id="cond-good" value="Good" checked>
-                    <label for="cond-good" class="radio-label">GOOD</label>
-                    
-                    <input type="radio" name="condition" id="cond-minor" value="Minor">
-                    <label for="cond-minor" class="radio-label">MINOR</label>
-                    
-                    <input type="radio" name="condition" id="cond-urgent" value="Urgent">
-                    <label for="cond-urgent" class="radio-label">URGENT</label>
+                <label class="form-label">Step 1 & 2: Mandatory Photos</label>
+                <div class="photo-step-grid">
+                    <div id="btn-before" class="photo-step-btn" onclick="document.getElementById('photo-before').click()">
+                        <span style="font-size:24px;">📷</span>
+                        <span id="label-before" style="font-size:11px; font-weight:900;">BEFORE PHOTO</span>
+                        <span id="time-before" style="font-size:9px; opacity:0.6;">(Required)</span>
+                    </div>
+                    <div id="btn-after" class="photo-step-btn" onclick="document.getElementById('photo-after').click()">
+                        <span style="font-size:24px;">📸</span>
+                        <span id="label-after" style="font-size:11px; font-weight:900;">AFTER PHOTO</span>
+                        <span id="time-after" style="font-size:9px; opacity:0.6;">(Final step)</span>
+                    </div>
                 </div>
+                <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto('before')">
+                <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto('after')">
+            </div>
+
+            <div id="timing-display" style="display:none; text-align:center; padding:10px; background:#e2e8f0; border-radius:10px; margin-bottom:20px; font-weight:900; color:var(--action-blue);">
+                ACTIVE TIME: <span id="time-calc">0m</span>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Photos (Select Multiple)</label>
-                <input type="file" id="photo-upload" multiple accept="image/*" style="display:none;" onchange="updatePhotoCount()">
-                <div class="photo-btn" onclick="document.getElementById('photo-upload').click()">
-                    <span id="photo-status" style="font-size:14px; font-weight:bold; color:#4a5568;">📷 Tap to Add Photos</span>
-                </div>
+                <label class="form-label">Work Description</label>
+                <textarea id="work-desc" class="insp-textarea" placeholder="Detail the work..."></textarea>
             </div>
-
             <div class="form-group">
-                <label class="form-label">Field Notes / Comments</label>
-                <textarea id="insp-comments" class="insp-textarea" placeholder="Describe findings..."></textarea>
+                <label class="form-label">Materials</label>
+                <textarea id="work-materials" class="insp-textarea" style="height:50px;" placeholder="Paint, chemicals, etc..."></textarea>
             </div>
 
-            <button class="submit-insp" onclick="submitInspection()">SUBMIT REPORT</button>
+            <div class="dual-btns">
+                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">PAUSE</button>
+                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">SUBMIT JOB</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Bank Overlay -->
+    <div id="jobbank-overlay" class="full-overlay">
+        <div class="form-header">
+            <span style="font-weight:900; font-size:20px;">JOB BANK</span>
+            <button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+        </div>
+        <div class="form-content">
+            <div id="job-bank-list"></div>
+        </div>
+    </div>
+
+    <!-- History Overlay -->
+    <div id="history-overlay" class="full-overlay">
+        <div class="form-header">
+            <span style="font-weight:900; font-size:20px;">SITE HISTORY</span>
+            <button onclick="closeOverlay('history')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+        </div>
+        <div class="form-content">
+            <div id="history-list"></div>
+        </div>
+    </div>
+
+    <!-- Inspection Overlay (Simplified) -->
+    <div id="inspection-overlay" class="full-overlay">
+        <div class="form-header"><span style="font-weight:900; font-size:20px;">INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px;">✕</button></div>
+        <div class="form-content">
+            <label class="form-label">Site: <span class="insp-site-display">--</span></label>
+            <textarea id="insp-comments" class="insp-textarea" placeholder="Notes..."></textarea>
+            <button class="submit-btn" style="margin-top:20px;" onclick="closeOverlay('inspection')">Save Inspection</button>
         </div>
     </div>
 
@@ -186,6 +229,12 @@
 
         let vanPos = { lat: 0, lng: 0 };
         let activeSite = {};
+        let currentJob = {
+            startTime: null,
+            pausedTimeAccumulated: 0,
+            hasBefore: false,
+            hasAfter: false
+        };
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition((pos) => {
@@ -196,31 +245,142 @@
         function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
         
-        function openInspection() {
-            document.getElementById('inspection-overlay').style.display = 'flex';
-            document.getElementById('insp-site-display').innerText = activeSite.name;
-            document.getElementById('insp-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
+        function openOverlay(type) {
+            document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
+            document.getElementById(type + '-overlay').style.display = 'flex';
+            document.querySelectorAll('.insp-site-display').forEach(el => el.innerText = activeSite.name);
             document.getElementById('site-info').style.display = 'none';
+            if(type === 'history') renderHistory();
+            if(type === 'jobbank') renderJobBank();
         }
 
-        function closeInspection() { document.getElementById('inspection-overlay').style.display = 'none'; }
+        function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
-        function updatePhotoCount() {
-            const count = document.getElementById('photo-upload').files.length;
-            document.getElementById('photo-status').innerText = count > 0 ? `✅ ${count} Photos Selected` : "📷 Tap to Add Photos";
+        function handlePhoto(step) {
+            const now = new Date();
+            const btn = document.getElementById('btn-' + step);
+            const label = document.getElementById('time-' + step);
+            
+            btn.classList.add('done');
+            label.innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (step === 'before') {
+                currentJob.startTime = now;
+                currentJob.hasBefore = true;
+                document.getElementById('pause-work-btn').disabled = false;
+            } else {
+                currentJob.hasAfter = true;
+                const activeMs = (now - currentJob.startTime) + currentJob.pausedTimeAccumulated;
+                const activeMins = Math.round(activeMs / 60000);
+                document.getElementById('timing-display').style.display = 'block';
+                document.getElementById('time-calc').innerText = activeMins + " minutes";
+                document.getElementById('submit-work-btn').disabled = false;
+            }
         }
 
-        function submitInspection() {
-            const cond = document.querySelector('input[name="condition"]:checked').value;
-            const comments = document.getElementById('insp-comments').value;
-            const photos = document.getElementById('photo-upload').files.length;
+        function pauseJob() {
+            const now = new Date();
+            const elapsed = now - currentJob.startTime;
+            
+            const pausedJob = {
+                site: activeSite.name,
+                startTime: currentJob.startTime.toISOString(),
+                accumulated: currentJob.pausedTimeAccumulated + elapsed,
+                desc: document.getElementById('work-desc').value,
+                mats: document.getElementById('work-materials').value,
+                pausedAt: now.toLocaleDateString() + " " + now.toLocaleTimeString()
+            };
 
-            const body = `INSPECTION REPORT%0D%0A-------------------%0D%0ASite: ${activeSite.name}%0D%0ACondition: ${cond}%0D%0AGPS: ${vanPos.lat}, ${vanPos.lng}%0D%0APhotos attached in device: ${photos}%0D%0A%0D%0AComments: ${comments}`;
+            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
+            bank.unshift(pausedJob);
+            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
+
+            alert("Job Paused and added to Job Bank.");
+            resetJobState();
+            closeOverlay('work');
+        }
+
+        function resumeJob(index) {
+            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
+            const job = bank[index];
             
-            window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection: ${activeSite.name} [${cond}]&body=${body}`;
+            activeSite.name = job.site;
+            currentJob.startTime = new Date(); // New start for this segment
+            currentJob.pausedTimeAccumulated = job.accumulated;
+            currentJob.hasBefore = true;
             
-            alert("Report Prepared. If using a field device, attach your selected photos to the email before sending.");
-            closeInspection();
+            document.getElementById('work-desc').value = job.desc;
+            document.getElementById('work-materials').value = job.mats;
+            
+            // Update UI to show "Before" is done
+            const btn = document.getElementById('btn-before');
+            btn.classList.add('done');
+            document.getElementById('time-before').innerText = "RESUMED";
+            document.getElementById('pause-work-btn').disabled = false;
+
+            bank.splice(index, 1);
+            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
+            
+            openOverlay('work');
+        }
+
+        function resetJobState() {
+            currentJob = { startTime: null, pausedTimeAccumulated: 0, hasBefore: false, hasAfter: false };
+            document.getElementById('btn-before').classList.remove('done');
+            document.getElementById('btn-after').classList.remove('done');
+            document.getElementById('time-before').innerText = "(Required)";
+            document.getElementById('time-after').innerText = "(Final step)";
+            document.getElementById('work-desc').value = "";
+            document.getElementById('work-materials').value = "";
+            document.getElementById('timing-display').style.display = 'none';
+            document.getElementById('submit-work-btn').disabled = true;
+            document.getElementById('pause-work-btn').disabled = true;
+        }
+
+        function submitWorkLog() {
+            const activeMins = Math.round(((new Date() - currentJob.startTime) + currentJob.pausedTimeAccumulated) / 60000);
+            const desc = document.getElementById('work-desc').value;
+            
+            const logEntry = { site: activeSite.name, type: 'WORK', duration: activeMins, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() };
+            let history = JSON.parse(localStorage.getItem('tt_history') || '[]');
+            history.unshift(logEntry);
+            localStorage.setItem('tt_history', JSON.stringify(history.slice(0, 20)));
+
+            const body = `WORK LOG [v26]%0D%0ASite: ${activeSite.name}%0D%0AActive Time: ${activeMins} mins%0D%0ADescription: ${desc}`;
+            window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
+            
+            resetJobState();
+            closeOverlay('work');
+        }
+
+        function renderJobBank() {
+            const list = document.getElementById('job-bank-list');
+            const data = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
+            if (data.length === 0) {
+                list.innerHTML = '<div id="job-bank-empty">Job Bank is empty.<br>Dispatched jobs will appear here in Phase 2.</div>';
+                return;
+            }
+            list.innerHTML = data.map((item, idx) => `
+                <div class="list-item paused" onclick="resumeJob(${idx})">
+                    <span class="badge p">PAUSED</span>
+                    <div class="list-title">${item.site}</div>
+                    <div class="list-meta">Paused: ${item.pausedAt}</div>
+                    <div style="font-weight:bold; color:var(--pause-grey); font-size:11px;">ACTIVE SO FAR: ${Math.round(item.accumulated / 60000)} MINS</div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            const data = JSON.parse(localStorage.getItem('tt_history') || '[]');
+            if (data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">No history.</p>'; return; }
+            list.innerHTML = data.map(item => `
+                <div class="list-item">
+                    <div class="list-title">${item.site}</div>
+                    <div class="list-meta">${item.type} | ${item.date} @ ${item.time}</div>
+                    <div style="font-weight:bold; color:var(--action-blue); font-size:12px;">TIME: ${item.duration} MINS</div>
+                </div>
+            `).join('');
         }
 
         const config = [
