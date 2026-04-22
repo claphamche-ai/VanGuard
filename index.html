@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.8</title>
+    <title id="page-title">VanGuard | Field Ops v2.9</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -23,7 +23,7 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.8</div>
+        <div class="sidebar-version">Version 2.9</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -42,7 +42,14 @@
         </div>
         <!-- INFO BODY: Photo and Edit Fields -->
         <div class="info-body">
-            <div class="site-photo" onclick="alert('Camera integration for cover photo coming soon')">📷</div>
+            <div class="site-photo-frame" id="cover-photo-frame">
+                <div class="add-photo-icon" onclick="document.getElementById('cover-photo-upload').click()">
+                    <span style="font-size: 24px;">📷</span><br>
+                    <small>ADD</small>
+                </div>
+            </div>
+            <input type="file" id="cover-photo-upload" accept="image/*" capture="environment" style="display:none;" onchange="handleCoverPhoto(this)">
+
             <div class="site-meta">
                 <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
                 <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" placeholder="Tap to add..." class="inline-input"></div>

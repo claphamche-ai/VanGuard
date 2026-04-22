@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.8`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.9`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -86,6 +86,20 @@ function openOverlay(type) {
 }
 function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
+// Cover Photo Handler
+function handleCoverPhoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const frame = document.getElementById('cover-photo-frame');
+            frame.style.backgroundImage = `url(${e.target.result})`;
+            frame.classList.add('has-photo');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Live Timer Logic
 function startLiveTimer(startTime, offset = 0) {
     clearInterval(timerInterval);
     const widget = document.getElementById('live-timer-widget');
@@ -278,7 +292,6 @@ config.forEach(item => {
                 })
             });
             
-            // Explicitly bind the click event directly to the marker instance
             marker.on('click', function(e) {
                 L.DomEvent.stopPropagation(e);
                 activeSite.name = feature.properties?.name || "Unknown Site";
@@ -290,6 +303,12 @@ config.forEach(item => {
                 document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
                 document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
                 document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
+
+                // Reset cover photo logic on click
+                const coverFrame = document.getElementById('cover-photo-frame');
+                coverFrame.style.backgroundImage = '';
+                coverFrame.classList.remove('has-photo');
+                document.getElementById('cover-photo-upload').value = '';
 
                 document.getElementById('site-info').style.display = 'block';
             });
@@ -312,7 +331,6 @@ config.forEach(item => {
                     })
                 });
                 
-                // Explicitly bind the click event directly to the center marker instance
                 centerMarker.on('click', function(e) {
                     L.DomEvent.stopPropagation(e);
                     activeSite.name = layer.feature?.properties?.name || "Unknown Area";
@@ -324,6 +342,12 @@ config.forEach(item => {
                     document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
                     document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
                     document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
+
+                    // Reset cover photo logic on click
+                    const coverFrame = document.getElementById('cover-photo-frame');
+                    coverFrame.style.backgroundImage = '';
+                    coverFrame.classList.remove('has-photo');
+                    document.getElementById('cover-photo-upload').value = '';
 
                     document.getElementById('site-info').style.display = 'block';
                 });
