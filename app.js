@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.5`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.6`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -55,10 +55,10 @@ function toggleFS() {
     
     if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
         requestFullScreen.call(docEl);
-        document.getElementById('fs-btn').innerText = "🗗 EXIT FS";
+        document.getElementById('fs-btn').innerText = "✖"; // Change to X when full screen
     } else {
         cancelFullScreen.call(doc);
-        document.getElementById('fs-btn').innerText = "🔲 FULL SCREEN";
+        document.getElementById('fs-btn').innerText = "⛶"; // Revert to expand icon
     }
 }
 
@@ -258,17 +258,14 @@ const config = [
 const container = document.getElementById('layer-container');
 
 config.forEach(item => {
-    // 1. Build menu
     const div = document.createElement('div');
     div.className = 'layer-item';
     div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
     container.appendChild(div);
 
-    // 2. Setup group
     const group = L.featureGroup();
     layers[item.label] = group;
 
-    // 3. Setup Custom Layer parsing
     const customLayer = L.geoJson(null, {
         style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
         pointToLayer: function(feature, latlng) {
@@ -293,7 +290,6 @@ config.forEach(item => {
         }
     });
 
-    // 4. Pass the EXACT string name to omnivore. Browsers handle fetch encoding natively.
     const runLayer = omnivore.kml(item.file, null, customLayer);
     
     runLayer.on('ready', function() {
