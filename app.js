@@ -33,14 +33,13 @@ function handleWorkPhoto(step) {
     if(step === 'before') {
         const start = new Date();
         document.getElementById('live-timer-widget').style.display = 'block';
-        document.getElementById('pause-work-btn').disabled = false;
         clearInterval(timerInterval);
         timerInterval = setInterval(() => {
             const diff = Math.floor((new Date() - start)/1000);
             const m = Math.floor(diff/60); const s = diff%60;
             document.getElementById('live-timer-widget').innerText = m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
         }, 1000);
-    } else { document.getElementById('submit-work-btn').disabled = false; }
+    }
 }
 
 function handleDropdown(el) {
@@ -65,8 +64,6 @@ const config = [
     { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e' }
 ];
 
-const container = document.getElementById('layer-container');
-
 config.forEach(item => {
     const group = L.geoJson(null, {
         pointToLayer: (f, ll) => L.marker(ll, {
@@ -83,17 +80,6 @@ config.forEach(item => {
             document.getElementById('site-info').style.display = 'block';
         })
     });
-    
     omnivore.kml(item.file, null, group).addTo(map);
     layers[item.label] = group;
-
-    const div = document.createElement('div');
-    div.className = 'layer-item';
-    div.innerHTML = `<input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)"> ${item.label}`;
-    container.appendChild(div);
 });
-
-function toggleLayer(name, show) {
-    if(show) map.addLayer(layers[name]);
-    else map.removeLayer(layers[name]);
-}

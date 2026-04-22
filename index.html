@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>STOPTAGS | Field Ops v37</title>
+    <title>STOPTAGS | v27</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -18,12 +18,12 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
         <div class="sidebar-header">STOPTAGS</div>
-        <div class="sidebar-version">v37.0.0</div>
+        <div class="sidebar-version">v27.0.0</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
-        <div id="layer-container" class="layer-list"></div>
+        <div id="layer-container" class="layer-list" style="display:none;"></div>
         
-        <div class="nav-item" onclick="alert('Job Bank coming soon')">📋 Job Bank</div>
+        <div class="nav-item" onclick="alert('Job Bank...')">📋 Job Bank</div>
         <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
     </div>
 
@@ -73,13 +73,6 @@
                 <option value="">Select...</option>
                 <option value="Brick">Brick</option>
                 <option value="Metal">Metal</option>
-                <option value="ADD_NEW">➕ Add New...</option>
-            </select>
-            <label class="label">Property</label>
-            <select id="work-property" onchange="handleDropdown(this)">
-                <option value="">Select...</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Private">Private</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
             <div class="footer-btns">
