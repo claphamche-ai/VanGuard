@@ -3,102 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v26</title>
+    <title>Track Tags | Field Ops v27</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        :root {
-            --safety-yellow: #f1c40f;
-            --action-blue: #2980b9;
-            --white: #ffffff;
-            --black: #1a1a1a;
-            --menu-bg: rgba(20, 20, 20, 0.85);
-            --soft-radius: 12px;
-            --urgent-red: #ff4757;
-            --minor-orange: #f39c12;
-            --good-green: #2ecc71;
-            --pause-grey: #636e72;
-            --disabled-grey: #bdc3c7;
-        }
-
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
-        #map { height: 100vh; width: 100vw; z-index: 1; }
-
-        .menu-trigger {
-            position: absolute; top: 15px; left: 15px; z-index: 2005;
-            background: var(--safety-yellow); border: 2px solid var(--black);
-            width: 50px; height: 50px; border-radius: 12px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-        }
-        .menu-trigger span { width: 24px; height: 3px; background: var(--black); margin: 2.5px 0; border-radius: 2px; }
-
-        .fs-btn {
-            position: absolute; top: 15px; right: 15px; z-index: 2000;
-            background: #000; color: #fff; padding: 12px 18px; border: 2px solid var(--safety-yellow);
-            border-radius: 12px; font-weight: 900; font-size: 11px; cursor: pointer; text-transform: uppercase;
-        }
-
-        .version-tag {
-            position: absolute; bottom: 10px; right: 10px; z-index: 2000;
-            color: rgba(255, 255, 255, 0.4); font-size: 10px; font-weight: bold; pointer-events: none;
-        }
-
-        #sidebar {
-            position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
-            background: var(--menu-bg); backdrop-filter: blur(15px);
-            z-index: 3000; transition: left 0.4s ease;
-            color: white; padding: 20px; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.1);
-            overflow-y: auto;
-        }
-        #sidebar.open { left: 0; }
-        .sidebar-header { font-size: 22px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; display: flex; align-items: baseline; gap: 8px; }
-        
-        .nav-item { padding: 14px; margin: 8px 0; border-radius: 10px; background: rgba(255,255,255,0.05); cursor: pointer; display: flex; align-items: center; font-weight: 600; }
-        #layer-container { display: none; margin: 5px 0 15px 0; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
-        .layer-row { display: flex; align-items: center; margin: 12px 0; font-size: 13px; cursor: pointer; }
-
-        #site-info { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: var(--white); border-radius: 20px; z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; }
-        .details-list { padding: 15px 20px; }
-        .detail-item { margin-bottom: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; }
-        .detail-label { font-size: 9px; font-weight: 800; color: #999; text-transform: uppercase; }
-        .detail-value { font-size: 13px; font-weight: 600; color: #222; }
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 15px 20px 15px; }
-        .action-btn { background: var(--action-blue); color: white; border: none; padding: 12px 0; border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; text-align: center; text-transform: uppercase; }
-
-        .full-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #f8f9fa; z-index: 5000; display: none; flex-direction: column;
-            overflow-y: auto; color: #333;
-        }
-        .form-header { background: #000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-        .form-content { padding: 20px; flex-grow: 1; }
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-weight: 800; font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
-        
-        .insp-textarea { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: white; height: 80px; resize: none; }
-
-        .photo-step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .photo-step-btn { 
-            background: #fff; border: 2px dashed #cbd5e0; padding: 20px 10px; 
-            border-radius: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .photo-step-btn.done { border-style: solid; border-color: var(--good-green); background: #f0fff4; }
-
-        .dual-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 10px; }
-        .submit-btn { background: var(--safety-yellow); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; text-transform: uppercase; }
-        .submit-btn:disabled { background: var(--disabled-grey); cursor: not-allowed; opacity: 0.7; }
-        .pause-btn { background: var(--pause-grey); color: #fff; border: none; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; cursor: pointer; text-transform: uppercase; }
-
-        /* LISTS */
-        .list-item { background: white; margin-bottom: 10px; padding: 15px; border-radius: 12px; border-left: 5px solid var(--action-blue); cursor: pointer; position: relative; }
-        .list-item.paused { border-left-color: var(--pause-grey); }
-        .list-title { font-weight: 900; font-size: 16px; }
-        .list-meta { font-size: 11px; color: #888; text-transform: uppercase; margin-top: 5px; }
-        .badge { position: absolute; top: 15px; right: 15px; font-size: 9px; padding: 4px 8px; border-radius: 5px; font-weight: 900; background: #eee; }
-        .badge.p { background: var(--pause-grey); color: white; }
-
-        #job-bank-empty { text-align: center; color: #888; padding: 40px 20px; }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
@@ -107,22 +14,24 @@
     </div>
 
     <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v26</div>
+    <div class="version-tag">TRACK TAGS v27</div>
 
     <div id="sidebar">
-        <div class="sidebar-header">TRACK TAGS <span class="v-label">v26</span></div>
+        <div class="sidebar-close" onclick="closeSidebar()">✕</div>
+        <div class="sidebar-header">TRACK TAGS <span class="v-label">v27</span></div>
         <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
         <div id="layer-container"></div>
         <div class="nav-item" onclick="openOverlay('jobbank')"><i>📋</i> Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode...')"><i>➕</i> Add Site</div>
-        <div class="nav-item" style="color: var(--urgent-red);" onclick="location.reload()"><i>🚪</i> Log Out</div>
+        <div class="nav-item" style="color: #ff4757; margin-top: 30px;" onclick="location.reload()"><i>🚪</i> Log Out</div>
     </div>
 
     <div id="map"></div>
 
+    <!-- Site Summary Info -->
     <div id="site-info">
-        <div style="height:140px; background:#333; position:relative; display:flex; align-items:center; justify-content:center;">
-            <div style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5); color:white; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer;" onclick="document.getElementById('site-info').style.display='none'">✕</div>
+        <div class="info-hero">
+            <div class="close-site" onclick="document.getElementById('site-info').style.display='none'">✕</div>
             <div style="font-size:40px;">📸</div>
         </div>
         <div class="details-list">
@@ -138,6 +47,47 @@
         </div>
     </div>
 
+    <!-- Inspection Overlay -->
+    <div id="inspection-overlay" class="full-overlay">
+        <div class="form-header">
+            <span style="font-weight:900; font-size:20px;">SITE INSPECTION</span>
+            <button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
+        </div>
+        <div class="form-content">
+            <div class="form-group">
+                <label class="form-label">Site: <span class="insp-site-display">--</span></label>
+                <div id="insp-gps-display" class="gps-meta">GPS: Identifying...</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Surface Condition</label>
+                <div class="radio-grid">
+                    <input type="radio" name="condition" id="cond-good" value="Good" checked>
+                    <label for="cond-good" class="radio-label">GOOD</label>
+                    <input type="radio" name="condition" id="cond-minor" value="Minor">
+                    <label for="cond-minor" class="radio-label">MINOR</label>
+                    <input type="radio" name="condition" id="cond-urgent" value="Urgent">
+                    <label for="cond-urgent" class="radio-label">URGENT</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Photos (Multiple)</label>
+                <input type="file" id="insp-photo-upload" multiple accept="image/*" style="display:none;" onchange="updatePhotoCount('inspection')">
+                <div class="photo-btn" onclick="document.getElementById('insp-photo-upload').click()">
+                    <span id="insp-photo-status">📷 Tap to Add Photos</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notes</label>
+                <textarea id="insp-comments" class="form-textarea" placeholder="Describe findings..."></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitInspection()">Submit Report</button>
+        </div>
+    </div>
+
     <!-- Log Work Overlay -->
     <div id="work-overlay" class="full-overlay">
         <div class="form-header">
@@ -147,7 +97,7 @@
         <div class="form-content">
             <div class="form-group">
                 <label class="form-label">Site: <span class="insp-site-display">--</span></label>
-                <div class="insp-gps-display" style="font-size:11px; color:#888;">GPS: Identifying...</div>
+                <div id="work-gps-display" class="gps-meta">GPS: Identifying...</div>
             </div>
 
             <div class="form-group">
@@ -155,35 +105,33 @@
                 <div class="photo-step-grid">
                     <div id="btn-before" class="photo-step-btn" onclick="document.getElementById('photo-before').click()">
                         <span style="font-size:24px;">📷</span>
-                        <span id="label-before" style="font-size:11px; font-weight:900;">BEFORE PHOTO</span>
+                        <span id="label-before" style="font-weight:900; font-size:11px;">BEFORE</span>
                         <span id="time-before" style="font-size:9px; opacity:0.6;">(Required)</span>
                     </div>
                     <div id="btn-after" class="photo-step-btn" onclick="document.getElementById('photo-after').click()">
                         <span style="font-size:24px;">📸</span>
-                        <span id="label-after" style="font-size:11px; font-weight:900;">AFTER PHOTO</span>
-                        <span id="time-after" style="font-size:9px; opacity:0.6;">(Final step)</span>
+                        <span id="label-after" style="font-weight:900; font-size:11px;">AFTER</span>
+                        <span id="time-after" style="font-size:9px; opacity:0.6;">(Final Step)</span>
                     </div>
                 </div>
-                <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto('before')">
-                <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto('after')">
+                <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
+                <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
             </div>
 
-            <div id="timing-display" style="display:none; text-align:center; padding:10px; background:#e2e8f0; border-radius:10px; margin-bottom:20px; font-weight:900; color:var(--action-blue);">
-                ACTIVE TIME: <span id="time-calc">0m</span>
-            </div>
+            <div id="timing-display">ACTIVE TIME: <span id="time-calc">0m</span></div>
 
             <div class="form-group">
                 <label class="form-label">Work Description</label>
-                <textarea id="work-desc" class="insp-textarea" placeholder="Detail the work..."></textarea>
+                <textarea id="work-desc" class="form-textarea" placeholder="Detail removal/cleaning..."></textarea>
             </div>
             <div class="form-group">
                 <label class="form-label">Materials</label>
-                <textarea id="work-materials" class="insp-textarea" style="height:50px;" placeholder="Paint, chemicals, etc..."></textarea>
+                <textarea id="work-materials" class="form-textarea" style="height:50px;" placeholder="Paint, remover, etc..."></textarea>
             </div>
 
             <div class="dual-btns">
-                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">PAUSE</button>
-                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">SUBMIT JOB</button>
+                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">Pause</button>
+                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">Submit</button>
             </div>
         </div>
     </div>
@@ -202,187 +150,60 @@
     <!-- History Overlay -->
     <div id="history-overlay" class="full-overlay">
         <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">SITE HISTORY</span>
+            <span style="font-weight:900; font-size:20px;">HISTORY</span>
             <button onclick="closeOverlay('history')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
         </div>
         <div class="form-content">
             <div id="history-list"></div>
-        </div>
-    </div>
-
-    <!-- Inspection Overlay (Simplified) -->
-    <div id="inspection-overlay" class="full-overlay">
-        <div class="form-header"><span style="font-weight:900; font-size:20px;">INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px;">✕</button></div>
-        <div class="form-content">
-            <label class="form-label">Site: <span class="insp-site-display">--</span></label>
-            <textarea id="insp-comments" class="insp-textarea" placeholder="Notes..."></textarea>
-            <button class="submit-btn" style="margin-top:20px;" onclick="closeOverlay('inspection')">Save Inspection</button>
+            <button class="submit-btn" style="background:#eee; color:#666;" onclick="clearHistory()">Clear History</button>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-
+    <script src="inspection.js"></script>
+    <script src="work.js"></script>
     <script>
         const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         let vanPos = { lat: 0, lng: 0 };
-        let activeSite = {};
-        let currentJob = {
-            startTime: null,
-            pausedTimeAccumulated: 0,
-            hasBefore: false,
-            hasAfter: false
-        };
+        let activeSiteData = {};
+
+        // GPS & Fleet
+        let vanMarker = null;
+        let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition((pos) => {
                 vanPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                const loc = [vanPos.lat, vanPos.lng];
+                if (!vanMarker) {
+                    vanMarker = L.marker(loc, { icon: L.divIcon({ className: 'van-icon', html: '🚐', iconSize:[40,40], iconAnchor:[20,20]}) }).addTo(map);
+                } else { vanMarker.setLatLng(loc); }
+                trail.addLatLng(loc);
             }, null, {enableHighAccuracy: true});
         }
 
+        // Sidebar & UI
         function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
-        
+        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function toggleLayers() { const el = document.getElementById('layer-container'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
+
         function openOverlay(type) {
             document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
             document.getElementById(type + '-overlay').style.display = 'flex';
-            document.querySelectorAll('.insp-site-display').forEach(el => el.innerText = activeSite.name);
+            document.querySelectorAll('.insp-site-display').forEach(el => el.innerText = activeSiteData.name);
             document.getElementById('site-info').style.display = 'none';
             if(type === 'history') renderHistory();
             if(type === 'jobbank') renderJobBank();
+            if(type === 'inspection') document.getElementById('insp-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
+            if(type === 'work') document.getElementById('work-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
         }
-
         function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
-        function handlePhoto(step) {
-            const now = new Date();
-            const btn = document.getElementById('btn-' + step);
-            const label = document.getElementById('time-' + step);
-            
-            btn.classList.add('done');
-            label.innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            if (step === 'before') {
-                currentJob.startTime = now;
-                currentJob.hasBefore = true;
-                document.getElementById('pause-work-btn').disabled = false;
-            } else {
-                currentJob.hasAfter = true;
-                const activeMs = (now - currentJob.startTime) + currentJob.pausedTimeAccumulated;
-                const activeMins = Math.round(activeMs / 60000);
-                document.getElementById('timing-display').style.display = 'block';
-                document.getElementById('time-calc').innerText = activeMins + " minutes";
-                document.getElementById('submit-work-btn').disabled = false;
-            }
-        }
-
-        function pauseJob() {
-            const now = new Date();
-            const elapsed = now - currentJob.startTime;
-            
-            const pausedJob = {
-                site: activeSite.name,
-                startTime: currentJob.startTime.toISOString(),
-                accumulated: currentJob.pausedTimeAccumulated + elapsed,
-                desc: document.getElementById('work-desc').value,
-                mats: document.getElementById('work-materials').value,
-                pausedAt: now.toLocaleDateString() + " " + now.toLocaleTimeString()
-            };
-
-            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-            bank.unshift(pausedJob);
-            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-
-            alert("Job Paused and added to Job Bank.");
-            resetJobState();
-            closeOverlay('work');
-        }
-
-        function resumeJob(index) {
-            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-            const job = bank[index];
-            
-            activeSite.name = job.site;
-            currentJob.startTime = new Date(); // New start for this segment
-            currentJob.pausedTimeAccumulated = job.accumulated;
-            currentJob.hasBefore = true;
-            
-            document.getElementById('work-desc').value = job.desc;
-            document.getElementById('work-materials').value = job.mats;
-            
-            // Update UI to show "Before" is done
-            const btn = document.getElementById('btn-before');
-            btn.classList.add('done');
-            document.getElementById('time-before').innerText = "RESUMED";
-            document.getElementById('pause-work-btn').disabled = false;
-
-            bank.splice(index, 1);
-            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-            
-            openOverlay('work');
-        }
-
-        function resetJobState() {
-            currentJob = { startTime: null, pausedTimeAccumulated: 0, hasBefore: false, hasAfter: false };
-            document.getElementById('btn-before').classList.remove('done');
-            document.getElementById('btn-after').classList.remove('done');
-            document.getElementById('time-before').innerText = "(Required)";
-            document.getElementById('time-after').innerText = "(Final step)";
-            document.getElementById('work-desc').value = "";
-            document.getElementById('work-materials').value = "";
-            document.getElementById('timing-display').style.display = 'none';
-            document.getElementById('submit-work-btn').disabled = true;
-            document.getElementById('pause-work-btn').disabled = true;
-        }
-
-        function submitWorkLog() {
-            const activeMins = Math.round(((new Date() - currentJob.startTime) + currentJob.pausedTimeAccumulated) / 60000);
-            const desc = document.getElementById('work-desc').value;
-            
-            const logEntry = { site: activeSite.name, type: 'WORK', duration: activeMins, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString() };
-            let history = JSON.parse(localStorage.getItem('tt_history') || '[]');
-            history.unshift(logEntry);
-            localStorage.setItem('tt_history', JSON.stringify(history.slice(0, 20)));
-
-            const body = `WORK LOG [v26]%0D%0ASite: ${activeSite.name}%0D%0AActive Time: ${activeMins} mins%0D%0ADescription: ${desc}`;
-            window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
-            
-            resetJobState();
-            closeOverlay('work');
-        }
-
-        function renderJobBank() {
-            const list = document.getElementById('job-bank-list');
-            const data = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-            if (data.length === 0) {
-                list.innerHTML = '<div id="job-bank-empty">Job Bank is empty.<br>Dispatched jobs will appear here in Phase 2.</div>';
-                return;
-            }
-            list.innerHTML = data.map((item, idx) => `
-                <div class="list-item paused" onclick="resumeJob(${idx})">
-                    <span class="badge p">PAUSED</span>
-                    <div class="list-title">${item.site}</div>
-                    <div class="list-meta">Paused: ${item.pausedAt}</div>
-                    <div style="font-weight:bold; color:var(--pause-grey); font-size:11px;">ACTIVE SO FAR: ${Math.round(item.accumulated / 60000)} MINS</div>
-                </div>
-            `).join('');
-        }
-
-        function renderHistory() {
-            const list = document.getElementById('history-list');
-            const data = JSON.parse(localStorage.getItem('tt_history') || '[]');
-            if (data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">No history.</p>'; return; }
-            list.innerHTML = data.map(item => `
-                <div class="list-item">
-                    <div class="list-title">${item.site}</div>
-                    <div class="list-meta">${item.type} | ${item.date} @ ${item.time}</div>
-                    <div style="font-weight:bold; color:var(--action-blue); font-size:12px;">TIME: ${item.duration} MINS</div>
-                </div>
-            `).join('');
-        }
-
+        // Layers Config
         const config = [
             { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '🛣️', isPath: true },
             { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f', icon: '⚡' },
@@ -400,7 +221,7 @@
                 style: () => ({ color: item.color, weight: 10, opacity: 0.6 }),
                 pointToLayer: (feat, ll) => L.marker(ll, {
                     icon: L.divIcon({
-                        className: 'marker-icon',
+                        className: 'm-icon',
                         html: `<div style="background:${item.color}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; border:2px solid #fff;">${item.icon}</div>`,
                         iconSize: [38, 38], iconAnchor: [19, 19]
                     })
@@ -408,16 +229,16 @@
                 onEachFeature: (feat, layer) => {
                     if (item.isPath && feat.geometry.type === "LineString") {
                         const coords = feat.geometry.coordinates;
-                        const midPoint = [coords[Math.floor(coords.length / 2)][1], coords[Math.floor(coords.length / 2)][0]];
-                        L.marker(midPoint, {
+                        const mid = [coords[Math.floor(coords.length/2)][1], coords[Math.floor(coords.length/2)][0]];
+                        L.marker(mid, {
                             icon: L.divIcon({
-                                className: 'marker-icon',
+                                className: 'm-icon',
                                 html: `<div style="background:${item.color}; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; border:2px solid #fff;">${item.icon}</div>`,
                                 iconSize: [30, 30], iconAnchor: [15, 15]
                             })
-                        }).addTo(group).on('click', (e) => { L.DomEvent.stopPropagation(e); showSite(feat, item); });
+                        }).addTo(group).on('click', (e) => { L.DomEvent.stopPropagation(e); showSiteSummary(feat, item); });
                     }
-                    layer.on('click', (e) => { L.DomEvent.stopPropagation(e); showSite(feat, item); });
+                    layer.on('click', (e) => { L.DomEvent.stopPropagation(e); showSiteSummary(feat, item); });
                 }
             });
             omnivore.kml(item.file, null, group).addTo(map);
@@ -433,18 +254,16 @@
             container.appendChild(row);
         }
 
-        function showSite(feat, item) {
-            activeSite = { name: feat.properties.name || "Unnamed Site", addr: feat.properties.address || "Porirua" };
-            document.getElementById('s-name').innerText = activeSite.name;
-            document.getElementById('s-addr').innerText = activeSite.addr;
+        function showSiteSummary(feat, item) {
+            activeSiteData = { name: feat.properties.name || "Unnamed", addr: feat.properties.address || "Porirua" };
+            document.getElementById('s-name').innerText = activeSiteData.name;
+            document.getElementById('s-addr').innerText = activeSiteData.addr;
             document.getElementById('s-type').innerText = item.label;
             document.getElementById('s-date').innerText = (Math.floor(Math.random() * 60)) + " days ago";
             document.getElementById('site-info').style.display = 'block';
         }
 
         config.forEach(loadLayer);
-        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function toggleLayers() { const el = document.getElementById('layer-container'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
     </script>
 </body>
 </html>
