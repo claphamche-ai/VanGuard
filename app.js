@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.10`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.11`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -84,9 +84,17 @@ function openOverlay(type) {
     document.getElementById('site-info').style.display = 'none';
     if(type === 'jobbank') renderJobBank();
 }
-function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
-// Cover Photo Handler
+function closeOverlay(type) { 
+    document.getElementById(type + '-overlay').style.display = 'none'; 
+    if(type === 'work') {
+        document.getElementById('ai-analysis-section').style.display = 'none';
+        document.getElementById('ai-results').style.display = 'none';
+        document.getElementById('ai-analyze-btn').innerText = "🤖 Extract Tags & Size (AI)";
+        document.getElementById('ai-analyze-btn').disabled = false;
+    }
+}
+
 function handleCoverPhoto(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -125,10 +133,35 @@ function handleWorkPhoto(step) {
         workState.hasBefore = true;
         document.getElementById('pause-work-btn').disabled = false;
         startLiveTimer(now, workState.accumulated);
+        
+        // Reveal AI Button when before photo is taken
+        document.getElementById('ai-analysis-section').style.display = 'block';
     } else {
         workState.hasAfter = true;
         document.getElementById('submit-work-btn').disabled = false;
     }
+}
+
+function runAIAnalysis() {
+    const btn = document.getElementById('ai-analyze-btn');
+    const res = document.getElementById('ai-results');
+    btn.innerText = "⏳ Processing image data...";
+    btn.disabled = true;
+
+    // Simulated latency for Vision API call
+    setTimeout(() => {
+        document.getElementById('ai-tag').innerText = "VANDAL, 2K26";
+        document.getElementById('ai-size').innerText = "Approx 1.2m x 0.8m";
+        res.style.display = 'block';
+        btn.innerText = "✓ Analysis Complete";
+        btn.style.background = "#2ecc71"; // Turn green
+        
+        // Pre-fill description
+        const desc = document.getElementById('work-desc');
+        if(desc.value === "") {
+            desc.value = "AI Note: Detected tags 'VANDAL, 2K26'. Estimated size 1.2m x 0.8m.";
+        }
+    }, 2500);
 }
 
 function handleInspPhoto(step) {

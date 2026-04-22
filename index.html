@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.10</title>
+    <title id="page-title">VanGuard | Field Ops v2.11</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -23,7 +23,7 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.10</div>
+        <div class="sidebar-version">Version 2.11</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -40,7 +40,6 @@
             <span id="s-name">Select Site</span>
             <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
         </div>
-        <!-- INFO BODY: Photo and Edit Fields -->
         <div class="info-body">
             <div class="site-photo-frame" id="cover-photo-frame">
                 <div class="add-photo-icon" onclick="document.getElementById('cover-photo-upload').click()">
@@ -68,6 +67,7 @@
         <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
+            
             <div class="photo-grid">
                 <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
                 <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>
@@ -75,6 +75,17 @@
             <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
             <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
             
+            <!-- AI Analysis Module -->
+            <div id="ai-analysis-section" style="display:none; margin-bottom: 15px;">
+                <button id="ai-analyze-btn" class="action-btn purple" style="width:100%; padding:15px; font-size:14px; margin-bottom:10px;" onclick="runAIAnalysis()">🤖 Extract Tags & Size (AI)</button>
+                <div id="ai-results" style="display:none; background:#f4ebf9; padding:15px; border-radius:8px; border-left:4px solid #9b59b6; font-size:13px; color:#333;">
+                    <strong style="color:#8e44ad; font-size:14px;">Vision Analysis Data</strong><br>
+                    <span style="color:#7f8c8d; font-size:11px;">(Requires backend API connection for live data)</span><br><br>
+                    <strong>Deciphered Tags:</strong> <span id="ai-tag">--</span><br>
+                    <strong>Estimated Area:</strong> <span id="ai-size">--</span>
+                </div>
+            </div>
+
             <button class="extra-photo-btn" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
             <div id="work-extra-count" class="extra-label">0 extra photos</div>
             <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
