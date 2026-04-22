@@ -69,10 +69,10 @@ select, .textarea { width:100%; padding:14px; border-radius:8px; border:2px soli
 .extra-photo-btn { width:100%; padding:12px; border:2px solid var(--b); background:none; color:var(--b); border-radius:8px; font-weight:bold; cursor:pointer; margin-top:5px; }
 .extra-label { font-size:11px; text-align:center; color:#888; margin-top:5px; margin-bottom:10px; }
 
-/* ADJUSTED FOOTER GRID FOR CANCEL BUTTON */
-.footer-btns { display:grid; grid-template-columns:1fr 1fr 2fr; gap:10px; padding:20px 0; }
-.btn-submit { background:var(--y); border:none; padding:15px; border-radius:10px; font-weight:900; cursor:pointer; text-transform:uppercase; font-size:14px; } 
+/* UNIFORM FOOTER BUTTONS */
+.footer-btns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; padding:20px 0; }
+.btn-submit { background:var(--y); border:none; padding:15px; border-radius:10px; font-weight:900; cursor:pointer; text-transform:uppercase; font-size:14px; color:#000; } 
 .btn-submit:disabled { background:#ccc; cursor:not-allowed; opacity:0.6; }
-.btn-pause { cursor:pointer; border:none; border-radius:10px; background:#ddd; font-weight:bold; text-transform:uppercase; font-size:14px; } 
+.btn-pause { background:#ddd; border:none; padding:15px; border-radius:10px; font-weight:900; cursor:pointer; text-transform:uppercase; font-size:14px; color:#333; } 
 .btn-pause:disabled { opacity:0.5; cursor:not-allowed; } 
-.btn-cancel { cursor:pointer; border:none; border-radius:10px; background:#e74c3c; color:white; font-weight:bold; text-transform:uppercase; font-size:14px; }
+.btn-cancel { background:#e74c3c; border:none; padding:15px; border-radius:10px; font-weight:900; cursor:pointer; text-transform:uppercase; font-size:14px; color:white; }

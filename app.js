@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.12`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.13`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -194,7 +194,6 @@ function cancelJob() {
         stopLiveTimer();
         workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
         
-        // Reset UI Elements
         document.getElementById('btn-before').classList.remove('done');
         document.getElementById('time-before').innerText = "Take photo to start";
         document.getElementById('btn-after').classList.remove('done');
