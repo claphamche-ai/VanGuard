@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Operations v14</title>
+    <title>Track Tags | Field Ops v15</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -12,7 +12,7 @@
             --action-blue: #2980b9;
             --white: rgba(255, 255, 255, 0.94);
             --black: #1a1a1a;
-            --menu-bg: rgba(26, 26, 26, 0.88);
+            --menu-bg: rgba(26, 26, 26, 0.75);
             --soft-radius: 18px;
             --urgent-red: #ff4757;
         }
@@ -20,26 +20,43 @@
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
         #map { height: 100vh; width: 100vw; z-index: 1; }
 
-        /* --- NAVIGATION & MENU --- */
+        /* HEADER & FULLSCREEN */
+        .header-controls {
+            position: absolute; top: 15px; left: 80px; z-index: 2000;
+            display: flex; gap: 10px; pointer-events: none;
+        }
+        .fs-btn {
+            background: #000; color: #fff; padding: 12px 18px; border: 2px solid var(--safety-yellow);
+            border-radius: 12px; font-weight: 900; font-size: 11px; cursor: pointer;
+            text-transform: uppercase; pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* MENU TRIGGER */
         .menu-trigger {
-            position: absolute; top: 15px; left: 15px; z-index: 2000;
+            position: absolute; top: 15px; left: 15px; z-index: 2005;
             background: var(--safety-yellow); border: 2px solid var(--black);
-            width: 54px; height: 54px; border-radius: 14px;
+            width: 50px; height: 50px; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            transition: opacity 0.5s ease, transform 0.2s;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
-        .menu-trigger:active { transform: scale(0.9); }
-        .menu-trigger span { width: 28px; height: 3px; background: var(--black); margin: 3px 0; border-radius: 2px; }
+        .menu-trigger span { width: 24px; height: 3px; background: var(--black); margin: 2.5px 0; border-radius: 2px; }
 
+        /* SIDEBAR & CLOSE X */
         #sidebar {
             position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
             background: var(--menu-bg); backdrop-filter: blur(12px);
             z-index: 3000; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: white; padding: 25px; box-sizing: border-box;
-            border-right: 1px solid rgba(255,255,255,0.15);
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
         #sidebar.open { left: 0; }
+        .sidebar-close {
+            position: absolute; top: 20px; right: 20px; width: 35px; height: 35px;
+            background: rgba(255,255,255,0.1); color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-weight: bold; font-size: 18px;
+        }
 
         .sidebar-header { font-size: 26px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 25px; border-bottom: 1px solid #444; padding-bottom: 15px; }
         
@@ -49,7 +66,6 @@
             display: flex; align-items: center; transition: background 0.2s;
             font-weight: 600;
         }
-        .nav-item:hover { background: rgba(255,255,255,0.12); }
         .nav-item i { margin-right: 15px; font-style: normal; font-size: 22px; }
 
         #layer-container { display: none; margin: 10px 0 20px 0; padding-left: 5px; max-height: 40vh; overflow-y: auto; }
@@ -57,53 +73,32 @@
         .layer-row input { width: 24px; height: 24px; margin-right: 15px; cursor: pointer; accent-color: var(--safety-yellow); }
         .layer-label-pill { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); }
 
-        /* --- STAGE 1: QUICK INFO --- */
-        #quick-info {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 330px; background: var(--white); border-radius: var(--soft-radius);
-            z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            overflow: hidden; border: 1px solid rgba(0,0,0,0.08);
-        }
-        .info-close-btn { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; background: var(--urgent-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; border: 2px solid rgba(0,0,0,0.1); }
-        .info-header-icon { height: 150px; background: #111; display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 2px solid rgba(0,0,0,0.05); }
-        .info-body { padding: 22px; }
-        .info-status-pill { font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; margin-top: 15px; font-size: 14px; }
-        .enter-site-btn { width: 100%; background: var(--safety-yellow); border: none; padding: 22px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* --- STAGE 2: WORK MODAL --- */
-        #work-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 5000; display: none; flex-direction: column;
-        }
-        .work-modal-header { background: var(--black); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .work-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 20px; }
-        .work-btn { background: var(--action-blue); color: white; padding: 35px 10px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 14px; text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 0 #1b5a84; }
-        .work-btn:active { transform: translateY(3px); box-shadow: none; background: var(--safety-yellow); color: var(--black); }
-
-        /* --- MAP ASSETS --- */
-        .icon-marker { display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
-        @keyframes urgent-pulse {
-            0% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.25); filter: brightness(1.4); }
-            100% { transform: scale(1); filter: brightness(1); }
-        }
-        .urgent-asset { animation: urgent-pulse 1.2s infinite; border: 2px solid #fff; z-index: 1000 !important; }
+        /* UI ELEMENTS */
+        #quick-info { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: var(--white); border-radius: var(--soft-radius); z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; }
+        .info-close-btn { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: var(--urgent-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         
-        .hidden-menu { opacity: 0; pointer-events: none; }
+        #work-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; display: none; flex-direction: column; }
+        
+        .ui-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div id="menu-trigger" class="menu-trigger" onclick="toggleSidebar()">
+    <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()">
         <span></span><span></span><span></span>
     </div>
 
+    <div class="header-controls">
+        <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
+    </div>
+
     <div id="sidebar">
+        <div class="sidebar-close" onclick="closeSidebar()">✕</div>
         <div class="sidebar-header">TRACK TAGS</div>
         <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
         <div id="layer-container"></div>
         
-        <div class="nav-item" onclick="alert('Accessing Dispatched Jobs...')"><i>📋</i> Job Bank</div>
+        <div class="nav-item" onclick="alert('Accessing Job Bank...')"><i>📋</i> Job Bank</div>
         <div class="nav-item" onclick="alert('Switching to Add Site Mode...')"><i>➕</i> Add Site</div>
         <div class="nav-item" style="margin-top: 40px; color: var(--urgent-red);" onclick="location.reload()"><i>🚪</i> Log Out</div>
     </div>
@@ -111,33 +106,32 @@
     <div id="map"></div>
 
     <div id="quick-info">
-        <div class="info-close-btn" onclick="closeInfo()">✕</div>
-        <div class="info-header-icon" id="q-icon">⚡</div>
-        <div class="info-body">
-            <h2 id="q-name" style="margin:0; font-weight: 900;">SITE NAME</h2>
-            <p id="q-addr" style="font-size:14px; color:#555; margin:8px 0 18px 0;">Address Placeholder</p>
-            <div id="q-status-pill" class="info-status-pill">Last Action: --</div>
+        <div class="info-close-btn" onclick="document.getElementById('quick-info').style.display='none'">✕</div>
+        <div id="q-icon" style="height:140px; background:#111; display:flex; align-items:center; justify-content:center; font-size:50px; color:white;">⚡</div>
+        <div style="padding:22px;">
+            <h2 id="q-name" style="margin:0;">SITE NAME</h2>
+            <p id="q-addr" style="font-size:14px; color:#666; margin:8px 0 15px 0;">--</p>
+            <div id="q-status-pill" style="padding:10px; border-radius:10px; font-weight:bold; text-align:center;">Last Action: --</div>
         </div>
-        <button class="enter-site-btn" onclick="openWorkModal()">ENTER SITE</button>
+        <button style="width:100%; background:var(--safety-yellow); border:none; padding:20px; font-weight:900; font-size:16px; cursor:pointer;" onclick="openWorkModal()">ENTER SITE</button>
     </div>
 
     <div id="work-modal">
-        <div class="work-modal-header">
-            <span style="font-weight:900; font-size: 18px;">FIELD WORK</span>
-            <button onclick="document.getElementById('work-modal').style.display='none'" style="background:var(--safety-yellow); border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size: 14px;">EXIT SITE</button>
+        <div style="background:#000; color:white; padding:20px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:900;">WORK DASHBOARD</span>
+            <button onclick="document.getElementById('work-modal').style.display='none'" style="background:var(--safety-yellow); border:none; padding:10px 20px; border-radius:10px; font-weight:900;">EXIT</button>
         </div>
-        <div style="padding:20px; overflow-y: auto;">
-            <div style="background:#f8f9fa; padding:25px; border-radius:22px; margin-bottom:25px; border: 1px solid #eee;">
-                <h1 id="m-name" style="margin:0; font-size: 28px;">SITE</h1>
-                <p id="m-addr" style="color: #666; margin-top: 5px;">Location Info</p>
+        <div style="padding:20px;">
+            <div style="background:#f4f4f4; padding:25px; border-radius:20px; margin-bottom:20px;">
+                <h1 id="m-name" style="margin:0;">SITE</h1>
+                <p id="m-meta" style="color:#666; margin-top:5px;">Location Info</p>
             </div>
-            <div class="work-action-grid">
-                <div class="work-btn" onclick="alert('Inspection Task Logged')">SITE INSPECTION</div>
-                <div class="work-btn" onclick="alert('Graffiti Task Logged')">REMOVE GRAFFITI</div>
-                <div class="work-btn" onclick="alert('Litter Task Logged')">LITTER REMOVAL</div>
-                <div class="work-btn" onclick="alert('Maintenance Task Logged')">GENERAL WORK</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">INSPECTION</div>
+                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">GRAFFITI</div>
+                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">LITTER</div>
+                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">GENERAL</div>
             </div>
-            <button style="width:100%; margin-top:20px; padding:20px; background:#333; color:white; border:none; border-radius:18px; font-weight:bold; font-size: 16px;" onclick="alert('Fetching Site History...')">VIEW WORK HISTORY</button>
         </div>
     </div>
 
@@ -148,30 +142,31 @@
         const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // UI Interaction Logic
-        let hideTimer;
+        let idleTimer;
         const menuTrigger = document.getElementById('menu-trigger');
+        const sidebar = document.getElementById('sidebar');
 
-        function startHideTimer() {
-            menuTrigger.classList.remove('hidden-menu');
-            clearTimeout(hideTimer);
-            hideTimer = setTimeout(() => {
-                if (!document.getElementById('sidebar').classList.contains('open')) {
-                    menuTrigger.classList.add('hidden-menu');
+        function startIdleTimer() {
+            menuTrigger.classList.remove('ui-hidden');
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => {
+                if (!sidebar.classList.contains('open')) {
+                    menuTrigger.classList.add('ui-hidden');
                 }
             }, 5000);
         }
 
-        ['mousemove', 'touchstart', 'click'].forEach(evt => window.addEventListener(evt, startHideTimer));
-        startHideTimer();
+        ['mousedown', 'touchstart', 'mousemove'].forEach(e => window.addEventListener(e, startIdleTimer));
+        startIdleTimer();
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        function openSidebar() { sidebar.classList.add('open'); }
+        function closeSidebar() { sidebar.classList.remove('open'); startIdleTimer(); }
+
         function toggleLayers() { 
-            const el = document.getElementById('layer-container');
-            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+            const container = document.getElementById('layer-container');
+            container.style.display = container.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Asset Configuration
         const config = [
             { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '🛣️', isPath: true },
             { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f', icon: '⚡' },
@@ -184,7 +179,7 @@
             { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e', icon: '🚗' }
         ];
 
-        let activeSiteData = {};
+        let activeData = {};
 
         function loadLayer(item) {
             const group = L.geoJson(null, {
@@ -196,11 +191,10 @@
                 pointToLayer: (feat, ll) => {
                     const d = Math.floor(Math.random() * 90);
                     const bg = d > 60 ? '#000' : (d > 30 ? '#555' : item.color);
-                    const cls = d > 60 ? 'icon-marker urgent-asset' : 'icon-marker';
                     return L.marker(ll, {
                         icon: L.divIcon({
-                            className: cls,
-                            html: `<div style="background:${bg}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px;">${item.icon}</div>`,
+                            className: 'marker-icon',
+                            html: `<div style="background:${bg}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; border:2px solid #fff; ${d > 60 ? 'animation: pulse 1s infinite;' : ''}">${item.icon}</div>`,
                             iconSize: [38, 38], iconAnchor: [19, 19]
                         })
                     });
@@ -209,8 +203,8 @@
                     layer.on('click', (e) => {
                         L.DomEvent.stopPropagation(e);
                         const d = Math.floor(Math.random() * 90);
-                        activeSiteData = { name: feat.properties.name || "Asset", addr: feat.properties.address || "Porirua", days: d, icon: item.icon };
-                        showInfo();
+                        activeData = { name: feat.properties.name || "Asset", addr: feat.properties.address || "Porirua", days: d, icon: item.icon };
+                        showQuick();
                     });
                 }
             });
@@ -226,24 +220,29 @@
 
         config.forEach(loadLayer);
 
-        function showInfo() {
-            document.getElementById('q-name').innerText = activeSiteData.name;
-            document.getElementById('q-addr').innerText = activeSiteData.addr;
-            document.getElementById('q-icon').innerText = activeSiteData.icon;
+        function showQuick() {
+            document.getElementById('q-name').innerText = activeData.name;
+            document.getElementById('q-addr').innerText = activeData.addr;
+            document.getElementById('q-icon').innerText = activeData.icon;
             const pill = document.getElementById('q-status-pill');
-            pill.innerText = `LAST INSPECTED: ${activeSiteData.days} DAYS AGO`;
-            pill.style.background = activeSiteData.days > 60 ? '#ffeae6' : '#e6ffed';
-            pill.style.color = activeSiteData.days > 60 ? '#ff4757' : '#2ecc71';
+            pill.innerText = `LAST INSPECTED: ${activeData.days} DAYS AGO`;
+            pill.style.background = activeData.days > 60 ? '#ffeae6' : '#e6ffed';
+            pill.style.color = activeData.days > 60 ? '#ff4757' : '#2ecc71';
             document.getElementById('quick-info').style.display = 'block';
         }
 
-        function closeInfo() { document.getElementById('quick-info').style.display = 'none'; }
         function openWorkModal() {
-            document.getElementById('m-name').innerText = activeSiteData.name;
-            document.getElementById('m-addr').innerText = activeSiteData.addr;
+            document.getElementById('m-name').innerText = activeData.name;
+            document.getElementById('m-meta').innerText = activeData.addr;
             document.getElementById('work-modal').style.display = 'flex';
-            closeInfo();
+            document.getElementById('quick-info').style.display = 'none';
+        }
+
+        function toggleFS() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         }
     </script>
+    <style> @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); filter: brightness(1.3); } 100% { transform: scale(1); } } </style>
 </body>
 </html>
