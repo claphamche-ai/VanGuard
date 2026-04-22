@@ -8,10 +8,12 @@ let workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: f
 let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
 
 // Update Menu Clock
-setInterval(() => {
+function updateClock() {
     const now = new Date();
-    document.getElementById('menu-clock').innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'medium' });
-}, 1000);
+    document.getElementById('menu-clock').innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' });
+}
+updateClock();
+setInterval(updateClock, 1000);
 
 const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -41,7 +43,9 @@ function toggleFS() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
     } else {
-        document.exitFullscreen();
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
     }
 }
 
@@ -50,6 +54,14 @@ function closeSidebar() { document.getElementById('sidebar').classList.remove('o
 function toggleLayerList() {
     const el = document.getElementById('layer-container');
     el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function toggleLayer(name, show) {
+    if(show) {
+        map.addLayer(layers[name]);
+    } else {
+        map.removeLayer(layers[name]);
+    }
 }
 
 function openOverlay(type) { 
@@ -82,7 +94,7 @@ function stopLiveTimer() {
 function handleWorkPhoto(step) {
     const now = new Date();
     document.getElementById('btn-' + step).classList.add('done');
-    document.getElementById('time-' + step).innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    document.getElementById('time-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
     
     if(step === 'before') {
         workState.startTime = now;
@@ -99,7 +111,7 @@ function handleWorkPhoto(step) {
 function handleInspPhoto(step) {
     const now = new Date();
     document.getElementById('btn-insp-' + step).classList.add('done');
-    document.getElementById('time-insp-' + step).innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    document.getElementById('time-insp-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
     
     if(step === 'start') {
         inspState.startTime = now;
@@ -133,7 +145,7 @@ function updateExtraCount(type) {
 // Pause & Submit Logic (Work)
 function pauseJob() {
     const elapsed = new Date() - workState.startTime;
-    const pausedJob = { site: activeSite.name, type: 'WORK', accumulated: workState.accumulated + elapsed, pausedAt: new Date().toLocaleString() };
+    const pausedJob = { site: activeSite.name, type: 'WORK', accumulated: workState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
     let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
     bank.unshift(pausedJob);
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
@@ -161,7 +173,7 @@ function submitWork() {
 // Pause & Submit Logic (Insp)
 function pauseInsp() {
     const elapsed = new Date() - inspState.startTime;
-    const pausedJob = { site: activeSite.name, type: 'INSPECTION', accumulated: inspState.accumulated + elapsed, pausedAt: new Date().toLocaleString() };
+    const pausedJob = { site: activeSite.name, type: 'INSPECTION', accumulated: inspState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
     let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
     bank.unshift(pausedJob);
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
@@ -279,13 +291,9 @@ config.forEach(item => {
     omnivore.kml(item.file, null, group).addTo(map);
     layers[item.label] = group;
 
+    // Build Layer List explicitly inside the load logic
     const div = document.createElement('div');
     div.className = 'layer-item';
-    div.innerHTML = `<input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)"> ${item.icon} ${item.label}`;
+    div.innerHTML = `<input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)"> <span style="font-size:16px; margin-right:5px;">${item.icon}</span> ${item.label}`;
     container.appendChild(div);
 });
-
-function toggleLayer(name, show) {
-    if(show) map.addLayer(layers[name]);
-    else map.removeLayer(layers[name]);
-}

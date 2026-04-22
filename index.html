@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TrackTags | Field Ops v2.1</title>
+    <title>TrackTags | Field Ops v2.2</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,12 +15,14 @@
         <span></span><span></span><span></span>
     </div>
 
-    <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
+    <!-- Full Screen and GPS buttons positioned clearly on the right side -->
+    <button class="fs-btn" onclick="toggleFS()">🔲 FULL SCREEN</button>
+    <button id="gps-btn" onclick="centerGPS()">📍</button>
 
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div class="sidebar-header" style="clear:both;">TrackTags</div>
-        <div class="sidebar-version">Version 2.1</div>
+        <div class="sidebar-version">Version 2.2</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -31,8 +33,6 @@
     </div>
 
     <div id="map"></div>
-    
-    <button id="gps-btn" onclick="centerGPS()">📍</button>
 
     <div id="site-info">
         <div class="info-header">
