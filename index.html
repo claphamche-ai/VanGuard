@@ -3,145 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Porirua Field Ops v12</title>
+    <title>Track Tags | Field Operations v14</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --safety-yellow: #f1c40f;
             --action-blue: #2980b9;
-            --high-vis-pink: #ff00ff;
-            --white: #ffffff;
-            --black: #000000;
-            --grey: #f4f4f4;
-            --urgent-red: #e74c3c;
+            --white: rgba(255, 255, 255, 0.94);
+            --black: #1a1a1a;
+            --menu-bg: rgba(26, 26, 26, 0.88);
+            --soft-radius: 18px;
+            --urgent-red: #ff4757;
         }
 
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Arial Black', sans-serif; background: #fff; overflow: hidden; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
         #map { height: 100vh; width: 100vw; z-index: 1; }
 
-        .overlay-ui { position: absolute; z-index: 1000; pointer-events: auto; }
+        /* --- NAVIGATION & MENU --- */
+        .menu-trigger {
+            position: absolute; top: 15px; left: 15px; z-index: 2000;
+            background: var(--safety-yellow); border: 2px solid var(--black);
+            width: 54px; height: 54px; border-radius: 14px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: opacity 0.5s ease, transform 0.2s;
+        }
+        .menu-trigger:active { transform: scale(0.9); }
+        .menu-trigger span { width: 28px; height: 3px; background: var(--black); margin: 3px 0; border-radius: 2px; }
+
+        #sidebar {
+            position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
+            background: var(--menu-bg); backdrop-filter: blur(12px);
+            z-index: 3000; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white; padding: 25px; box-sizing: border-box;
+            border-right: 1px solid rgba(255,255,255,0.15);
+        }
+        #sidebar.open { left: 0; }
+
+        .sidebar-header { font-size: 26px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 25px; border-bottom: 1px solid #444; padding-bottom: 15px; }
         
-        .header {
-            top: 10px; left: 10px; background: var(--safety-yellow);
-            padding: 12px; border: 4px solid #000; font-size: 16px; font-weight: bold;
-            box-shadow: 4px 4px 0px #000;
+        .nav-item {
+            padding: 16px; margin: 10px 0; border-radius: var(--soft-radius);
+            background: rgba(255,255,255,0.06); cursor: pointer;
+            display: flex; align-items: center; transition: background 0.2s;
+            font-weight: 600;
         }
+        .nav-item:hover { background: rgba(255,255,255,0.12); }
+        .nav-item i { margin-right: 15px; font-style: normal; font-size: 22px; }
 
-        .fs-toggle {
-            top: 10px; right: 10px; background: #000; color: #fff;
-            padding: 10px 15px; border: 2px solid var(--safety-yellow); font-weight: bold;
-            cursor: pointer; font-size: 11px; text-transform: uppercase;
-        }
+        #layer-container { display: none; margin: 10px 0 20px 0; padding-left: 5px; max-height: 40vh; overflow-y: auto; }
+        .layer-row { display: flex; align-items: center; margin: 14px 0; font-size: 14px; }
+        .layer-row input { width: 24px; height: 24px; margin-right: 15px; cursor: pointer; accent-color: var(--safety-yellow); }
+        .layer-label-pill { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); }
 
-        .layer-list {
-            top: 70px; left: 10px; background: #fff; border: 4px solid #000;
-            padding: 8px; max-height: 45vh; overflow-y: auto; width: 220px;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-        }
-        .layer-item { display: flex; align-items: center; margin: 10px 0; font-size: 12px; font-weight: bold; }
-        .layer-item input { width: 26px; height: 26px; margin-right: 12px; cursor: pointer; }
-
-        /* STAGE 1: FLOATING QUICK INFO */
+        /* --- STAGE 1: QUICK INFO --- */
         #quick-info {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; background: white; border: 4px solid #000;
-            z-index: 3000; display: none; box-shadow: 12px 12px 0px rgba(0,0,0,0.5);
+            width: 330px; background: var(--white); border-radius: var(--soft-radius);
+            z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.08);
         }
-        .info-x {
-            position: absolute; top: -15px; right: -15px; width: 40px; height: 40px;
-            background: var(--urgent-red); color: white; border: 3px solid #000; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-weight: bold;
-            cursor: pointer; box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-        }
-        .info-img { width: 100%; height: 130px; background: #333; border-bottom: 4px solid #000; overflow: hidden; }
-        .info-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .info-body { padding: 15px; }
-        .enter-site-btn {
-            width: 100%; background: var(--safety-yellow); border: none; border-top: 4px solid #000;
-            padding: 18px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase;
-        }
+        .info-close-btn { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; background: var(--urgent-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; border: 2px solid rgba(0,0,0,0.1); }
+        .info-header-icon { height: 150px; background: #111; display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 2px solid rgba(0,0,0,0.05); }
+        .info-body { padding: 22px; }
+        .info-status-pill { font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; margin-top: 15px; font-size: 14px; }
+        .enter-site-btn { width: 100%; background: var(--safety-yellow); border: none; padding: 22px; font-weight: 900; font-size: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* STAGE 2: WORK MODAL */
+        /* --- STAGE 2: WORK MODAL --- */
         #work-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--white); z-index: 4000; display: none;
-            flex-direction: column;
+            background: #fff; z-index: 5000; display: none; flex-direction: column;
         }
-        .modal-nav { background: #000; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .modal-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
-        .site-summary { background: var(--grey); border: 4px solid #000; padding: 20px; margin-bottom: 20px; }
-        
-        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-action {
-            background: var(--action-blue); color: white; border: 4px solid #000;
-            padding: 25px 10px; border-radius: 12px; font-weight: bold; text-align: center;
-            font-size: 16px; cursor: pointer;
-        }
-        .btn-history {
-            background: #444; color: white; border: 4px solid #000;
-            padding: 20px; width: 100%; margin-top: 20px; font-weight: bold;
-            font-size: 18px; text-transform: uppercase; cursor: pointer; border-radius: 8px;
-        }
+        .work-modal-header { background: var(--black); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .work-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 20px; }
+        .work-btn { background: var(--action-blue); color: white; padding: 35px 10px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 14px; text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 0 #1b5a84; }
+        .work-btn:active { transform: translateY(3px); box-shadow: none; background: var(--safety-yellow); color: var(--black); }
 
-        /* ICON STYLES */
-        .icon-box {
-            display: flex; align-items: center; justify-content: center;
-            border: 2px solid #000; border-radius: 6px; background: #fff;
-            transition: all 0.2s;
-        }
+        /* --- MAP ASSETS --- */
+        .icon-marker { display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
         @keyframes urgent-pulse {
             0% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.2); filter: brightness(1.6); }
+            50% { transform: scale(1.25); filter: brightness(1.4); }
             100% { transform: scale(1); filter: brightness(1); }
         }
-        .pulse-urgent { animation: urgent-pulse 1s infinite ease-in-out; border-width: 3px; }
-
-        .van-marker { font-size: 38px; text-shadow: 2px 2px 0px #000; }
+        .urgent-asset { animation: urgent-pulse 1.2s infinite; border: 2px solid #fff; z-index: 1000 !important; }
+        
+        .hidden-menu { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div class="overlay-ui header">TRACK TAGS v12</div>
-    <button class="overlay-ui fs-toggle" onclick="toggleFS()">Maximize</button>
-    <div class="overlay-ui layer-list" id="layer-menu"></div>
+    <div id="menu-trigger" class="menu-trigger" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+    </div>
+
+    <div id="sidebar">
+        <div class="sidebar-header">TRACK TAGS</div>
+        <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
+        <div id="layer-container"></div>
+        
+        <div class="nav-item" onclick="alert('Accessing Dispatched Jobs...')"><i>📋</i> Job Bank</div>
+        <div class="nav-item" onclick="alert('Switching to Add Site Mode...')"><i>➕</i> Add Site</div>
+        <div class="nav-item" style="margin-top: 40px; color: var(--urgent-red);" onclick="location.reload()"><i>🚪</i> Log Out</div>
+    </div>
 
     <div id="map"></div>
 
-    <!-- Stage 1 -->
     <div id="quick-info">
-        <div class="info-x" onclick="document.getElementById('quick-info').style.display='none'">X</div>
-        <div class="info-img"><img src="https://via.placeholder.com/400x200?text=SITE+PREVIEW" /></div>
+        <div class="info-close-btn" onclick="closeInfo()">✕</div>
+        <div class="info-header-icon" id="q-icon">⚡</div>
         <div class="info-body">
-            <h2 id="q-name" style="margin:0 0 5px 0;">SITE NAME</h2>
-            <div id="q-addr" style="font-size:12px; margin-bottom:10px;">--</div>
-            <div id="q-type" style="font-size:12px; text-transform:uppercase; color:#666;">--</div>
-            <div id="q-days" style="font-size:16px; margin-top:10px; font-weight:bold;">--</div>
+            <h2 id="q-name" style="margin:0; font-weight: 900;">SITE NAME</h2>
+            <p id="q-addr" style="font-size:14px; color:#555; margin:8px 0 18px 0;">Address Placeholder</p>
+            <div id="q-status-pill" class="info-status-pill">Last Action: --</div>
         </div>
-        <button class="enter-site-btn" onclick="enterSite()">Enter Site</button>
+        <button class="enter-site-btn" onclick="openWorkModal()">ENTER SITE</button>
     </div>
 
-    <!-- Stage 2 -->
     <div id="work-modal">
-        <div class="modal-nav">
-            <div style="font-weight:900;">SITE MANAGEMENT</div>
-            <button style="background:var(--urgent-red); color:#fff; border:2px solid #000; padding:8px 15px;" onclick="document.getElementById('work-modal').style.display='none'">EXIT</button>
+        <div class="work-modal-header">
+            <span style="font-weight:900; font-size: 18px;">FIELD WORK</span>
+            <button onclick="document.getElementById('work-modal').style.display='none'" style="background:var(--safety-yellow); border:none; padding:10px 22px; border-radius:10px; font-weight:900; font-size: 14px;">EXIT SITE</button>
         </div>
-        <div class="modal-content">
-            <div class="site-summary">
-                <h1 id="m-name" style="margin-top:0;">NAME</h1>
-                <p id="m-meta">Location & Details</p>
-                <div id="m-status" style="font-weight:bold; color:red;">Status: Urgent Inspection Required</div>
+        <div style="padding:20px; overflow-y: auto;">
+            <div style="background:#f8f9fa; padding:25px; border-radius:22px; margin-bottom:25px; border: 1px solid #eee;">
+                <h1 id="m-name" style="margin:0; font-size: 28px;">SITE</h1>
+                <p id="m-addr" style="color: #666; margin-top: 5px;">Location Info</p>
             </div>
-
-            <div class="btn-grid">
-                <div class="btn-action" onclick="alert('Inspection Started')">SITE INSPECTION</div>
-                <div class="btn-action" onclick="alert('Graffiti Removal Started')">GRAFFITI REMOVAL</div>
-                <div class="btn-action" onclick="alert('Litter Removal Started')">LITTER REMOVAL</div>
-                <div class="btn-action" onclick="alert('General Maintenance Started')">GENERAL WORK</div>
+            <div class="work-action-grid">
+                <div class="work-btn" onclick="alert('Inspection Task Logged')">SITE INSPECTION</div>
+                <div class="work-btn" onclick="alert('Graffiti Task Logged')">REMOVE GRAFFITI</div>
+                <div class="work-btn" onclick="alert('Litter Task Logged')">LITTER REMOVAL</div>
+                <div class="work-btn" onclick="alert('Maintenance Task Logged')">GENERAL WORK</div>
             </div>
-
-            <button class="btn-history" onclick="alert('Opening Site History...')">View Work History</button>
+            <button style="width:100%; margin-top:20px; padding:20px; background:#333; color:white; border:none; border-radius:18px; font-weight:bold; font-size: 16px;" onclick="alert('Fetching Site History...')">VIEW WORK HISTORY</button>
         </div>
     </div>
 
@@ -149,95 +145,105 @@
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
 
     <script>
-        const map = L.map('map', { zoomControl: true, tap: false }).setView([-41.135, 174.84], 14);
+        const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // Fleet GPS
-        let van = null;
-        let trail = L.polyline([], {color: '#e74c3c', weight: 4, dashArray: '10, 10'}).addTo(map);
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition((pos) => {
-                const loc = [pos.coords.latitude, pos.coords.longitude];
-                if (!van) van = L.marker(loc, {icon: L.divIcon({className:'van-marker', html:'🚐', iconSize:[40,40], iconAnchor:[20,20]})}).addTo(map);
-                else van.setLatLng(loc);
-                trail.addLatLng(loc);
-            }, null, {enableHighAccuracy: true});
+        // UI Interaction Logic
+        let hideTimer;
+        const menuTrigger = document.getElementById('menu-trigger');
+
+        function startHideTimer() {
+            menuTrigger.classList.remove('hidden-menu');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+                if (!document.getElementById('sidebar').classList.contains('open')) {
+                    menuTrigger.classList.add('hidden-menu');
+                }
+            }, 5000);
         }
 
+        ['mousemove', 'touchstart', 'click'].forEach(evt => window.addEventListener(evt, startHideTimer));
+        startHideTimer();
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        function toggleLayers() { 
+            const el = document.getElementById('layer-container');
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Asset Configuration
         const config = [
-            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '', isPath: true },
+            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '🛣️', isPath: true },
             { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f', icon: '⚡' },
             { file: 'PCC Underpasses.kml', label: 'Underpasses', color: '#e74c3c', icon: '🌉' },
             { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique Paint', color: '#9b59b6', icon: '💎' },
             { file: 'Traffic Light Box Sites.kml', label: 'Traffic Boxes', color: '#2ecc71', icon: '🚦' },
             { file: 'Community Buildings.kml', label: 'Comm. Buildings', color: '#3498db', icon: '🏠' },
             { file: 'PCC Mural Sites.kml', label: 'Murals', color: '#d35400', icon: '🖼️' },
-            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '', isPath: true },
+            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '💈', isPath: true },
             { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e', icon: '🚗' }
         ];
 
-        let activeData = {};
+        let activeSiteData = {};
 
         function loadLayer(item) {
             const group = L.geoJson(null, {
-                style: (feat) => {
-                    const days = Math.floor(Math.random() * 90);
-                    const c = days > 60 ? '#000' : (days > 30 ? '#555' : item.color);
-                    return { color: c, weight: 15, opacity: 0.9, dashArray: item.isPath ? '15, 15' : '' };
+                style: () => {
+                    const d = Math.floor(Math.random() * 90);
+                    const c = d > 60 ? '#000' : (d > 30 ? '#555' : item.color);
+                    return { color: c, weight: 14, opacity: 0.8, dashArray: item.isPath ? '12, 12' : '' };
                 },
                 pointToLayer: (feat, ll) => {
-                    const days = Math.floor(Math.random() * 90);
-                    const bg = days > 60 ? '#000' : (days > 30 ? '#555' : item.color);
-                    const pulse = days > 60 ? 'pulse-urgent' : '';
+                    const d = Math.floor(Math.random() * 90);
+                    const bg = d > 60 ? '#000' : (d > 30 ? '#555' : item.color);
+                    const cls = d > 60 ? 'icon-marker urgent-asset' : 'icon-marker';
                     return L.marker(ll, {
                         icon: L.divIcon({
-                            className: `icon-box ${pulse}`,
-                            html: `<div style="background:${bg}; width:34px; height:34px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; border-radius:4px;">${item.icon}</div>`,
-                            iconSize: [34, 34], iconAnchor: [17, 17]
+                            className: cls,
+                            html: `<div style="background:${bg}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px;">${item.icon}</div>`,
+                            iconSize: [38, 38], iconAnchor: [19, 19]
                         })
                     });
                 },
                 onEachFeature: (feat, layer) => {
                     layer.on('click', (e) => {
                         L.DomEvent.stopPropagation(e);
-                        const days = Math.floor(Math.random() * 90);
-                        activeData = {
-                            name: feat.properties.name || "Site Asset",
-                            addr: feat.properties.address || feat.properties.SUBURB || "Porirua District",
-                            type: item.label,
-                            days: days
-                        };
-                        document.getElementById('q-name').innerText = activeData.name;
-                        document.getElementById('q-addr').innerText = "Addr: " + activeData.addr;
-                        document.getElementById('q-type').innerText = "Type: " + activeData.type;
-                        document.getElementById('q-days').innerText = "Last Inspected: " + days + " Days Ago";
-                        document.getElementById('q-days').style.color = days > 60 ? 'red' : 'black';
-                        document.getElementById('quick-info').style.display = 'block';
+                        const d = Math.floor(Math.random() * 90);
+                        activeSiteData = { name: feat.properties.name || "Asset", addr: feat.properties.address || "Porirua", days: d, icon: item.icon };
+                        showInfo();
                     });
                 }
             });
             omnivore.kml(item.file, null, group).addTo(map);
 
-            const menu = document.getElementById('layer-menu');
-            const div = document.createElement('div');
-            div.className = 'layer-item';
-            div.innerHTML = `<input type="checkbox" checked> <span style="background:${item.color}; padding:2px 8px; border:2px solid #000;">${item.label}</span>`;
-            div.querySelector('input').onchange = (e) => {
-                if(e.target.checked) map.addLayer(group); else map.removeLayer(group);
-            };
-            menu.appendChild(div);
+            const container = document.getElementById('layer-container');
+            const row = document.createElement('div');
+            row.className = 'layer-row';
+            row.innerHTML = `<input type="checkbox" checked> <div class="layer-label-pill"><span>${item.icon}</span> <span style="margin-left:10px;">${item.label}</span></div>`;
+            row.querySelector('input').onchange = (e) => { if(e.target.checked) map.addLayer(group); else map.removeLayer(group); };
+            container.appendChild(row);
         }
 
         config.forEach(loadLayer);
-        function enterSite() {
-            document.getElementById('m-name').innerText = activeData.name;
-            document.getElementById('m-meta').innerText = "Type: " + activeData.type + " | Location: " + activeData.addr;
-            document.getElementById('m-status').innerText = "Status: Last action " + activeData.days + " days ago.";
-            document.getElementById('m-status').style.color = activeData.days > 60 ? 'red' : 'green';
-            document.getElementById('work-modal').style.display = 'flex';
-            document.getElementById('quick-info').style.display = 'none';
+
+        function showInfo() {
+            document.getElementById('q-name').innerText = activeSiteData.name;
+            document.getElementById('q-addr').innerText = activeSiteData.addr;
+            document.getElementById('q-icon').innerText = activeSiteData.icon;
+            const pill = document.getElementById('q-status-pill');
+            pill.innerText = `LAST INSPECTED: ${activeSiteData.days} DAYS AGO`;
+            pill.style.background = activeSiteData.days > 60 ? '#ffeae6' : '#e6ffed';
+            pill.style.color = activeSiteData.days > 60 ? '#ff4757' : '#2ecc71';
+            document.getElementById('quick-info').style.display = 'block';
         }
-        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+
+        function closeInfo() { document.getElementById('quick-info').style.display = 'none'; }
+        function openWorkModal() {
+            document.getElementById('m-name').innerText = activeSiteData.name;
+            document.getElementById('m-addr').innerText = activeSiteData.addr;
+            document.getElementById('work-modal').style.display = 'flex';
+            closeInfo();
+        }
     </script>
 </body>
 </html>
