@@ -3,267 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v27</title>
+    <title>Track Tags | Field Ops v33</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
+    <div id="live-timer-widget">00:00</div>
+
     <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()">
         <span></span><span></span><span></span>
     </div>
 
-    <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v27</div>
-
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
-        <div class="sidebar-header">TRACK TAGS <span class="v-label">v27</span></div>
-        <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
+        <div class="sidebar-header">TRACK TAGS</div>
+        <div class="nav-item" onclick="toggleLayers()">🗺️ Map Layers</div>
         <div id="layer-container"></div>
-        <div class="nav-item" onclick="openOverlay('jobbank')"><i>📋</i> Job Bank</div>
-        <div class="nav-item" onclick="alert('Add Site Mode...')"><i>➕</i> Add Site</div>
-        <div class="nav-item" style="color: #ff4757; margin-top: 30px;" onclick="location.reload()"><i>🚪</i> Log Out</div>
+        <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
+        <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
     </div>
 
     <div id="map"></div>
 
-    <!-- Site Summary Info -->
     <div id="site-info">
-        <div class="info-hero">
-            <div class="close-site" onclick="document.getElementById('site-info').style.display='none'">✕</div>
-            <div style="font-size:40px;">📸</div>
-        </div>
-        <div class="details-list">
-            <div class="detail-item"><div class="detail-label">Name</div><div id="s-name" class="detail-value">--</div></div>
-            <div class="detail-item"><div class="detail-label">Address</div><div id="s-addr" class="detail-value">--</div></div>
-            <div class="detail-item"><div class="detail-label">Type</div><div id="s-type" class="detail-value">--</div></div>
-            <div class="detail-item"><div class="detail-label">Last Inspected</div><div id="s-date" class="detail-value">--</div></div>
+        <div class="info-header">
+            <span id="s-name">Select Site</span>
+            <button onclick="document.getElementById('site-info').style.display='none'">✕</button>
         </div>
         <div class="action-grid">
-            <button class="action-btn" onclick="openOverlay('inspection')">Inspection</button>
-            <button class="action-btn" onclick="openOverlay('work')">Log Work</button>
-            <button class="action-btn" onclick="openOverlay('history')">History</button>
+            <button class="action-btn blue" onclick="openOverlay('inspection')">Inspection</button>
+            <button class="action-btn blue" onclick="openOverlay('work')">Log Work</button>
+            <button class="action-btn gray" onclick="alert('History...')">History</button>
+            <button class="action-btn green" onclick="alert('Add Site...')">Add Site</button>
         </div>
     </div>
 
-    <!-- Inspection Overlay -->
-    <div id="inspection-overlay" class="full-overlay">
-        <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">SITE INSPECTION</span>
-            <button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
-        </div>
-        <div class="form-content">
-            <div class="form-group">
-                <label class="form-label">Site: <span class="insp-site-display">--</span></label>
-                <div id="insp-gps-display" class="gps-meta">GPS: Identifying...</div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Surface Condition</label>
-                <div class="radio-grid">
-                    <input type="radio" name="condition" id="cond-good" value="Good" checked>
-                    <label for="cond-good" class="radio-label">GOOD</label>
-                    <input type="radio" name="condition" id="cond-minor" value="Minor">
-                    <label for="cond-minor" class="radio-label">MINOR</label>
-                    <input type="radio" name="condition" id="cond-urgent" value="Urgent">
-                    <label for="cond-urgent" class="radio-label">URGENT</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Photos (Multiple)</label>
-                <input type="file" id="insp-photo-upload" multiple accept="image/*" style="display:none;" onchange="updatePhotoCount('inspection')">
-                <div class="photo-btn" onclick="document.getElementById('insp-photo-upload').click()">
-                    <span id="insp-photo-status">📷 Tap to Add Photos</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Notes</label>
-                <textarea id="insp-comments" class="form-textarea" placeholder="Describe findings..."></textarea>
-            </div>
-
-            <button class="submit-btn" onclick="submitInspection()">Submit Report</button>
-        </div>
-    </div>
-
-    <!-- Log Work Overlay -->
     <div id="work-overlay" class="full-overlay">
-        <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">LOG WORK</span>
-            <button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
-        </div>
+        <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')">✕</button></div>
         <div class="form-content">
-            <div class="form-group">
-                <label class="form-label">Site: <span class="insp-site-display">--</span></label>
-                <div id="work-gps-display" class="gps-meta">GPS: Identifying...</div>
+            <p>Site: <strong class="site-display">--</strong></p>
+            <div class="photo-grid">
+                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE</div>
+                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER</div>
             </div>
+            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
+            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
+            
+            <button class="extra-photo-btn" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
+            <div id="work-extra-count" class="extra-label">0 extra photos</div>
+            <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
 
-            <div class="form-group">
-                <label class="form-label">Step 1 & 2: Mandatory Photos</label>
-                <div class="photo-step-grid">
-                    <div id="btn-before" class="photo-step-btn" onclick="document.getElementById('photo-before').click()">
-                        <span style="font-size:24px;">📷</span>
-                        <span id="label-before" style="font-weight:900; font-size:11px;">BEFORE</span>
-                        <span id="time-before" style="font-size:9px; opacity:0.6;">(Required)</span>
-                    </div>
-                    <div id="btn-after" class="photo-step-btn" onclick="document.getElementById('photo-after').click()">
-                        <span style="font-size:24px;">📸</span>
-                        <span id="label-after" style="font-weight:900; font-size:11px;">AFTER</span>
-                        <span id="time-after" style="font-size:9px; opacity:0.6;">(Final Step)</span>
-                    </div>
-                </div>
-                <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
-                <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
-            </div>
-
-            <div id="timing-display">ACTIVE TIME: <span id="time-calc">0m</span></div>
-
-            <div class="form-group">
-                <label class="form-label">Work Description</label>
-                <textarea id="work-desc" class="form-textarea" placeholder="Detail removal/cleaning..."></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Materials</label>
-                <textarea id="work-materials" class="form-textarea" style="height:50px;" placeholder="Paint, remover, etc..."></textarea>
-            </div>
-
-            <div class="dual-btns">
-                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">Pause</button>
-                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">Submit</button>
+            <label class="label">Medium</label>
+            <select id="work-medium" onchange="handleDropdown(this)">
+                <option value="">Select...</option>
+                <option value="Spray Paint">Spray Paint</option>
+                <option value="Paint">Paint</option>
+                <option value="Felt Pen">Felt Pen</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
+            <label class="label">Surface</label>
+            <select id="work-surface" onchange="handleDropdown(this)">
+                <option value="">Select...</option>
+                <option value="Brick">Brick</option>
+                <option value="Raw Wood">Raw Wood</option>
+                <option value="Metal">Metal</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
+            <label class="label">Property</label>
+            <select id="work-property" onchange="handleDropdown(this)">
+                <option value="">Select...</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Private">Private</option>
+                <option value="Public">Public Fence</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
+            <div class="footer-btns">
+                <button id="pause-work-btn" class="btn-pause" disabled onclick="pauseJob()">Pause</button>
+                <button id="submit-work-btn" class="btn-submit" disabled onclick="submitWork()">Submit</button>
             </div>
         </div>
     </div>
 
-    <!-- Job Bank Overlay -->
-    <div id="jobbank-overlay" class="full-overlay">
-        <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">JOB BANK</span>
-            <button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
-        </div>
+    <div id="inspection-overlay" class="full-overlay">
+        <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')">✕</button></div>
         <div class="form-content">
-            <div id="job-bank-list"></div>
-        </div>
-    </div>
-
-    <!-- History Overlay -->
-    <div id="history-overlay" class="full-overlay">
-        <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">HISTORY</span>
-            <button onclick="closeOverlay('history')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button>
-        </div>
-        <div class="form-content">
-            <div id="history-list"></div>
-            <button class="submit-btn" style="background:#eee; color:#666;" onclick="clearHistory()">Clear History</button>
+            <p>Site: <strong class="site-display">--</strong></p>
+            <div class="photo-grid">
+                <div id="btn-insp-start" class="photo-box" onclick="document.getElementById('photo-insp-start').click()">📸 START</div>
+                <div id="btn-insp-end" class="photo-box" onclick="document.getElementById('photo-insp-end').click()">📷 END</div>
+            </div>
+            <input type="file" id="photo-insp-start" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('start')">
+            <input type="file" id="photo-insp-end" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('end')">
+            <textarea id="insp-notes" class="textarea" placeholder="Notes..."></textarea>
+            <div class="footer-btns">
+                <button id="pause-insp-btn" class="btn-pause" disabled onclick="pauseInsp()">Pause</button>
+                <button id="submit-insp-btn" class="btn-submit" disabled onclick="submitInsp()">Submit</button>
+            </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="inspection.js"></script>
-    <script src="work.js"></script>
-    <script>
-        const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-        let vanPos = { lat: 0, lng: 0 };
-        let activeSiteData = {};
-
-        // GPS & Fleet
-        let vanMarker = null;
-        let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
-
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition((pos) => {
-                vanPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                const loc = [vanPos.lat, vanPos.lng];
-                if (!vanMarker) {
-                    vanMarker = L.marker(loc, { icon: L.divIcon({ className: 'van-icon', html: '🚐', iconSize:[40,40], iconAnchor:[20,20]}) }).addTo(map);
-                } else { vanMarker.setLatLng(loc); }
-                trail.addLatLng(loc);
-            }, null, {enableHighAccuracy: true});
-        }
-
-        // Sidebar & UI
-        function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
-        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function toggleLayers() { const el = document.getElementById('layer-container'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
-
-        function openOverlay(type) {
-            document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
-            document.getElementById(type + '-overlay').style.display = 'flex';
-            document.querySelectorAll('.insp-site-display').forEach(el => el.innerText = activeSiteData.name);
-            document.getElementById('site-info').style.display = 'none';
-            if(type === 'history') renderHistory();
-            if(type === 'jobbank') renderJobBank();
-            if(type === 'inspection') document.getElementById('insp-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
-            if(type === 'work') document.getElementById('work-gps-display').innerText = `LAT: ${vanPos.lat.toFixed(5)} | LNG: ${vanPos.lng.toFixed(5)}`;
-        }
-        function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
-
-        // Layers Config
-        const config = [
-            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '🛣️', isPath: true },
-            { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f', icon: '⚡' },
-            { file: 'PCC Underpasses.kml', label: 'Underpasses', color: '#e74c3c', icon: '🌉' },
-            { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique Paint', color: '#9b59b6', icon: '💎' },
-            { file: 'Traffic Light Box Sites.kml', label: 'Traffic Boxes', color: '#2ecc71', icon: '🚦' },
-            { file: 'Community Buildings.kml', label: 'Comm. Buildings', color: '#3498db', icon: '🏠' },
-            { file: 'PCC Mural Sites.kml', label: 'Murals', color: '#d35400', icon: '🖼️' },
-            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '💈' },
-            { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e', icon: '🚗' }
-        ];
-
-        function loadLayer(item) {
-            const group = L.geoJson(null, {
-                style: () => ({ color: item.color, weight: 10, opacity: 0.6 }),
-                pointToLayer: (feat, ll) => L.marker(ll, {
-                    icon: L.divIcon({
-                        className: 'm-icon',
-                        html: `<div style="background:${item.color}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; border:2px solid #fff;">${item.icon}</div>`,
-                        iconSize: [38, 38], iconAnchor: [19, 19]
-                    })
-                }),
-                onEachFeature: (feat, layer) => {
-                    if (item.isPath && feat.geometry.type === "LineString") {
-                        const coords = feat.geometry.coordinates;
-                        const mid = [coords[Math.floor(coords.length/2)][1], coords[Math.floor(coords.length/2)][0]];
-                        L.marker(mid, {
-                            icon: L.divIcon({
-                                className: 'm-icon',
-                                html: `<div style="background:${item.color}; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; border:2px solid #fff;">${item.icon}</div>`,
-                                iconSize: [30, 30], iconAnchor: [15, 15]
-                            })
-                        }).addTo(group).on('click', (e) => { L.DomEvent.stopPropagation(e); showSiteSummary(feat, item); });
-                    }
-                    layer.on('click', (e) => { L.DomEvent.stopPropagation(e); showSiteSummary(feat, item); });
-                }
-            });
-            omnivore.kml(item.file, null, group).addTo(map);
-
-            const container = document.getElementById('layer-container');
-            const row = document.createElement('div');
-            row.className = 'layer-row';
-            row.innerHTML = `<input type="checkbox" checked> <div class="layer-label-pill"><span>${item.icon}</span> <span style="margin-left:10px;">${item.label}</span></div>`;
-            row.onclick = () => {
-                const cb = row.querySelector('input'); cb.checked = !cb.checked;
-                if(cb.checked) map.addLayer(group); else map.removeLayer(group);
-            };
-            container.appendChild(row);
-        }
-
-        function showSiteSummary(feat, item) {
-            activeSiteData = { name: feat.properties.name || "Unnamed", addr: feat.properties.address || "Porirua" };
-            document.getElementById('s-name').innerText = activeSiteData.name;
-            document.getElementById('s-addr').innerText = activeSiteData.addr;
-            document.getElementById('s-type').innerText = item.label;
-            document.getElementById('s-date').innerText = (Math.floor(Math.random() * 60)) + " days ago";
-            document.getElementById('site-info').style.display = 'block';
-        }
-
-        config.forEach(loadLayer);
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
