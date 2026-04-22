@@ -1,55 +1,50 @@
  :root {
     --safety-yellow: #f1c40f;
     --action-blue: #2980b9;
-    --urgent-red: #ff4757;
-    --good-green: #2ecc71;
 }
 
-body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #000; overflow: hidden; }
+body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #000; overflow: hidden; }
 #map { height: 100vh; width: 100vw; }
 
 #live-timer-widget {
     position: fixed; top: 15px; right: 140px; z-index: 6000;
     background: #ff4757; color: white; padding: 8px 15px; border-radius: 8px;
-    font-weight: 900; font-family: monospace; font-size: 20px;
-    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-    display: none;
+    font-weight: 900; font-family: monospace; font-size: 20px; display: none;
 }
 
-.extra-photo-btn {
-    width: 100%; background: #fff; border: 2px solid var(--action-blue);
-    color: var(--action-blue); padding: 12px; border-radius: 10px;
-    font-weight: 800; cursor: pointer; margin-bottom: 5px;
+#sidebar {
+    position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
+    background: rgba(245, 245, 245, 0.5); backdrop-filter: blur(10px);
+    z-index: 3000; transition: left 0.4s ease; color: #000; padding: 20px; box-sizing: border-box;
 }
-.extra-count { font-size: 11px; text-align: center; color: #888; }
-
-.menu-trigger { position: absolute; top: 15px; left: 15px; z-index: 2005; background: var(--safety-yellow); border: 2px solid #000; width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.menu-trigger span { width: 24px; height: 3px; background: #000; margin: 2px 0; }
-.fs-btn { position: absolute; top: 15px; right: 15px; z-index: 2000; background: #000; color: #fff; padding: 12px 18px; border: 2px solid var(--safety-yellow); border-radius: 12px; font-weight: 900; font-size: 11px; }
-
-#sidebar { position: fixed; top: 0; left: -320px; width: 310px; height: 100%; background: rgba(20,20,20,0.9); z-index: 3000; transition: left 0.4s ease; color: white; padding: 20px; box-sizing: border-box; }
 #sidebar.open { left: 0; }
 
-.full-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8f9fa; z-index: 5000; display: none; flex-direction: column; overflow-y: auto; color: #333; }
-.form-header { background: #000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-.form-content { padding: 20px; }
-.form-label { display: block; font-weight: 800; font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
+.menu-trigger { position: absolute; top: 15px; left: 15px; z-index: 2005; background: var(--safety-yellow); width: 50px; height: 50px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; }
+.menu-trigger span { width: 24px; height: 3px; background: #000; margin: 2px 0; }
 
+#site-info { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; border-radius: 20px; z-index: 4000; display: none; padding-bottom: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
+.action-btn { background: var(--action-blue); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+
+.full-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fdfdfd; z-index: 5000; display: none; flex-direction: column; overflow-y: auto; }
+.form-header { background: #000; color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.form-content { padding: 15px; }
+.form-group { margin-bottom: 15px; }
+.form-label { display: block; font-weight: 800; font-size: 11px; color: #555; text-transform: uppercase; margin-bottom: 5px; }
+
+.form-select {
+    width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #eee;
+    background: #fff; font-size: 16px; font-family: inherit; appearance: none;
+}
+
+.form-textarea { width: 100%; border: 2px solid #eee; border-radius: 12px; padding: 15px; font-size: 16px; height: 80px; box-sizing: border-box; }
 .photo-step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-.photo-step-btn { background: #fff; border: 2px dashed #cbd5e0; padding: 20px 10px; border-radius: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-.photo-step-btn.done { border-style: solid; border-color: var(--good-green); background: #f0fff4; }
+.photo-step-btn { background: #fff; border: 2px dashed #ccc; padding: 20px; border-radius: 12px; text-align: center; }
+.photo-step-btn.done { border-style: solid; border-color: #2ecc71; background: #f0fff4; }
 
-.radio-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.radio-grid input { display: none; }
-.radio-label { padding: 15px 5px; border-radius: 12px; text-align: center; font-weight: 900; font-size: 11px; cursor: pointer; background: #eee; }
-input:checked + .radio-label { color: white; }
-input#cond-good:checked + .radio-label { background: var(--good-green); }
-input#cond-minor:checked + .radio-label { background: #f39c12; }
-input#cond-urgent:checked + .radio-label { background: var(--urgent-red); }
+.extra-photo-btn { width: 100%; padding: 12px; border: 1px solid var(--action-blue); border-radius: 10px; background: none; color: var(--action-blue); font-weight: 700; margin-bottom: 20px; }
+.extra-count { font-size: 10px; text-align: center; margin-top: -15px; margin-bottom: 15px; color: #888; }
 
-.form-textarea { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 12px; font-family: inherit; font-size: 16px; height: 80px; resize: none; box-sizing: border-box; }
-.dual-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px; }
-.submit-btn { background: var(--safety-yellow); color: #000; border: none; padding: 20px; font-weight: 900; font-size: 18px; border-radius: 15px; }
-.submit-btn:disabled { background: #ccc; opacity: 0.6; }
-.pause-btn { background: #636e72; color: #fff; border: none; padding: 20px; font-weight: 900; border-radius: 15px; }
-.version-tag { position: absolute; bottom: 10px; right: 10px; color: rgba(255,255,255,0.3); font-size: 10px; } 
+.dual-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+.submit-btn { background: var(--safety-yellow); border: none; border-radius: 15px; font-weight: 900; font-size: 16px; }
+.pause-btn { background: #eee; border: none; border-radius: 15px; padding: 20px; } 

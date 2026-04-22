@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v30</title>
+    <title>Track Tags | Field Ops v31</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -15,17 +15,13 @@
         <span></span><span></span><span></span>
     </div>
 
-    <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v30</div>
-
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
-        <div class="sidebar-header">TRACK TAGS <span class="v-label">v30</span></div>
+        <div class="sidebar-header">TRACK TAGS <span class="v-label">v31</span></div>
         <div class="nav-item" onclick="toggleLayers()"><i>🗺️</i> Map Layers</div>
         <div id="layer-container"></div>
         <div class="nav-item" onclick="openOverlay('jobbank')"><i>📋</i> Job Bank</div>
-        <div class="nav-item" onclick="alert('Add Site Mode Active...')"><i>➕</i> Add Site</div>
-        <div class="nav-item" style="color: #ff4757; margin-top: 30px;" onclick="location.reload()"><i>🚪</i> Log Out</div>
+        <div class="nav-item" onclick="location.reload()"><i>🚪</i> Log Out</div>
     </div>
 
     <div id="map"></div>
@@ -33,21 +29,96 @@
     <div id="site-info">
         <div class="info-hero">
             <div class="close-site" onclick="document.getElementById('site-info').style.display='none'">✕</div>
-            <div style="font-size:40px;">📸</div>
+            <div style="font-size:40px;">🎨</div>
         </div>
         <div class="details-list">
             <div class="detail-item"><div class="detail-label">Name</div><div id="s-name" class="detail-value">--</div></div>
-            <div class="detail-item"><div class="detail-label">Address</div><div id="s-addr" class="detail-value">--</div></div>
             <div class="detail-item"><div class="detail-label">Type</div><div id="s-type" class="detail-value">--</div></div>
         </div>
         <div class="action-grid">
             <button class="action-btn" onclick="openOverlay('inspection')">Inspection</button>
             <button class="action-btn" onclick="openOverlay('work')">Log Work</button>
             <button class="action-btn" onclick="openOverlay('history')">History</button>
-            <button class="action-btn" style="background:#2ecc71" onclick="alert('Adding new site...')">Add Site</button>
+            <button class="action-btn" style="background:#2ecc71" onclick="alert('Add Site Mode...')">Add Site</button>
         </div>
     </div>
 
+    <!-- Work Log Overlay with Select Menus -->
+    <div id="work-overlay" class="full-overlay">
+        <div class="form-header">
+            <span style="font-weight:900; font-size:20px;">LOG WORK</span>
+            <button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px;">✕</button>
+        </div>
+        <div class="form-content">
+            <div class="form-group"><label class="form-label">Site: <span class="insp-site-display">--</span></label></div>
+            
+            <div class="photo-step-grid">
+                <div id="btn-before" class="photo-step-btn" onclick="document.getElementById('photo-before').click()">
+                    <span style="font-size:24px;">📸</span>
+                    <span style="font-weight:900; font-size:11px;">BEFORE</span>
+                </div>
+                <div id="btn-after" class="photo-step-btn" onclick="document.getElementById('photo-after').click()">
+                    <span style="font-size:24px;">📷</span>
+                    <span style="font-weight:900; font-size:11px;">AFTER</span>
+                </div>
+            </div>
+            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
+            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
+            
+            <button class="extra-photo-btn" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
+            <div id="work-extra-count" class="extra-count">0 extra photos</div>
+            <input type="file" id="photo-work-extra" multiple accept="image/*" style="display:none;" onchange="addExtraPhotos('work')">
+
+            <div class="form-group">
+                <label class="form-label">Graffiti Type (Medium)</label>
+                <select id="work-medium" class="form-select" onchange="checkAddNew(this, 'medium')">
+                    <option value="">Select Medium...</option>
+                    <option value="Spray Paint">Spray Paint</option>
+                    <option value="Paint (Brush/Roller)">Paint (Brush/Roller)</option>
+                    <option value="Felt Pen / Marker">Felt Pen / Marker</option>
+                    <option value="Etched / Scratched">Etched / Scratched</option>
+                    <option value="Sticker / Poster">Sticker / Poster</option>
+                    <option value="ADD_NEW">➕ Add New Item...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Surface Type</label>
+                <select id="work-surface" class="form-select" onchange="checkAddNew(this, 'surface')">
+                    <option value="">Select Surface...</option>
+                    <option value="Brick">Brick</option>
+                    <option value="Raw Wood">Raw Wood</option>
+                    <option value="Painted (Smooth)">Painted (Smooth)</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Concrete / Stone">Concrete / Stone</option>
+                    <option value="Glass">Glass</option>
+                    <option value="ADD_NEW">➕ Add New Item...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Property Type</label>
+                <select id="work-property" class="form-select" onchange="checkAddNew(this, 'property')">
+                    <option value="">Select Property...</option>
+                    <option value="Commercial Building">Commercial Building</option>
+                    <option value="Private Residence">Private Residence</option>
+                    <option value="Public Fence">Public Fence</option>
+                    <option value="Utility Box">Utility Box</option>
+                    <option value="Underpass">Underpass</option>
+                    <option value="ADD_NEW">➕ Add New Item...</option>
+                </select>
+            </div>
+
+            <textarea id="work-desc" class="form-textarea" placeholder="Additional work notes..."></textarea>
+            
+            <div class="dual-btns">
+                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">Pause</button>
+                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inspection Overlay (Kept simple for walk-throughs) -->
     <div id="inspection-overlay" class="full-overlay">
         <div class="form-header">
             <span style="font-weight:900; font-size:20px;">INSPECTION</span>
@@ -57,27 +128,16 @@
             <div class="form-group"><label class="form-label">Site: <span class="insp-site-display">--</span></label></div>
             <div class="photo-step-grid">
                 <div id="btn-insp-start" class="photo-step-btn" onclick="document.getElementById('photo-insp-start').click()">
-                    <span style="font-size:24px;">📸</span>
-                    <span id="label-insp-start" style="font-weight:900; font-size:11px;">START PHOTO</span>
-                    <span id="hint-insp-start" style="font-size:9px; color:var(--action-blue);">Take photo to start.</span>
+                    <span style="font-size:24px;">📸</span><span style="font-weight:900; font-size:11px;">START PHOTO</span>
                 </div>
                 <div id="btn-insp-end" class="photo-step-btn" onclick="document.getElementById('photo-insp-end').click()">
-                    <span style="font-size:24px;">📷</span>
-                    <span id="label-insp-end" style="font-weight:900; font-size:11px;">END PHOTO</span>
-                    <span id="hint-insp-end" style="font-size:9px; opacity:0.6;">(Walk length)</span>
+                    <span style="font-size:24px;">📷</span><span style="font-weight:900; font-size:11px;">END PHOTO</span>
                 </div>
             </div>
             <input type="file" id="photo-insp-start" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('start')">
             <input type="file" id="photo-insp-end" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('end')">
             
-            <button class="extra-photo-btn" onclick="document.getElementById('photo-insp-extra').click()">➕ Add Mid-Job Photo</button>
-            <div id="insp-extra-count" class="extra-count">0 extra photos added</div>
-            <input type="file" id="photo-insp-extra" multiple accept="image/*" style="display:none;" onchange="addExtraPhotos('insp')">
-
-            <div class="form-group">
-                <label class="form-label">Findings</label>
-                <textarea id="insp-comments" class="form-textarea" placeholder="Notes..."></textarea>
-            </div>
+            <textarea id="insp-comments" class="form-textarea" placeholder="Condition notes..."></textarea>
             <div class="dual-btns">
                 <button id="pause-insp-btn" class="pause-btn" disabled onclick="pauseInsp()">Pause</button>
                 <button id="submit-insp-btn" class="submit-btn" disabled onclick="submitInspection()">Submit</button>
@@ -85,42 +145,8 @@
         </div>
     </div>
 
-    <div id="work-overlay" class="full-overlay">
-        <div class="form-header">
-            <span style="font-weight:900; font-size:20px;">LOG WORK</span>
-            <button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px;">✕</button>
-        </div>
-        <div class="form-content">
-            <div class="form-group"><label class="form-label">Site: <span class="insp-site-display">--</span></label></div>
-            <div class="photo-step-grid">
-                <div id="btn-before" class="photo-step-btn" onclick="document.getElementById('photo-before').click()">
-                    <span style="font-size:24px;">📸</span>
-                    <span id="label-before" style="font-weight:900; font-size:11px;">BEFORE</span>
-                    <span id="hint-before" style="font-size:9px; color:var(--action-blue);">Take photo to start.</span>
-                </div>
-                <div id="btn-after" class="photo-step-btn" onclick="document.getElementById('photo-after').click()">
-                    <span style="font-size:24px;">📷</span>
-                    <span id="label-after" style="font-weight:900; font-size:11px;">AFTER</span>
-                    <span id="hint-after" style="font-size:9px; opacity:0.6;">(Complete work)</span>
-                </div>
-            </div>
-            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
-            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
-            
-            <button class="extra-photo-btn" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
-            <div id="work-extra-count" class="extra-count">0 extra photos added</div>
-            <input type="file" id="photo-work-extra" multiple accept="image/*" style="display:none;" onchange="addExtraPhotos('work')">
-
-            <textarea id="work-desc" class="form-textarea" placeholder="Work description..."></textarea>
-            <div class="dual-btns">
-                <button id="pause-work-btn" class="pause-btn" disabled onclick="pauseJob()">Pause</button>
-                <button id="submit-work-btn" class="submit-btn" disabled onclick="submitWorkLog()">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="jobbank-overlay" class="full-overlay"><div class="form-header"><span style="font-weight:900; font-size:20px;">JOB BANK</span><button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px;">✕</button></div><div class="form-content"><div id="job-bank-list"></div></div></div>
-    <div id="history-overlay" class="full-overlay"><div class="form-header"><span style="font-weight:900; font-size:20px;">HISTORY</span><button onclick="closeOverlay('history')" style="background:none; border:none; color:white; font-size:24px;">✕</button></div><div class="form-content"><div id="history-list">No history found.</div></div></div>
+    <div id="jobbank-overlay" class="full-overlay"><div class="form-header"><span>JOB BANK</span><button onclick="closeOverlay('jobbank')">✕</button></div><div id="job-bank-list" class="form-content"></div></div>
+    <div id="history-overlay" class="full-overlay"><div class="form-header"><span>HISTORY</span><button onclick="closeOverlay('history')">✕</button></div><div class="form-content">Local session history clear.</div></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
@@ -158,11 +184,23 @@
             display.style.color = '#2ecc71';
         }
 
+        function checkAddNew(selectElement, type) {
+            if (selectElement.value === "ADD_NEW") {
+                const newVal = prompt(`Enter new ${type} type:`);
+                if (newVal) {
+                    const option = document.createElement("option");
+                    option.text = newVal;
+                    option.value = newVal;
+                    selectElement.add(option, selectElement.options[selectElement.options.length - 1]);
+                    selectElement.value = newVal;
+                } else {
+                    selectElement.value = "";
+                }
+            }
+        }
+
         function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
-        function toggleFS() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function toggleLayers() { const el = document.getElementById('layer-container'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
-
         function openOverlay(type) {
             document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
             document.getElementById(type + '-overlay').style.display = 'flex';
@@ -171,30 +209,21 @@
         }
         function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
-        function showSiteSummary(feat, item) {
-            activeSiteData = { name: feat.properties.name || "Unnamed", addr: feat.properties.address || "Porirua" };
-            document.getElementById('s-name').innerText = activeSiteData.name;
-            document.getElementById('s-addr').innerText = activeSiteData.addr;
-            document.getElementById('s-type').innerText = item.label;
-            document.getElementById('site-info').style.display = 'block';
-        }
-
         const config = [
-            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff', icon: '🛣️' },
-            { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f', icon: '⚡' },
-            { file: 'PCC Underpasses.kml', label: 'Underpasses', color: '#e74c3c', icon: '🌉' },
-            { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique Paint', color: '#9b59b6', icon: '💎' },
-            { file: 'Traffic Light Box Sites.kml', label: 'Traffic Boxes', color: '#2ecc71', icon: '🚦' },
-            { file: 'Community Buildings.kml', label: 'Comm. Buildings', color: '#3498db', icon: '🏠' },
-            { file: 'PCC Mural Sites.kml', label: 'Murals', color: '#d35400', icon: '🖼️' },
-            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '💈' },
-            { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e', icon: '🚗' }
+            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyways', color: '#ff00ff' },
+            { file: 'Wellington Electricity substation sites.kml', label: 'Substations', color: '#f1c40f' }
         ];
 
         config.forEach(item => {
             const group = L.geoJson(null, {
-                pointToLayer: (feat, ll) => L.marker(ll, { icon: L.divIcon({ className: 'm-icon', html: `<div style="background:${item.color}; width:30px; height:30px; border-radius:50%; border:2px solid #fff;"></div>` }) }),
-                onEachFeature: (feat, layer) => layer.on('click', (e) => { L.DomEvent.stopPropagation(e); showSiteSummary(feat, item); })
+                pointToLayer: (feat, ll) => L.marker(ll, { icon: L.divIcon({ className: 'm-icon', html: `<div style="background:${item.color}; width:24px; height:24px; border-radius:50%; border:2px solid #fff;"></div>` }) }),
+                onEachFeature: (feat, layer) => layer.on('click', (e) => { 
+                    L.DomEvent.stopPropagation(e);
+                    activeSiteData = { name: feat.properties.name || "Site", type: item.label };
+                    document.getElementById('s-name').innerText = activeSiteData.name;
+                    document.getElementById('s-type').innerText = item.label;
+                    document.getElementById('site-info').style.display = 'block';
+                })
             });
             omnivore.kml(item.file, null, group).addTo(map);
         });
