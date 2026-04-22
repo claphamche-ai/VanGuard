@@ -23,7 +23,14 @@ let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', op
 
 // GPS Tracking
 map.locate({setView: false, watch: true, enableHighAccuracy: true});
-let userMarker = L.marker([0,0], { icon: L.divIcon({ className: 'van-icon', html: '🚐', iconSize: [40,40], iconAnchor: [20,20] }) }).addTo(map);
+let userMarker = L.marker([0,0], { 
+    icon: L.divIcon({ 
+        className: 'van-icon', 
+        html: '<div style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center;">🚐</div>', 
+        iconSize: [40,40], 
+        iconAnchor: [20,20] 
+    }) 
+}).addTo(map);
 
 map.on('locationfound', e => { 
     userMarker.setLatLng(e.latlng); 
@@ -40,12 +47,17 @@ function centerGPS() {
 }
 
 function toggleFS() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
+    const doc = window.document;
+    const docEl = doc.documentElement;
+    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+        document.getElementById('fs-btn').innerText = "🗗 EXIT FS";
     } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
+        cancelFullScreen.call(doc);
+        document.getElementById('fs-btn').innerText = "🔲 FULL SCREEN";
     }
 }
 
@@ -90,7 +102,6 @@ function stopLiveTimer() {
     document.getElementById('live-timer-widget').style.display = 'none';
 }
 
-// Work Photo Handling
 function handleWorkPhoto(step) {
     const now = new Date();
     document.getElementById('btn-' + step).classList.add('done');
@@ -107,7 +118,6 @@ function handleWorkPhoto(step) {
     }
 }
 
-// Insp Photo Handling
 function handleInspPhoto(step) {
     const now = new Date();
     document.getElementById('btn-insp-' + step).classList.add('done');
@@ -142,7 +152,6 @@ function updateExtraCount(type) {
     document.getElementById(type+'-extra-count').style.color = '#2ecc71';
 }
 
-// Pause & Submit Logic (Work)
 function pauseJob() {
     const elapsed = new Date() - workState.startTime;
     const pausedJob = { site: activeSite.name, type: 'WORK', accumulated: workState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
@@ -170,7 +179,6 @@ function submitWork() {
     closeOverlay('work');
 }
 
-// Pause & Submit Logic (Insp)
 function pauseInsp() {
     const elapsed = new Date() - inspState.startTime;
     const pausedJob = { site: activeSite.name, type: 'INSPECTION', accumulated: inspState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') };
@@ -234,52 +242,49 @@ function resumeAny(index) {
 
 // KML Config with Specific Icons
 const config = [
-    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️', isPath: true },
+    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
     { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
     { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
     { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
     { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
     { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
     { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
-    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈', isPath: true },
+    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
     { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
 ];
 
 const container = document.getElementById('layer-container');
 
 config.forEach(item => {
-    const group = L.geoJson(null, {
-        style: () => ({ color: item.color, weight: 8, opacity: 0.6 }),
-        pointToLayer: (f, ll) => L.marker(ll, {
-            icon: L.divIcon({
-                className: 'm-icon',
-                html: `<div style="background:${item.color}; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:2px solid #fff;">${item.icon}</div>`,
-                iconSize: [32, 32],
-                iconAnchor: [16, 16]
-            })
-        }),
-        onEachFeature: (f, l) => {
-            if (item.isPath && f.geometry.type === "LineString") {
-                const coords = f.geometry.coordinates;
-                const mid = [coords[Math.floor(coords.length/2)][1], coords[Math.floor(coords.length/2)][0]];
-                L.marker(mid, {
-                    icon: L.divIcon({
-                        className: 'm-icon',
-                        html: `<div style="background:${item.color}; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:8px; border:2px solid #fff; font-size:14px;">${item.icon}</div>`,
-                        iconSize: [28, 28]
-                    })
-                }).addTo(group).on('click', (e) => {
-                    L.DomEvent.stopPropagation(e);
-                    activeSite.name = f.properties.name || "Unknown Path";
-                    activeSite.type = item.label;
-                    document.getElementById('s-name').innerText = activeSite.name;
-                    document.getElementById('s-type').innerText = activeSite.type;
-                    document.getElementById('site-info').style.display = 'block';
-                });
-            }
-            l.on('click', (e) => {
+    // 1. Build Layer List synchronously so menu works immediately
+    const div = document.createElement('div');
+    div.className = 'layer-item';
+    div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
+    container.appendChild(div);
+
+    // 2. Initialize Layer Group
+    const group = L.featureGroup();
+    layers[item.label] = group;
+
+    // 3. Configure Omnivore Custom Layer (Points and Line/Polygon clicks)
+    const customLayer = L.geoJson(null, {
+        style: function(feature) {
+            return { color: item.color, weight: 6, opacity: 0.7 };
+        },
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
+                    iconSize: [38, 38],
+                    iconAnchor: [19, 19]
+                })
+            });
+        },
+        onEachFeature: function(feature, layer) {
+            layer.on('click', function(e) {
                 L.DomEvent.stopPropagation(e);
-                activeSite.name = f.properties.name || "Unknown Site";
+                activeSite.name = feature.properties.name || "Unknown Site";
                 activeSite.type = item.label;
                 document.getElementById('s-name').innerText = activeSite.name;
                 document.getElementById('s-type').innerText = activeSite.type;
@@ -287,13 +292,35 @@ config.forEach(item => {
             });
         }
     });
-    
-    omnivore.kml(item.file, null, group).addTo(map);
-    layers[item.label] = group;
 
-    // Build Layer List explicitly inside the load logic
-    const div = document.createElement('div');
-    div.className = 'layer-item';
-    div.innerHTML = `<input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)"> <span style="font-size:16px; margin-right:5px;">${item.icon}</span> ${item.label}`;
-    container.appendChild(div);
+    // 4. Load KML and extract centers for Polygons/Lines
+    const runLayer = omnivore.kml(encodeURI(item.file), null, customLayer);
+    
+    runLayer.on('ready', function() {
+        runLayer.eachLayer(function(layer) {
+            if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                const center = layer.getBounds().getCenter();
+                const centerMarker = L.marker(center, {
+                    icon: L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
+                        iconSize: [38, 38],
+                        iconAnchor: [19, 19]
+                    })
+                });
+                centerMarker.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    activeSite.name = layer.feature.properties.name || "Unknown Area";
+                    activeSite.type = item.label;
+                    document.getElementById('s-name').innerText = activeSite.name;
+                    document.getElementById('s-type').innerText = activeSite.type;
+                    document.getElementById('site-info').style.display = 'block';
+                });
+                group.addLayer(centerMarker);
+            }
+        });
+        map.addLayer(group);
+    });
+    
+    group.addLayer(runLayer);
 });
