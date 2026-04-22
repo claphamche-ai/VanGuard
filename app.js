@@ -5,10 +5,23 @@ let activeSite = { name: "" };
 const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// GPS Tracking
-map.locate({setView: true, watch: true, enableHighAccuracy: true});
-let userMarker = L.circleMarker([0,0], {radius: 10, color: 'blue', fillColor: '#3388ff', fillOpacity: 0.8}).addTo(map);
-map.on('locationfound', e => { userMarker.setLatLng(e.latlng); });
+// GPS Tracking - Fixed for Mobile
+// setView: false prevents the map from constantly snapping back to the van
+map.locate({setView: false, watch: true, enableHighAccuracy: true});
+let userMarker = L.circleMarker([0,0], {radius: 8, color: '#fff', weight: 2, fillColor: '#3388ff', fillOpacity: 1}).addTo(map);
+
+map.on('locationfound', e => { 
+    userMarker.setLatLng(e.latlng); 
+});
+
+function centerGPS() {
+    const coords = userMarker.getLatLng();
+    if(coords.lat !== 0) {
+        map.setView(coords, 16);
+    } else {
+        alert("Acquiring GPS signal...");
+    }
+}
 
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
@@ -53,6 +66,8 @@ function handleDropdown(el) {
         if(val) {
             const opt = document.createElement("option"); opt.text = val; opt.value = val;
             el.add(opt, el.options[el.options.length-1]); el.value = val;
+        } else {
+            el.value = "";
         }
     }
 }
@@ -60,6 +75,29 @@ function handleDropdown(el) {
 function updateExtraCount(type) {
     const input = document.getElementById('photo-'+type+'-extra');
     document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos";
+}
+
+function submitWork() {
+    const medium = document.getElementById('work-medium').value;
+    const surface = document.getElementById('work-surface').value;
+    const prop = document.getElementById('work-property').value;
+    
+    if(!medium || !surface || !prop) { alert("Please complete all dropdown selections."); return; }
+    
+    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0AMedium: ${medium}%0D%0ASurface: ${surface}%0D%0AProperty: ${prop}`;
+    window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
+    closeOverlay('work');
+    document.getElementById('live-timer-widget').style.display = 'none';
+    clearInterval(timerInterval);
+}
+
+function submitInsp() {
+    const notes = document.getElementById('insp-notes').value;
+    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ANotes: ${notes}`;
+    window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection Log: ${activeSite.name}&body=${body}`;
+    closeOverlay('inspection');
+    document.getElementById('live-timer-widget').style.display = 'none';
+    clearInterval(timerInterval);
 }
 
 const config = [

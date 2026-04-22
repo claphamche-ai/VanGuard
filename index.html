@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v33</title>
+    <title>Track Tags | Field Ops v35</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -16,20 +16,22 @@
     </div>
 
     <div id="sidebar">
-        <div class="sidebar-close" onclick="closeSidebar()">✕</div>
-        <div class="sidebar-header">TRACK TAGS</div>
-        <div class="nav-item" onclick="toggleLayers()">🗺️ Map Layers</div>
-        <div id="layer-container"></div>
-        <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
+        <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
+        <div class="sidebar-header" style="clear:both;">TRACK TAGS</div>
+        <div class="nav-item" onclick="alert('Map Layers coming soon')">🗺️ Map Layers</div>
+        <div class="nav-item" onclick="alert('Job Bank coming soon')">📋 Job Bank</div>
         <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
     </div>
 
     <div id="map"></div>
+    
+    <!-- Manual GPS Center Button -->
+    <button id="gps-btn" onclick="centerGPS()">📍</button>
 
     <div id="site-info">
         <div class="info-header">
             <span id="s-name">Select Site</span>
-            <button onclick="document.getElementById('site-info').style.display='none'">✕</button>
+            <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
         </div>
         <div class="action-grid">
             <button class="action-btn blue" onclick="openOverlay('inspection')">Inspection</button>
@@ -40,7 +42,7 @@
     </div>
 
     <div id="work-overlay" class="full-overlay">
-        <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')">✕</button></div>
+        <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             <div class="photo-grid">
@@ -54,12 +56,14 @@
             <div id="work-extra-count" class="extra-label">0 extra photos</div>
             <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
 
-            <label class="label">Medium</label>
+            <label class="label">Graffiti Type (Medium)</label>
             <select id="work-medium" onchange="handleDropdown(this)">
                 <option value="">Select...</option>
                 <option value="Spray Paint">Spray Paint</option>
-                <option value="Paint">Paint</option>
-                <option value="Felt Pen">Felt Pen</option>
+                <option value="Paint">Paint (Brush/Roller)</option>
+                <option value="Felt Pen">Felt Pen / Marker</option>
+                <option value="Etched">Etched / Scratched</option>
+                <option value="Sticker">Sticker / Poster</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
             <label class="label">Surface</label>
@@ -67,15 +71,20 @@
                 <option value="">Select...</option>
                 <option value="Brick">Brick</option>
                 <option value="Raw Wood">Raw Wood</option>
+                <option value="Painted">Painted (Smooth)</option>
                 <option value="Metal">Metal</option>
+                <option value="Concrete">Concrete / Stone</option>
+                <option value="Glass">Glass</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
-            <label class="label">Property</label>
+            <label class="label">Property Type</label>
             <select id="work-property" onchange="handleDropdown(this)">
                 <option value="">Select...</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Private">Private</option>
+                <option value="Commercial">Commercial Building</option>
+                <option value="Private">Private Residence</option>
                 <option value="Public">Public Fence</option>
+                <option value="Utility Box">Utility Box</option>
+                <option value="Underpass">Underpass</option>
                 <option value="ADD_NEW">➕ Add New...</option>
             </select>
             <div class="footer-btns">
@@ -86,7 +95,7 @@
     </div>
 
     <div id="inspection-overlay" class="full-overlay">
-        <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')">✕</button></div>
+        <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             <div class="photo-grid">
