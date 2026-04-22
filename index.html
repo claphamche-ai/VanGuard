@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Track Tags | Field Ops v18</title>
+    <title>Track Tags | Field Ops v20</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --safety-yellow: #f1c40f;
             --action-blue: #2980b9;
-            --white: rgba(255, 255, 255, 0.94);
+            --white: #ffffff;
             --black: #1a1a1a;
-            --menu-bg: rgba(26, 26, 26, 0.25); /* 75% Transparency */
-            --soft-radius: 18px;
+            --menu-bg: rgba(26, 26, 26, 0.25);
+            --soft-radius: 12px;
             --urgent-red: #ff4757;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: #000; overflow: hidden; }
         #map { height: 100vh; width: 100vw; z-index: 1; }
 
-        /* NAVIGATION & CONTROLS */
         .menu-trigger {
             position: absolute; top: 15px; left: 15px; z-index: 2005;
             background: var(--safety-yellow); border: 2px solid var(--black);
@@ -38,13 +37,11 @@
             text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* VERSION TAG */
         .version-tag {
             position: absolute; bottom: 10px; right: 10px; z-index: 2000;
             color: rgba(0,0,0,0.5); font-size: 10px; font-weight: bold; pointer-events: none;
         }
 
-        /* SIDEBAR */
         #sidebar {
             position: fixed; top: 0; left: -320px; width: 310px; height: 100%;
             background: var(--menu-bg); backdrop-filter: blur(8px);
@@ -60,28 +57,28 @@
             cursor: pointer; font-weight: bold; font-size: 18px;
         }
 
-        .sidebar-header { font-size: 26px; font-weight: 900; color: var(--safety-yellow); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; }
-        
-        .nav-item {
-            padding: 16px; margin: 10px 0; border-radius: var(--soft-radius);
-            background: rgba(255,255,255,0.1); cursor: pointer;
-            display: flex; align-items: center; transition: background 0.2s;
-            font-weight: 600;
+        #site-info {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 340px; background: var(--white); border-radius: 20px;
+            z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            overflow: hidden; border: 1px solid #ddd;
         }
-        .nav-item i { margin-right: 15px; font-style: normal; font-size: 22px; }
+        .site-photo { width: 100%; height: 140px; background: #333; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .close-site { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
 
-        #layer-container { display: none; margin: 10px 0 20px 0; padding-left: 5px; max-height: 40vh; overflow-y: auto; }
-        .layer-row { display: flex; align-items: center; margin: 14px 0; font-size: 14px; }
-        .layer-row input { width: 24px; height: 24px; margin-right: 15px; cursor: pointer; accent-color: var(--safety-yellow); }
-        .layer-label-pill { display: flex; align-items: center; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 25px; }
+        .details-list { padding: 15px 20px; }
+        .detail-item { margin-bottom: 8px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; }
+        .detail-label { font-size: 10px; font-weight: 800; color: #999; text-transform: uppercase; }
+        .detail-value { font-size: 14px; font-weight: 600; color: #222; }
 
-        /* UI MODALS */
-        #quick-info { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: var(--white); border-radius: var(--soft-radius); z-index: 4000; display: none; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; }
-        #work-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 5000; display: none; flex-direction: column; }
-        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 15px 20px 15px; }
+        .action-btn { 
+            background: var(--action-blue); color: white; border: none; padding: 12px 5px; 
+            border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer; 
+            text-align: center; text-transform: uppercase;
+        }
+
         .ui-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        /* VAN ICON */
         .van-marker { font-size: 38px; text-shadow: 2px 2px 0px #000; }
     </style>
 </head>
@@ -92,7 +89,7 @@
     </div>
 
     <button class="fs-btn" onclick="toggleFS()">Maximize Map</button>
-    <div class="version-tag">TRACK TAGS v18</div>
+    <div class="version-tag">TRACK TAGS v20</div>
 
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()">✕</div>
@@ -106,33 +103,21 @@
 
     <div id="map"></div>
 
-    <div id="quick-info">
-        <div style="position:absolute; top:10px; right:10px; width:30px; height:30px; background:var(--urgent-red); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;" onclick="document.getElementById('quick-info').style.display='none'">✕</div>
-        <div id="q-icon" style="height:140px; background:#111; display:flex; align-items:center; justify-content:center; font-size:50px; color:white;">⚡</div>
-        <div style="padding:22px;">
-            <h2 id="q-name" style="margin:0;">SITE NAME</h2>
-            <p id="q-addr" style="font-size:14px; color:#666; margin:8px 0 15px 0;">--</p>
-            <div id="q-status-pill" style="padding:10px; border-radius:10px; font-weight:bold; text-align:center;">Last Action: --</div>
+    <div id="site-info">
+        <div class="site-photo">
+            <div class="close-site" onclick="document.getElementById('site-info').style.display='none'">✕</div>
+            <div id="s-photo-placeholder" style="font-size:40px; color:#555;">📸</div>
         </div>
-        <button style="width:100%; background:var(--safety-yellow); border:none; padding:20px; font-weight:900; font-size:16px; cursor:pointer;" onclick="openWorkModal()">ENTER SITE</button>
-    </div>
-
-    <div id="work-modal">
-        <div style="background:#000; color:white; padding:20px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:900;">WORK DASHBOARD</span>
-            <button onclick="document.getElementById('work-modal').style.display='none'" style="background:var(--safety-yellow); border:none; padding:10px 20px; border-radius:10px; font-weight:900;">EXIT</button>
+        <div class="details-list">
+            <div class="detail-item"><div class="detail-label">Name</div><div id="s-name" class="detail-value">--</div></div>
+            <div class="detail-item"><div class="detail-label">Address</div><div id="s-addr" class="detail-value">--</div></div>
+            <div class="detail-item"><div class="detail-label">Type</div><div id="s-type" class="detail-value">--</div></div>
+            <div class="detail-item"><div class="detail-label">Last Inspected</div><div id="s-date" class="detail-value">--</div></div>
         </div>
-        <div style="padding:20px;">
-            <div style="background:#f4f4f4; padding:25px; border-radius:20px; margin-bottom:20px;">
-                <h1 id="m-name" style="margin:0;">SITE</h1>
-                <p id="m-meta" style="color:#666; margin-top:5px;">Location Info</p>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">INSPECTION</div>
-                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">GRAFFITI</div>
-                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">LITTER</div>
-                <div style="background:var(--action-blue); color:white; padding:30px 10px; border-radius:16px; text-align:center; font-weight:bold;" onclick="alert('Logged')">GENERAL</div>
-            </div>
+        <div class="action-grid">
+            <button class="action-btn" onclick="alert('Starting Inspection...')">Inspection</button>
+            <button class="action-btn" onclick="alert('Opening Log Work...')">Log Work</button>
+            <button class="action-btn" onclick="alert('Loading History...')">History</button>
         </div>
     </div>
 
@@ -151,30 +136,24 @@
                 const loc = [pos.coords.latitude, pos.coords.longitude];
                 if (!van) {
                     van = L.marker(loc, { icon: L.divIcon({ className: 'van-marker', html: '🚐', iconSize: [40, 40], iconAnchor: [20, 20] }) }).addTo(map);
-                } else {
-                    van.setLatLng(loc);
-                }
+                } else { van.setLatLng(loc); }
                 trail.addLatLng(loc);
             }, null, {enableHighAccuracy: true});
         }
 
         let idleTimer;
-        const menuTrigger = document.getElementById('menu-trigger');
-        const sidebar = document.getElementById('sidebar');
-
         function startIdleTimer() {
-            menuTrigger.classList.remove('ui-hidden');
+            document.getElementById('menu-trigger').classList.remove('ui-hidden');
             clearTimeout(idleTimer);
             idleTimer = setTimeout(() => {
-                if (!sidebar.classList.contains('open')) menuTrigger.classList.add('ui-hidden');
+                if (!document.getElementById('sidebar').classList.contains('open')) document.getElementById('menu-trigger').classList.add('ui-hidden');
             }, 5000);
         }
-
         ['mousedown', 'touchstart', 'mousemove'].forEach(e => window.addEventListener(e, startIdleTimer));
         startIdleTimer();
 
-        function openSidebar() { sidebar.classList.add('open'); }
-        function closeSidebar() { sidebar.classList.remove('open'); startIdleTimer(); }
+        function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); startIdleTimer(); }
         function toggleLayers() { 
             const el = document.getElementById('layer-container');
             el.style.display = (el.style.display === 'block') ? 'none' : 'block';
@@ -188,36 +167,46 @@
             { file: 'Traffic Light Box Sites.kml', label: 'Traffic Boxes', color: '#2ecc71', icon: '🚦' },
             { file: 'Community Buildings.kml', label: 'Comm. Buildings', color: '#3498db', icon: '🏠' },
             { file: 'PCC Mural Sites.kml', label: 'Murals', color: '#d35400', icon: '🖼️' },
-            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '💈', isPath: true },
+            { file: 'Power Pole Area Sweeps.kml', label: 'Power Poles', color: '#000', icon: '💈' },
             { file: 'PCC Off-street Carparks.kml', label: 'Carparks', color: '#34495e', icon: '🚗' }
         ];
-
-        let activeData = {};
 
         function loadLayer(item) {
             const group = L.geoJson(null, {
                 style: () => {
-                    const d = Math.floor(Math.random() * 90);
-                    const c = d > 60 ? '#000' : (d > 30 ? '#555' : item.color);
-                    return { color: c, weight: 14, opacity: 0.8, dashArray: item.isPath ? '12, 12' : '' };
+                    return { color: item.color, weight: 10, opacity: 0.6 };
                 },
                 pointToLayer: (feat, ll) => {
-                    const d = Math.floor(Math.random() * 90);
-                    const bg = d > 60 ? '#000' : (d > 30 ? '#555' : item.color);
                     return L.marker(ll, {
                         icon: L.divIcon({
                             className: 'marker-icon',
-                            html: `<div style="background:${bg}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; border:2px solid #fff;">${item.icon}</div>`,
+                            html: `<div style="background:${item.color}; width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:22px; border:2px solid #fff;">${item.icon}</div>`,
                             iconSize: [38, 38], iconAnchor: [19, 19]
                         })
                     });
                 },
                 onEachFeature: (feat, layer) => {
+                    // IF ALLEYWAY: ADD ICON AT CENTER OF LINE
+                    if (item.isPath && feat.geometry.type === "LineString") {
+                        const coords = feat.geometry.coordinates;
+                        const midIndex = Math.floor(coords.length / 2);
+                        const midPoint = [coords[midIndex][1], coords[midIndex][0]];
+                        
+                        L.marker(midPoint, {
+                            icon: L.divIcon({
+                                className: 'marker-icon',
+                                html: `<div style="background:${item.color}; width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; border:2px solid #fff;">${item.icon}</div>`,
+                                iconSize: [30, 30], iconAnchor: [15, 15]
+                            })
+                        }).addTo(group).on('click', (e) => {
+                            L.DomEvent.stopPropagation(e);
+                            showSite(feat, item);
+                        });
+                    }
+
                     layer.on('click', (e) => {
                         L.DomEvent.stopPropagation(e);
-                        const d = Math.floor(Math.random() * 90);
-                        activeData = { name: feat.properties.name || "Asset", addr: feat.properties.address || "Porirua", days: d, icon: item.icon };
-                        showQuick();
+                        showSite(feat, item);
                     });
                 }
             });
@@ -231,25 +220,15 @@
             container.appendChild(row);
         }
 
+        function showSite(feat, item) {
+            document.getElementById('s-name').innerText = feat.properties.name || "Unnamed Site";
+            document.getElementById('s-addr').innerText = feat.properties.address || "No address provided";
+            document.getElementById('s-type').innerText = item.label;
+            document.getElementById('s-date').innerText = (Math.floor(Math.random() * 60)) + " days ago";
+            document.getElementById('site-info').style.display = 'block';
+        }
+
         config.forEach(loadLayer);
-
-        function showQuick() {
-            document.getElementById('q-name').innerText = activeData.name;
-            document.getElementById('q-addr').innerText = activeData.addr;
-            document.getElementById('q-icon').innerText = activeData.icon;
-            const pill = document.getElementById('q-status-pill');
-            pill.innerText = `LAST INSPECTED: ${activeData.days} DAYS AGO`;
-            pill.style.background = activeData.days > 60 ? '#ffeae6' : '#e6ffed';
-            pill.style.color = activeData.days > 60 ? '#ff4757' : '#2ecc71';
-            document.getElementById('quick-info').style.display = 'block';
-        }
-
-        function openWorkModal() {
-            document.getElementById('m-name').innerText = activeData.name;
-            document.getElementById('m-meta').innerText = activeData.addr;
-            document.getElementById('work-modal').style.display = 'flex';
-            document.getElementById('quick-info').style.display = 'none';
-        }
 
         function toggleFS() {
             if (!document.fullscreenElement) document.documentElement.requestFullscreen();
