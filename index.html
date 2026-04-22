@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.6</title>
+    <title id="page-title">VanGuard | Field Ops v2.8</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -23,7 +23,7 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.6</div>
+        <div class="sidebar-version">Version 2.8</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -40,14 +40,20 @@
             <span id="s-name">Select Site</span>
             <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
         </div>
+        <!-- INFO BODY: Photo and Edit Fields -->
         <div class="info-body">
-            <div style="font-size:12px; color:#666; margin-bottom:10px;">Type: <span id="s-type">--</span></div>
+            <div class="site-photo" onclick="alert('Camera integration for cover photo coming soon')">📷</div>
+            <div class="site-meta">
+                <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
+                <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" placeholder="Tap to add..." class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Owner:</span> <input type="text" id="s-owner" placeholder="Tap to add..." class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Contact:</span> <input type="text" id="s-contact" placeholder="Tap to add..." class="inline-input"></div>
+            </div>
         </div>
         <div class="action-grid">
             <button class="action-btn blue" onclick="openOverlay('inspection')">Inspection</button>
             <button class="action-btn blue" onclick="openOverlay('work')">Log Work</button>
             <button class="action-btn gray" onclick="alert('History View Coming Soon')">History</button>
-            <button class="action-btn green" onclick="alert('Add Site Mode Active')">Add Site</button>
         </div>
     </div>
 

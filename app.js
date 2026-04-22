@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.7`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.8`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -241,7 +241,7 @@ function resumeAny(index) {
 }
 
 // ==============================================================
-// BASELINE KML LOADER
+// BASELINE KML LOADER - EXPLICT CLICK BINDING
 // ==============================================================
 const config = [
     { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
@@ -269,7 +269,7 @@ config.forEach(item => {
     const customLayer = L.geoJson(null, {
         style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
         pointToLayer: function(feature, latlng) {
-            return L.marker(latlng, {
+            const marker = L.marker(latlng, {
                 icon: L.divIcon({
                     className: 'custom-div-icon',
                     html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
@@ -277,26 +277,23 @@ config.forEach(item => {
                     iconAnchor: [19, 19]
                 })
             });
-        },
-        onEachFeature: function(feature, layer) {
-            layer.on('click', function(e) {
+            
+            // Explicitly bind the click event directly to the marker instance
+            marker.on('click', function(e) {
                 L.DomEvent.stopPropagation(e);
-                activeSite.name = feature.properties.name || "Unknown Site";
+                activeSite.name = feature.properties?.name || "Unknown Site";
                 activeSite.type = item.label;
 
                 const props = feature.properties || {};
-                const address = props.ADDRESS || props.Address || props.address || "";
-                const owner = props.OWNER || props.Owner || props.owner || "";
-                const contact = props.CONTACT || props.Contact || props.contact || "";
-
                 document.getElementById('s-name').innerText = activeSite.name;
                 document.getElementById('s-type').innerText = activeSite.type;
-                document.getElementById('s-address').value = address;
-                document.getElementById('s-owner').value = owner;
-                document.getElementById('s-contact').value = contact;
+                document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
+                document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
+                document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
 
                 document.getElementById('site-info').style.display = 'block';
             });
+            return marker;
         }
     });
 
@@ -314,21 +311,19 @@ config.forEach(item => {
                         iconAnchor: [19, 19]
                     })
                 });
+                
+                // Explicitly bind the click event directly to the center marker instance
                 centerMarker.on('click', function(e) {
                     L.DomEvent.stopPropagation(e);
-                    activeSite.name = layer.feature.properties.name || "Unknown Area";
+                    activeSite.name = layer.feature?.properties?.name || "Unknown Area";
                     activeSite.type = item.label;
 
-                    const props = layer.feature.properties || {};
-                    const address = props.ADDRESS || props.Address || props.address || "";
-                    const owner = props.OWNER || props.Owner || props.owner || "";
-                    const contact = props.CONTACT || props.Contact || props.contact || "";
-
+                    const props = layer.feature?.properties || {};
                     document.getElementById('s-name').innerText = activeSite.name;
                     document.getElementById('s-type').innerText = activeSite.type;
-                    document.getElementById('s-address').value = address;
-                    document.getElementById('s-owner').value = owner;
-                    document.getElementById('s-contact').value = contact;
+                    document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
+                    document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
+                    document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
 
                     document.getElementById('site-info').style.display = 'block';
                 });
