@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.6`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.7`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -55,10 +55,10 @@ function toggleFS() {
     
     if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
         requestFullScreen.call(docEl);
-        document.getElementById('fs-btn').innerText = "✖"; // Change to X when full screen
+        document.getElementById('fs-btn').innerText = "✖";
     } else {
         cancelFullScreen.call(doc);
-        document.getElementById('fs-btn').innerText = "⛶"; // Revert to expand icon
+        document.getElementById('fs-btn').innerText = "⛶";
     }
 }
 
@@ -241,7 +241,7 @@ function resumeAny(index) {
 }
 
 // ==============================================================
-// BASELINE KML LOADER - NO ENCODING HACKS
+// BASELINE KML LOADER
 // ==============================================================
 const config = [
     { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
@@ -283,8 +283,18 @@ config.forEach(item => {
                 L.DomEvent.stopPropagation(e);
                 activeSite.name = feature.properties.name || "Unknown Site";
                 activeSite.type = item.label;
+
+                const props = feature.properties || {};
+                const address = props.ADDRESS || props.Address || props.address || "";
+                const owner = props.OWNER || props.Owner || props.owner || "";
+                const contact = props.CONTACT || props.Contact || props.contact || "";
+
                 document.getElementById('s-name').innerText = activeSite.name;
                 document.getElementById('s-type').innerText = activeSite.type;
+                document.getElementById('s-address').value = address;
+                document.getElementById('s-owner').value = owner;
+                document.getElementById('s-contact').value = contact;
+
                 document.getElementById('site-info').style.display = 'block';
             });
         }
@@ -308,8 +318,18 @@ config.forEach(item => {
                     L.DomEvent.stopPropagation(e);
                     activeSite.name = layer.feature.properties.name || "Unknown Area";
                     activeSite.type = item.label;
+
+                    const props = layer.feature.properties || {};
+                    const address = props.ADDRESS || props.Address || props.address || "";
+                    const owner = props.OWNER || props.Owner || props.owner || "";
+                    const contact = props.CONTACT || props.Contact || props.contact || "";
+
                     document.getElementById('s-name').innerText = activeSite.name;
                     document.getElementById('s-type').innerText = activeSite.type;
+                    document.getElementById('s-address').value = address;
+                    document.getElementById('s-owner').value = owner;
+                    document.getElementById('s-contact').value = contact;
+
                     document.getElementById('site-info').style.display = 'block';
                 });
                 group.addLayer(centerMarker);
