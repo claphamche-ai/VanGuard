@@ -1,4 +1,15 @@
 
+// ==========================================
+// 1. BRANDING CONFIGURATION
+// Change this variable to instantly rebrand the entire app!
+// ==========================================
+const BRAND_NAME = "VanGuard";
+
+
+// Apply Branding to HTML
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.4`;
+document.getElementById('brand-name').innerText = BRAND_NAME;
+
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
@@ -240,33 +251,36 @@ function resumeAny(index) {
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
 }
 
-// KML Config with Specific Icons
+// ==============================================================
+// 2. KML CONFIGURATION (URL-SAFE NAMES)
+// YOU MUST RENAME YOUR LOCAL .KML FILES TO EXACTLY MATCH THESE!
+// ==============================================================
 const config = [
-    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
-    { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
-    { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
-    { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
-    { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
-    { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
-    { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
-    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
-    { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
+    { file: 'Assets_Map_Alleyway_sites.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️', isPath: true },
+    { file: 'Wellington_Electricity_substation_sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
+    { file: 'PCC_Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
+    { file: 'Thompson_Unique_Paint_Sites.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
+    { file: 'Traffic_Light_Box_Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
+    { file: 'Community_Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
+    { file: 'PCC_Mural_Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
+    { file: 'Power_Pole_Area_Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈', isPath: true },
+    { file: 'PCC_Off_street_Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
 ];
 
 const container = document.getElementById('layer-container');
 
 config.forEach(item => {
-    // 1. Build Layer List synchronously so menu works immediately
+    // Build Layer List synchronously so menu works immediately
     const div = document.createElement('div');
     div.className = 'layer-item';
     div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
     container.appendChild(div);
 
-    // 2. Initialize Layer Group
+    // Initialize Layer Group
     const group = L.featureGroup();
     layers[item.label] = group;
 
-    // 3. Configure Omnivore Custom Layer (Points and Line/Polygon clicks)
+    // Configure Omnivore Custom Layer
     const customLayer = L.geoJson(null, {
         style: function(feature) {
             return { color: item.color, weight: 6, opacity: 0.7 };
@@ -293,8 +307,8 @@ config.forEach(item => {
         }
     });
 
-    // 4. Load KML and extract centers for Polygons/Lines
-    const runLayer = omnivore.kml(encodeURI(item.file), null, customLayer);
+    // Load KML
+    const runLayer = omnivore.kml(item.file, null, customLayer);
     
     runLayer.on('ready', function() {
         runLayer.eachLayer(function(layer) {
