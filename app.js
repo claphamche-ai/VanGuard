@@ -1,13 +1,7 @@
 
-// ==========================================
-// 1. BRANDING CONFIGURATION
-// Change this variable to instantly rebrand the entire app!
-// ==========================================
 const BRAND_NAME = "VanGuard";
 
-
-// Apply Branding to HTML
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.4`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.4b`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -252,35 +246,31 @@ function resumeAny(index) {
 }
 
 // ==============================================================
-// 2. KML CONFIGURATION (URL-SAFE NAMES)
-// YOU MUST RENAME YOUR LOCAL .KML FILES TO EXACTLY MATCH THESE!
+// ORIGINAL KML NAMES RESTORED - DO NOT RENAME YOUR FILES
 // ==============================================================
 const config = [
-    { file: 'Assets_Map_Alleyway_sites.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️', isPath: true },
-    { file: 'Wellington_Electricity_substation_sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
-    { file: 'PCC_Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
-    { file: 'Thompson_Unique_Paint_Sites.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
-    { file: 'Traffic_Light_Box_Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
-    { file: 'Community_Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
-    { file: 'PCC_Mural_Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
-    { file: 'Power_Pole_Area_Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈', isPath: true },
-    { file: 'PCC_Off_street_Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
+    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
+    { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
+    { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
+    { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
+    { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
+    { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
+    { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
+    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
+    { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
 ];
 
 const container = document.getElementById('layer-container');
 
 config.forEach(item => {
-    // Build Layer List synchronously so menu works immediately
     const div = document.createElement('div');
     div.className = 'layer-item';
     div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
     container.appendChild(div);
 
-    // Initialize Layer Group
     const group = L.featureGroup();
     layers[item.label] = group;
 
-    // Configure Omnivore Custom Layer
     const customLayer = L.geoJson(null, {
         style: function(feature) {
             return { color: item.color, weight: 6, opacity: 0.7 };
@@ -307,8 +297,9 @@ config.forEach(item => {
         }
     });
 
-    // Load KML
-    const runLayer = omnivore.kml(item.file, null, customLayer);
+    // Safely encode the URL to handle spaces and '&' symbols
+    const safeURL = encodeURI(item.file).replace(/&/g, '%26');
+    const runLayer = omnivore.kml(safeURL, null, customLayer);
     
     runLayer.on('ready', function() {
         runLayer.eachLayer(function(layer) {
