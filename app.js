@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.13`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.14`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -205,11 +205,18 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
+        // Reset old fields
         document.getElementById('work-medium').value = "";
         document.getElementById('work-surface').value = "";
         document.getElementById('work-property').value = "";
         document.getElementById('work-desc').value = "";
         document.getElementById('work-materials').value = "";
+        
+        // Reset new fields
+        document.getElementById('work-workers').value = "1";
+        document.getElementById('work-method').value = "";
+        document.getElementById('work-paint-color').value = "N/A";
+        document.getElementById('work-chemical-amount').value = "";
         
         document.getElementById('pause-work-btn').disabled = true;
         document.getElementById('submit-work-btn').disabled = true;
@@ -263,13 +270,21 @@ function pauseJob() {
 function submitWork() {
     const totalMs = (new Date() - workState.startTime) + workState.accumulated;
     const mins = Math.round(totalMs / 60000);
-    const med = document.getElementById('work-medium').value;
-    const sur = document.getElementById('work-surface').value;
+    
+    const workers = document.getElementById('work-workers').value;
     const prop = document.getElementById('work-property').value;
+    const sur = document.getElementById('work-surface').value;
+    const med = document.getElementById('work-medium').value;
+    const method = document.getElementById('work-method').value;
+    const pColor = document.getElementById('work-paint-color').value;
+    const chemAmt = document.getElementById('work-chemical-amount').value;
+    const desc = document.getElementById('work-desc').value;
+    const extraMat = document.getElementById('work-materials').value;
     
-    if(!med || !sur || !prop) { alert("Please complete dropdown selections."); return; }
+    if(!prop || !sur || !med || !method) { alert("Please complete all required dropdown selections."); return; }
     
-    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0AMedium: ${med}%0D%0ASurface: ${sur}%0D%0AProperty: ${prop}`;
+    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0AWorkers on site: ${workers}%0D%0A%0D%0A--- PROBLEM ---%0D%0AProperty: ${prop}%0D%0ASurface: ${sur}%0D%0AMedium: ${med}%0D%0A%0D%0A--- TREATMENT ---%0D%0AMethod: ${method}%0D%0APaint Color: ${pColor}%0D%0AChemicals Used: ${chemAmt}%0D%0AExtra Materials: ${extraMat}%0D%0A%0D%0ANotes: ${desc}`;
+    
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
     
     stopLiveTimer();
