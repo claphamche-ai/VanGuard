@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.11`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.12`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -87,12 +87,6 @@ function openOverlay(type) {
 
 function closeOverlay(type) { 
     document.getElementById(type + '-overlay').style.display = 'none'; 
-    if(type === 'work') {
-        document.getElementById('ai-analysis-section').style.display = 'none';
-        document.getElementById('ai-results').style.display = 'none';
-        document.getElementById('ai-analyze-btn').innerText = "🤖 Extract Tags & Size (AI)";
-        document.getElementById('ai-analyze-btn').disabled = false;
-    }
 }
 
 function handleCoverPhoto(input) {
@@ -134,7 +128,6 @@ function handleWorkPhoto(step) {
         document.getElementById('pause-work-btn').disabled = false;
         startLiveTimer(now, workState.accumulated);
         
-        // Reveal AI Button when before photo is taken
         document.getElementById('ai-analysis-section').style.display = 'block';
     } else {
         workState.hasAfter = true;
@@ -148,15 +141,13 @@ function runAIAnalysis() {
     btn.innerText = "⏳ Processing image data...";
     btn.disabled = true;
 
-    // Simulated latency for Vision API call
     setTimeout(() => {
         document.getElementById('ai-tag').innerText = "VANDAL, 2K26";
         document.getElementById('ai-size').innerText = "Approx 1.2m x 0.8m";
         res.style.display = 'block';
         btn.innerText = "✓ Analysis Complete";
-        btn.style.background = "#2ecc71"; // Turn green
+        btn.style.background = "#2ecc71"; 
         
-        // Pre-fill description
         const desc = document.getElementById('work-desc');
         if(desc.value === "") {
             desc.value = "AI Note: Detected tags 'VANDAL, 2K26'. Estimated size 1.2m x 0.8m.";
@@ -196,6 +187,67 @@ function updateExtraCount(type) {
     const input = document.getElementById('photo-'+type+'-extra');
     document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos added";
     document.getElementById(type+'-extra-count').style.color = '#2ecc71';
+}
+
+function cancelJob() {
+    if(confirm("Cancel this job? All unsaved progress will be discarded.")) {
+        stopLiveTimer();
+        workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
+        
+        // Reset UI Elements
+        document.getElementById('btn-before').classList.remove('done');
+        document.getElementById('time-before').innerText = "Take photo to start";
+        document.getElementById('btn-after').classList.remove('done');
+        document.getElementById('time-after').innerText = "(Complete work)";
+        
+        document.getElementById('photo-before').value = "";
+        document.getElementById('photo-after').value = "";
+        document.getElementById('photo-work-extra').value = "";
+        document.getElementById('work-extra-count').innerText = "0 extra photos";
+        document.getElementById('work-extra-count').style.color = "#888";
+        
+        document.getElementById('work-medium').value = "";
+        document.getElementById('work-surface').value = "";
+        document.getElementById('work-property').value = "";
+        document.getElementById('work-desc').value = "";
+        document.getElementById('work-materials').value = "";
+        
+        document.getElementById('pause-work-btn').disabled = true;
+        document.getElementById('submit-work-btn').disabled = true;
+        
+        document.getElementById('ai-analysis-section').style.display = 'none';
+        document.getElementById('ai-results').style.display = 'none';
+        document.getElementById('ai-analyze-btn').innerText = "🤖 Extract Tags & Size (AI)";
+        document.getElementById('ai-analyze-btn').disabled = false;
+        document.getElementById('ai-analyze-btn').style.background = "#9b59b6";
+        
+        closeOverlay('work');
+    }
+}
+
+function cancelInsp() {
+    if(confirm("Cancel this inspection? All unsaved progress will be discarded.")) {
+        stopLiveTimer();
+        inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
+        
+        document.getElementById('btn-insp-start').classList.remove('done');
+        document.getElementById('time-insp-start').innerText = "Take photo to start";
+        document.getElementById('btn-insp-end').classList.remove('done');
+        document.getElementById('time-insp-end').innerText = "(Walk length)";
+        
+        document.getElementById('photo-insp-start').value = "";
+        document.getElementById('photo-insp-end').value = "";
+        document.getElementById('photo-insp-extra').value = "";
+        document.getElementById('insp-extra-count').innerText = "0 extra photos";
+        document.getElementById('insp-extra-count').style.color = "#888";
+        
+        document.getElementById('insp-notes').value = "";
+        
+        document.getElementById('pause-insp-btn').disabled = true;
+        document.getElementById('submit-insp-btn').disabled = true;
+        
+        closeOverlay('inspection');
+    }
 }
 
 function pauseJob() {
@@ -286,9 +338,6 @@ function resumeAny(index) {
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
 }
 
-// ==============================================================
-// BASELINE KML LOADER - EXPLICT CLICK BINDING
-// ==============================================================
 const config = [
     { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
     { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
