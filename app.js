@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.17`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.18`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
