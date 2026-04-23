@@ -67,7 +67,6 @@
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             
-            <!-- PHOTOS SECTION -->
             <div class="photo-grid">
                 <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
                 <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>
@@ -102,6 +101,35 @@
                     </select>
                 </div>
                 <div class="form-col">
+                    <select id="work-area" class="std-input" onchange="handleDropdown(this)">
+                        <option value="">Repaired Area (m²)...</option>
+                        <option value="0.5">0.5 m²</option>
+                        <option value="1">1 m²</option>
+                        <option value="2">2 m²</option>
+                        <option value="3">3 m²</option>
+                        <option value="4">4 m²</option>
+                        <option value="5">5 m²</option>
+                        <option value="6">6 m²</option>
+                        <option value="7">7 m²</option>
+                        <option value="8">8 m²</option>
+                        <option value="9">9 m²</option>
+                        <option value="10">10 m²</option>
+                        <option value="11">11 m²</option>
+                        <option value="12">12 m²</option>
+                        <option value="13">13 m²</option>
+                        <option value="14">14 m²</option>
+                        <option value="15">15 m²</option>
+                        <option value="16">16 m²</option>
+                        <option value="17">17 m²</option>
+                        <option value="18">18 m²</option>
+                        <option value="19">19 m²</option>
+                        <option value="20">20 m²</option>
+                        <option value="ADD_NEW">➕ Manual Entry...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-col">
                     <select id="work-property" class="std-input" onchange="handleDropdown(this)">
                         <option value="">Property Type...</option>
                         <option value="Commercial">Commercial Building</option>
@@ -112,8 +140,6 @@
                         <option value="ADD_NEW">➕ Add New...</option>
                     </select>
                 </div>
-            </div>
-            <div class="form-grid">
                 <div class="form-col">
                     <select id="work-surface" class="std-input" onchange="handleDropdown(this)">
                         <option value="">Surface Type...</option>
@@ -126,18 +152,17 @@
                         <option value="ADD_NEW">➕ Add New...</option>
                     </select>
                 </div>
-                <div class="form-col">
-                    <select id="work-medium" class="std-input" onchange="handleDropdown(this)">
-                        <option value="">Graffiti Medium...</option>
-                        <option value="Spray Paint">Spray Paint</option>
-                        <option value="Paint">Paint (Brush/Roller)</option>
-                        <option value="Felt Pen">Felt Pen / Marker</option>
-                        <option value="Etched">Etched / Scratched</option>
-                        <option value="Sticker">Sticker / Poster</option>
-                        <option value="ADD_NEW">➕ Add New...</option>
-                    </select>
-                </div>
             </div>
+            
+            <select id="work-medium" class="std-input" onchange="handleDropdown(this)">
+                <option value="">Graffiti Medium...</option>
+                <option value="Spray Paint">Spray Paint</option>
+                <option value="Paint">Paint (Brush/Roller)</option>
+                <option value="Felt Pen">Felt Pen / Marker</option>
+                <option value="Etched">Etched / Scratched</option>
+                <option value="Sticker">Sticker / Poster</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
 
             <!-- TREATMENT SECTION -->
             <div class="section-label">Treatment & Removal</div>
@@ -164,23 +189,7 @@
                     </select>
                 </div>
                 <div class="form-col">
-                    <!-- Changed Chemical Amount to a Select Box -->
-                    <select id="work-chemical-amount" class="std-input" onchange="handleDropdown(this)">
-                        <option value="">Chemicals Used...</option>
-                        <option value="None">None</option>
-                        <option value="0.5L">0.5L</option>
-                        <option value="1.0L">1.0L</option>
-                        <option value="1.5L">1.5L</option>
-                        <option value="2.0L">2.0L</option>
-                        <option value="2.5L">2.5L</option>
-                        <option value="3.0L">3.0L</option>
-                        <option value="3.5L">3.5L</option>
-                        <option value="4.0L">4.0L</option>
-                        <option value="4.5L">4.5L</option>
-                        <option value="5.0L">5.0L</option>
-                        <option value="5.0L+">5.0L+</option>
-                        <option value="ADD_NEW">➕ Custom Amount...</option>
-                    </select>
+                    <input type="text" id="work-chemical-amount" class="std-input" placeholder="Chemicals Used (ml/L)...">
                 </div>
             </div>
             
