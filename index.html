@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.16</title>
+    <title id="page-title">VanGuard | Field Ops v2.17</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -23,14 +23,21 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.16</div>
+        <div class="sidebar-version">Version 2.17</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
         <div id="layer-container" class="layer-list" style="display:none;"></div>
         <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
-        <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
+        
+        <!-- BASE MAP OPACITY SLIDER -->
+        <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+            <label style="font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px;">Map Background Visibility</label>
+            <input type="range" id="map-opacity-slider" min="0" max="1" step="0.05" value="1" style="width: 100%; accent-color: var(--b);" oninput="baseMap.setOpacity(this.value)">
+        </div>
+
+        <div class="nav-item" style="margin-top:10px; color:red; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px;" onclick="location.reload()">🚪 Log Out</div>
     </div>
 
     <div id="site-info">
@@ -66,6 +73,7 @@
         <div class="form-content">
             <p>Site: <strong class="site-display">--</strong></p>
             
+            <!-- PHOTOS SECTION -->
             <div class="photo-grid">
                 <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
                 <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>

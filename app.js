@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.16`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.17`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -19,7 +19,10 @@ updateClock();
 setInterval(updateClock, 1000);
 
 const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// EXPORT THE BASE MAP LAYER TO A VARIABLE SO OPACITY CAN BE CONTROLLED
+const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+baseMap.addTo(map);
 
 let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
 
