@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.14</title>
+    <title id="page-title">VanGuard | Field Ops v2.15</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -22,7 +22,7 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.14</div>
+        <div class="sidebar-version">Version 2.15</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -164,7 +164,23 @@
                     </select>
                 </div>
                 <div class="form-col">
-                    <input type="text" id="work-chemical-amount" class="std-input" placeholder="Chemicals Used (ml/L)...">
+                    <!-- Changed Chemical Amount to a Select Box -->
+                    <select id="work-chemical-amount" class="std-input" onchange="handleDropdown(this)">
+                        <option value="">Chemicals Used...</option>
+                        <option value="None">None</option>
+                        <option value="0.5L">0.5L</option>
+                        <option value="1.0L">1.0L</option>
+                        <option value="1.5L">1.5L</option>
+                        <option value="2.0L">2.0L</option>
+                        <option value="2.5L">2.5L</option>
+                        <option value="3.0L">3.0L</option>
+                        <option value="3.5L">3.5L</option>
+                        <option value="4.0L">4.0L</option>
+                        <option value="4.5L">4.5L</option>
+                        <option value="5.0L">5.0L</option>
+                        <option value="5.0L+">5.0L+</option>
+                        <option value="ADD_NEW">➕ Custom Amount...</option>
+                    </select>
                 </div>
             </div>
             

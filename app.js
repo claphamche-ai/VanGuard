@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.14`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.15`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -173,7 +173,7 @@ function handleInspPhoto(step) {
 
 function handleDropdown(el) {
     if(el.value === "ADD_NEW") {
-        const val = prompt("Enter new type:");
+        const val = prompt("Enter new type/amount:");
         if(val) {
             const opt = document.createElement("option"); opt.text = val; opt.value = val;
             el.add(opt, el.options[el.options.length-1]); el.value = val;
