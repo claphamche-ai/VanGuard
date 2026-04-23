@@ -1,8 +1,23 @@
  :root { --y: #f1c40f; --b: #2980b9; }
 body, html { margin:0; padding:0; height:100%; font-family:sans-serif; background:#000; overflow:hidden; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-#map { height:100vh; width:100vw; z-index: 1;}
 
-.van-icon { font-size:40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; }
+/* OVERSIZED MAP WRAPPER TO PREVENT CLIPPED CORNERS DURING ROTATION */
+#map-wrapper {
+    position: absolute;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: 1;
+    overflow: hidden;
+}
+#map { 
+    width: 100%; 
+    height: 100%; 
+    transition: transform 0.5s ease-out; 
+    transform-origin: center center;
+    background: #e5e5e5;
+}
 
 #live-timer-widget { position:fixed; top:15px; right:15px; background:#ff4757; color:white; padding:12px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
 

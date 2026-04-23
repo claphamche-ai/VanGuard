@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.15`;
+document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.16`;
 document.getElementById('brand-name').innerText = BRAND_NAME;
 
 let timerInterval;
@@ -23,29 +23,94 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
 
-map.locate({setView: false, watch: true, enableHighAccuracy: true});
+// VAN ICON INITIALIZATION
 let userMarker = L.marker([0,0], { 
     icon: L.divIcon({ 
-        className: 'van-icon', 
-        html: '<div style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center;">🚐</div>', 
+        className: '', 
+        html: '<div class="van-inner" style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; transition: transform 0.3s linear; transform: rotate(90deg);">🚐</div>', 
         iconSize: [40,40], 
         iconAnchor: [20,20] 
     }) 
 }).addTo(map);
 
-map.on('locationfound', e => { 
-    userMarker.setLatLng(e.latlng); 
-    trail.addLatLng(e.latlng);
+// ==========================================
+// GPS TRACKING & AUTO-FOLLOW ROTATION LOGIC
+// ==========================================
+let currentHeading = 0;
+let followMode = true; 
+
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(
+        function(pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            const speed = pos.coords.speed || 0; // Speed in m/s
+            const heading = pos.coords.heading;
+            
+            const latlng = [lat, lng];
+            userMarker.setLatLng(latlng);
+            trail.addLatLng(latlng);
+            
+            // Auto trigger follow mode if moving fast (> 15kmh / 4.16m/s)
+            if (speed > 4.16) {
+                followMode = true;
+            }
+
+            // Only update heading if moving fast enough to avoid stationary compass drift
+            if (heading !== null && !isNaN(heading) && speed > 1.5) {
+                currentHeading = heading;
+            }
+
+            // Always orient the van to face the direction of travel
+            // Base emoji faces left (-90), so add 90 to point UP (0)
+            document.querySelectorAll('.van-inner').forEach(el => {
+                el.style.transform = `rotate(${currentHeading + 90}deg)`;
+            });
+
+            if (followMode) {
+                map.panTo(latlng);
+                
+                // Rotate the underlying massive map wrapper so direction of travel is UP
+                document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
+                
+                // Counter-rotate the site markers to keep them physically upright to the screen
+                document.querySelectorAll('.marker-inner').forEach(el => {
+                    el.style.transform = `rotate(${currentHeading}deg)`;
+                });
+            }
+        },
+        function(err) { console.warn("GPS Error:", err); },
+        { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
+    );
+}
+
+// Break follow mode if user physically touches and drags the map
+map.on('dragstart', function() {
+    followMode = false;
+    // Snap rotation back to 0 so manual panning behaves normally relative to the finger
+    document.getElementById('map').style.transform = `rotate(0deg)`;
+    document.querySelectorAll('.marker-inner').forEach(el => {
+        el.style.transform = `rotate(0deg)`;
+    });
 });
 
 function centerGPS() {
+    followMode = true;
     const coords = userMarker.getLatLng();
     if(coords.lat !== 0) {
-        map.setView(coords, 16);
+        map.panTo(coords);
+        
+        // Re-apply rotation
+        document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
+        document.querySelectorAll('.marker-inner').forEach(el => {
+            el.style.transform = `rotate(${currentHeading}deg)`;
+        });
     } else {
         alert("Acquiring GPS signal...");
     }
 }
+// ==========================================
+
 
 function toggleFS() {
     const doc = window.document;
@@ -380,8 +445,8 @@ config.forEach(item => {
         pointToLayer: function(feature, latlng) {
             const marker = L.marker(latlng, {
                 icon: L.divIcon({
-                    className: 'custom-div-icon',
-                    html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
+                    className: '',
+                    html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
                     iconSize: [38, 38],
                     iconAnchor: [19, 19]
                 })
@@ -418,8 +483,8 @@ config.forEach(item => {
                 const center = layer.getBounds().getCenter();
                 const centerMarker = L.marker(center, {
                     icon: L.divIcon({
-                        className: 'custom-div-icon',
-                        html: `<div style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
+                        className: '',
+                        html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
                         iconSize: [38, 38],
                         iconAnchor: [19, 19]
                     })

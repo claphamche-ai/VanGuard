@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Field Ops v2.15</title>
+    <title id="page-title">VanGuard | Field Ops v2.16</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
+    <!-- UI LAYER -->
     <div id="live-timer-widget">00:00</div>
 
     <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()">
@@ -22,7 +23,7 @@
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 2.15</div>
+        <div class="sidebar-version">Version 2.16</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -31,8 +32,6 @@
         <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
         <div class="nav-item" style="margin-top:20px; color:red;" onclick="location.reload()">🚪 Log Out</div>
     </div>
-
-    <div id="map"></div>
 
     <div id="site-info">
         <div class="info-header">
@@ -234,6 +233,11 @@
     <div id="jobbank-overlay" class="full-overlay">
         <div class="form-header"><span>JOB BANK</span><button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
         <div class="form-content" id="job-bank-list"></div>
+    </div>
+
+    <!-- MAP CONTAINER -->
+    <div id="map-wrapper">
+        <div id="map"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
