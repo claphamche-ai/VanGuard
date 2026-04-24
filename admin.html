@@ -3,14 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VanGuard | Admin v3.0</title>
+    <title>VanGuard | Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="dash-bg">
-    <div class="dash-box">
-        <h1>ADMIN CONSOLE</h1>
-        <p>System Management & Reporting (Coming Soon)</p>
-        <button class="login-btn" style="background:#e74c3c;" onclick="location.href='index.html'">Log Out</button>
-    </div>
+<body class="admin-bg">
+    
+    <!-- TOP NAVIGATION BAR -->
+    <nav class="admin-topbar">
+        <div class="admin-nav-group">
+            <div class="admin-nav-item" onclick="alert('Accounts Panel (Coming Soon)')">
+                <span class="icon">👥</span>
+                <span class="label">Accounts</span>
+            </div>
+            <div class="admin-nav-item" onclick="location.href='dispatch.html'">
+                <span class="icon">📡</span>
+                <span class="label">Dispatch</span>
+            </div>
+            <div class="admin-nav-item" onclick="location.href='reporter.html'">
+                <span class="icon">📝</span>
+                <span class="label">Reporter</span>
+            </div>
+            <div class="admin-nav-item" onclick="alert('Settings Panel (Coming Soon)')">
+                <span class="icon">⚙️</span>
+                <span class="label">Settings</span>
+            </div>
+            <div class="admin-nav-item" onclick="alert('Help & Documentation (Coming Soon)')">
+                <span class="icon">❓</span>
+                <span class="label">Help</span>
+            </div>
+        </div>
+
+        <div class="admin-controls">
+            <!-- Minimize Button -->
+            <button class="admin-btn" onclick="alert('Minimize function requires desktop wrapper (e.g., Electron/Tauri) to interface with OS.')" title="Minimize">🗕</button>
+            <!-- Full Screen Button -->
+            <button id="admin-fs-btn" class="admin-btn" onclick="toggleAdminFS()" title="Full Screen">⛶</button>
+            <!-- Log Out -->
+            <button class="admin-btn" style="color: #e74c3c; margin-left: 10px;" onclick="location.href='index.html'" title="Log Out">✖</button>
+        </div>
+    </nav>
+
+    <!-- LOWER CONTENT FRAME -->
+    <main class="admin-content">
+        <div class="admin-welcome-box">
+            <div class="login-frame" style="margin: 0 auto 30px;">🚐</div>
+            <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 0 0 30px 0;">Version 3.1 | Admin Console</p>
+            
+            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px;">
+                Welcome to the VanGuard Regional Management Portal. Select a module from the top navigation bar to manage field ops, view intelligence reports, or configure your regional settings.
+            </p>
+
+            <button class="std-btn blue" style="max-width: 200px; margin: 0 auto;" onclick="alert('Intelligence Module (Coming Soon)')">View Reports</button>
+        </div>
+    </main>
+
+    <script>
+        function toggleAdminFS() {
+            const doc = window.document;
+            const docEl = doc.documentElement;
+            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+            const btn = document.getElementById('admin-fs-btn');
+            
+            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                requestFullScreen.call(docEl);
+                btn.innerText = "🗗"; // Windowed icon
+            } else {
+                cancelFullScreen.call(doc);
+                btn.innerText = "⛶"; // Full screen icon
+            }
+        }
+    </script>
 </body>
 </html>
