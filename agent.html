@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">VanGuard | Agent v3.0</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- UI LAYER -->
+    <div id="live-timer-widget">00:00</div>
+
+    <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()">
+        <span></span><span></span><span></span>
+    </div>
+
+    <button id="fs-btn" class="map-control-btn fs-btn" onclick="toggleFS()">⛶</button>
+    <button id="gps-btn" class="map-control-btn gps-btn" onclick="centerGPS()">📍</button>
+
+    <div id="sidebar">
+        <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
+        
+        <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
+        <div class="sidebar-version">Version 3.0 | AGENT</div>
+        <div id="menu-clock" class="sidebar-clock">--</div>
+        
+        <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
+        <div id="layer-container" class="layer-list" style="display:none;"></div>
+        <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
+        <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
+        
+        <div class="nav-item" style="margin-top:20px; color:red; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
+
+        <div style="margin-top: 15px; padding-top: 10px;">
+            <label style="font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px;">Menu Opacity</label>
+            <input type="range" id="menu-opacity-slider" min="0" max="1" step="0.05" value="0.95" style="width: 100%; accent-color: var(--b);" oninput="document.getElementById('sidebar').style.backgroundColor = `rgba(250, 250, 250, ${this.value})`">
+        </div>
+    </div>
+
+    <div id="site-info">
+        <div class="info-header">
+            <span id="s-name">Select Site</span>
+            <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
+        </div>
+        <div class="info-body">
+            <div class="site-photo-frame" id="cover-photo-frame">
+                <div class="add-photo-icon" onclick="document.getElementById('cover-photo-upload').click()">
+                    <span style="font-size: 24px;">📷</span><br>
+                    <small>ADD</small>
+                </div>
+            </div>
+            <input type="file" id="cover-photo-upload" accept="image/*" capture="environment" style="display:none;" onchange="handleCoverPhoto(this)">
+
+            <div class="site-meta">
+                <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
+                <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" placeholder="Tap to add..." class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Owner:</span> <input type="text" id="s-owner" placeholder="Tap to add..." class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Contact:</span> <input type="text" id="s-contact" placeholder="Tap to add..." class="inline-input"></div>
+            </div>
+        </div>
+        <div class="action-grid">
+            <button class="action-btn blue" onclick="openOverlay('inspection')">Inspection</button>
+            <button class="action-btn blue" onclick="openOverlay('work')">Log Work</button>
+            <button class="action-btn gray" onclick="alert('History View Coming Soon')">History</button>
+        </div>
+    </div>
+
+    <div id="work-overlay" class="full-overlay">
+        <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-content">
+            <p>Site: <strong class="site-display">--</strong></p>
+            
+            <!-- PHOTOS SECTION -->
+            <div class="photo-grid">
+                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
+                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>
+            </div>
+            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
+            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
+            
+            <button class="std-btn light-blue" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
+            <div id="work-extra-count" class="extra-label">0 extra photos</div>
+            <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
+
+            <div id="ai-analysis-section" style="display:none; margin-top: 15px;">
+                <button id="ai-analyze-btn" class="std-btn purple" onclick="runAIAnalysis()">🤖 Extract Tags & Size (AI)</button>
+                <div id="ai-results" style="display:none; background:#f4ebf9; padding:15px; border-radius:8px; border-left:4px solid #9b59b6; font-size:13px; color:#333; margin-top: 10px;">
+                    <strong style="color:#8e44ad; font-size:14px;">Vision Analysis Data</strong><br>
+                    <span style="color:#7f8c8d; font-size:11px;">(Requires backend API connection for live data)</span><br><br>
+                    <strong>Deciphered Tags:</strong> <span id="ai-tag">--</span><br>
+                    <strong>Estimated Area:</strong> <span id="ai-size">--</span>
+                </div>
+            </div>
+
+            <!-- SITE LOGISTICS SECTION -->
+            <div class="section-label">Logistics & Problem</div>
+            <div class="form-grid">
+                <div class="form-col">
+                    <select id="work-workers" class="std-input" onchange="handleDropdown(this)">
+                        <option value="1">1 Worker (Default)</option>
+                        <option value="2">2 Workers</option>
+                        <option value="3">3 Workers</option>
+                        <option value="4">4 Workers</option>
+                        <option value="5+">5+ Workers</option>
+                    </select>
+                </div>
+                <div class="form-col">
+                    <select id="work-area" class="std-input" onchange="handleDropdown(this)">
+                        <option value="">Repaired Area (m²)...</option>
+                        <option value="0.5">0.5 m²</option>
+                        <option value="1">1 m²</option>
+                        <option value="2">2 m²</option>
+                        <option value="3">3 m²</option>
+                        <option value="4">4 m²</option>
+                        <option value="5">5 m²</option>
+                        <option value="6">6 m²</option>
+                        <option value="7">7 m²</option>
+                        <option value="8">8 m²</option>
+                        <option value="9">9 m²</option>
+                        <option value="10">10 m²</option>
+                        <option value="11">11 m²</option>
+                        <option value="12">12 m²</option>
+                        <option value="13">13 m²</option>
+                        <option value="14">14 m²</option>
+                        <option value="15">15 m²</option>
+                        <option value="16">16 m²</option>
+                        <option value="17">17 m²</option>
+                        <option value="18">18 m²</option>
+                        <option value="19">19 m²</option>
+                        <option value="20">20 m²</option>
+                        <option value="ADD_NEW">➕ Manual Entry...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-col">
+                    <select id="work-property" class="std-input" onchange="handleDropdown(this)">
+                        <option value="">Property Type...</option>
+                        <option value="Commercial">Commercial Building</option>
+                        <option value="Private">Private Residence</option>
+                        <option value="Public">Public Fence</option>
+                        <option value="Utility Box">Utility Box</option>
+                        <option value="Underpass">Underpass</option>
+                        <option value="ADD_NEW">➕ Add New...</option>
+                    </select>
+                </div>
+                <div class="form-col">
+                    <select id="work-surface" class="std-input" onchange="handleDropdown(this)">
+                        <option value="">Surface Type...</option>
+                        <option value="Brick">Brick</option>
+                        <option value="Raw Wood">Raw Wood</option>
+                        <option value="Painted">Painted (Smooth)</option>
+                        <option value="Metal">Metal</option>
+                        <option value="Concrete">Concrete / Stone</option>
+                        <option value="Glass">Glass</option>
+                        <option value="ADD_NEW">➕ Add New...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <select id="work-medium" class="std-input" onchange="handleDropdown(this)">
+                <option value="">Graffiti Medium...</option>
+                <option value="Spray Paint">Spray Paint</option>
+                <option value="Paint">Paint (Brush/Roller)</option>
+                <option value="Felt Pen">Felt Pen / Marker</option>
+                <option value="Etched">Etched / Scratched</option>
+                <option value="Sticker">Sticker / Poster</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
+
+            <!-- TREATMENT SECTION -->
+            <div class="section-label">Treatment & Removal</div>
+            <select id="work-method" class="std-input" onchange="handleDropdown(this)">
+                <option value="">Removal Method...</option>
+                <option value="Painted over">Painted over</option>
+                <option value="Chemical removal">Chemical removal</option>
+                <option value="Pressure wash">Pressure wash</option>
+                <option value="Sand blasting">Sand blasting</option>
+                <option value="Mechanical sanding">Mechanical sanding</option>
+                <option value="ADD_NEW">➕ Add New...</option>
+            </select>
+
+            <div class="form-grid">
+                <div class="form-col">
+                    <select id="work-paint-color" class="std-input" onchange="handleDropdown(this)">
+                        <option value="N/A">Paint Color Used...</option>
+                        <option value="White">White</option>
+                        <option value="Black">Black</option>
+                        <option value="Grey">Grey</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Colour Match">Colour Match</option>
+                        <option value="ADD_NEW">➕ Add New...</option>
+                    </select>
+                </div>
+                <div class="form-col">
+                    <input type="text" id="work-chemical-amount" class="std-input" placeholder="Chemicals Used (ml/L)...">
+                </div>
+            </div>
+            
+            <div class="section-label">Notes</div>
+            <textarea id="work-desc" class="std-input textarea" placeholder="Work Description & Details..."></textarea>
+            <textarea id="work-materials" class="std-input textarea" placeholder="Other Materials Used..."></textarea>
+
+            <div class="footer-btns">
+                <button id="cancel-work-btn" class="std-btn red" onclick="cancelJob()">Cancel</button>
+                <button id="pause-work-btn" class="std-btn gray" disabled onclick="pauseJob()">Pause</button>
+                <button id="submit-work-btn" class="std-btn yellow" disabled onclick="submitWork()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSPECTION OVERLAY -->
+    <div id="inspection-overlay" class="full-overlay">
+        <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-content">
+            <p>Site: <strong class="site-display">--</strong></p>
+            <div class="photo-grid">
+                <div id="btn-insp-start" class="photo-box" onclick="document.getElementById('photo-insp-start').click()">📸 START<br><small id="time-insp-start" style="font-weight:normal;">Take photo to start</small></div>
+                <div id="btn-insp-end" class="photo-box" onclick="document.getElementById('photo-insp-end').click()">📷 END<br><small id="time-insp-end" style="font-weight:normal;">(Walk length)</small></div>
+            </div>
+            <input type="file" id="photo-insp-start" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('start')">
+            <input type="file" id="photo-insp-end" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('end')">
+            
+            <button class="std-btn light-blue" onclick="document.getElementById('photo-insp-extra').click()">➕ Add Mid-Job Photo</button>
+            <div id="insp-extra-count" class="extra-label">0 extra photos</div>
+            <input type="file" id="photo-insp-extra" multiple style="display:none;" onchange="updateExtraCount('insp')">
+
+            <textarea id="insp-notes" class="std-input textarea" placeholder="Inspection Notes..."></textarea>
+            
+            <div class="footer-btns">
+                <button id="cancel-insp-btn" class="std-btn red" onclick="cancelInsp()">Cancel</button>
+                <button id="pause-insp-btn" class="std-btn gray" disabled onclick="pauseInsp()">Pause</button>
+                <button id="submit-insp-btn" class="std-btn yellow" disabled onclick="submitInsp()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="jobbank-overlay" class="full-overlay">
+        <div class="form-header"><span>JOB BANK</span><button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-content" id="job-bank-list"></div>
+    </div>
+
+    <!-- MAP CONTAINER -->
+    <div id="map-wrapper">
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

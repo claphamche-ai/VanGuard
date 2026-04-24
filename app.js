@@ -1,8 +1,12 @@
 
 const BRAND_NAME = "VanGuard";
 
-document.getElementById('page-title').innerText = `${BRAND_NAME} | Field Ops v2.19`;
-document.getElementById('brand-name').innerText = BRAND_NAME;
+if(document.getElementById('page-title')) {
+    document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.0`;
+}
+if(document.getElementById('brand-name')) {
+    document.getElementById('brand-name').innerText = BRAND_NAME;
+}
 
 let timerInterval;
 let activeSite = { name: "", type: "" };
@@ -13,105 +17,199 @@ let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: fals
 
 function updateClock() {
     const now = new Date();
-    document.getElementById('menu-clock').innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' });
+    const clockEl = document.getElementById('menu-clock');
+    if(clockEl) {
+        clockEl.innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' });
+    }
 }
 updateClock();
 setInterval(updateClock, 1000);
 
-const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
+if(document.getElementById('map')) {
+    const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    baseMap.addTo(map);
 
-let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
+    let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
 
-// VAN ICON INITIALIZATION
-let userMarker = L.marker([0,0], { 
-    icon: L.divIcon({ 
-        className: '', 
-        html: '<div class="van-inner" style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; transition: transform 0.3s linear; transform: rotate(90deg);">🚐</div>', 
-        iconSize: [40,40], 
-        iconAnchor: [20,20] 
-    }) 
-}).addTo(map);
+    let userMarker = L.marker([0,0], { 
+        icon: L.divIcon({ 
+            className: '', 
+            html: '<div class="van-inner" style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; transition: transform 0.3s linear; transform: rotate(90deg);">🚐</div>', 
+            iconSize: [40,40], 
+            iconAnchor: [20,20] 
+        }) 
+    }).addTo(map);
 
-// ==========================================
-// GPS TRACKING & AUTO-FOLLOW ROTATION LOGIC
-// ==========================================
-let currentHeading = 0;
-let followMode = true; 
+    let currentHeading = 0;
+    let followMode = true; 
 
-if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(
-        function(pos) {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            const speed = pos.coords.speed || 0; // Speed in m/s
-            const heading = pos.coords.heading;
-            
-            const latlng = [lat, lng];
-            userMarker.setLatLng(latlng);
-            trail.addLatLng(latlng);
-            
-            // Auto trigger follow mode if moving fast (> 15kmh / 4.16m/s)
-            if (speed > 4.16) {
-                followMode = true;
-            }
-
-            // Only update heading if moving fast enough to avoid stationary compass drift
-            if (heading !== null && !isNaN(heading) && speed > 1.5) {
-                currentHeading = heading;
-            }
-
-            // Always orient the van to face the direction of travel
-            // Base emoji faces left (-90), so add 90 to point UP (0)
-            document.querySelectorAll('.van-inner').forEach(el => {
-                el.style.transform = `rotate(${currentHeading + 90}deg)`;
-            });
-
-            if (followMode) {
-                map.panTo(latlng);
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+            function(pos) {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                const speed = pos.coords.speed || 0; 
+                const heading = pos.coords.heading;
                 
-                // Rotate the underlying massive map wrapper so direction of travel is UP
-                document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
+                const latlng = [lat, lng];
+                userMarker.setLatLng(latlng);
+                trail.addLatLng(latlng);
                 
-                // Counter-rotate the site markers to keep them physically upright to the screen
-                document.querySelectorAll('.marker-inner').forEach(el => {
-                    el.style.transform = `rotate(${currentHeading}deg)`;
+                if (speed > 4.16) { followMode = true; }
+
+                if (heading !== null && !isNaN(heading) && speed > 1.5) {
+                    currentHeading = heading;
+                }
+
+                document.querySelectorAll('.van-inner').forEach(el => {
+                    el.style.transform = `rotate(${currentHeading + 90}deg)`;
                 });
-            }
-        },
-        function(err) { console.warn("GPS Error:", err); },
-        { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
-    );
-}
 
-// Break follow mode if user physically touches and drags the map
-map.on('dragstart', function() {
-    followMode = false;
-    // Snap rotation back to 0 so manual panning behaves normally relative to the finger
-    document.getElementById('map').style.transform = `rotate(0deg)`;
-    document.querySelectorAll('.marker-inner').forEach(el => {
-        el.style.transform = `rotate(0deg)`;
-    });
-});
-
-function centerGPS() {
-    followMode = true;
-    const coords = userMarker.getLatLng();
-    if(coords.lat !== 0) {
-        map.panTo(coords);
-        
-        // Re-apply rotation
-        document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
-        document.querySelectorAll('.marker-inner').forEach(el => {
-            el.style.transform = `rotate(${currentHeading}deg)`;
-        });
-    } else {
-        alert("Acquiring GPS signal...");
+                if (followMode) {
+                    map.panTo(latlng);
+                    document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
+                    document.querySelectorAll('.marker-inner').forEach(el => {
+                        el.style.transform = `rotate(${currentHeading}deg)`;
+                    });
+                }
+            },
+            function(err) { console.warn("GPS Error:", err); },
+            { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
+        );
     }
-}
-// ==========================================
 
+    map.on('dragstart', function() {
+        followMode = false;
+        document.getElementById('map').style.transform = `rotate(0deg)`;
+        document.querySelectorAll('.marker-inner').forEach(el => {
+            el.style.transform = `rotate(0deg)`;
+        });
+    });
+
+    window.centerGPS = function() {
+        followMode = true;
+        const coords = userMarker.getLatLng();
+        if(coords.lat !== 0) {
+            map.panTo(coords);
+            document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
+            document.querySelectorAll('.marker-inner').forEach(el => {
+                el.style.transform = `rotate(${currentHeading}deg)`;
+            });
+        } else {
+            alert("Acquiring GPS signal...");
+        }
+    }
+
+    const config = [
+        { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
+        { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
+        { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
+        { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
+        { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
+        { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
+        { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
+        { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
+        { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
+    ];
+
+    const container = document.getElementById('layer-container');
+
+    config.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'layer-item';
+        div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
+        container.appendChild(div);
+
+        const group = L.featureGroup();
+        layers[item.label] = group;
+
+        const customLayer = L.geoJson(null, {
+            style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
+            pointToLayer: function(feature, latlng) {
+                const marker = L.marker(latlng, {
+                    icon: L.divIcon({
+                        className: '',
+                        html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
+                        iconSize: [38, 38],
+                        iconAnchor: [19, 19]
+                    })
+                });
+                
+                marker.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    activeSite.name = feature.properties?.name || "Unknown Site";
+                    activeSite.type = item.label;
+
+                    const props = feature.properties || {};
+                    document.getElementById('s-name').innerText = activeSite.name;
+                    document.getElementById('s-type').innerText = activeSite.type;
+                    document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
+                    document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
+                    document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
+
+                    const coverFrame = document.getElementById('cover-photo-frame');
+                    coverFrame.style.backgroundImage = '';
+                    coverFrame.classList.remove('has-photo');
+                    document.getElementById('cover-photo-upload').value = '';
+
+                    document.getElementById('site-info').style.display = 'block';
+                });
+                return marker;
+            }
+        });
+
+        const runLayer = omnivore.kml(item.file, null, customLayer);
+        
+        runLayer.on('ready', function() {
+            runLayer.eachLayer(function(layer) {
+                if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                    const center = layer.getBounds().getCenter();
+                    const centerMarker = L.marker(center, {
+                        icon: L.divIcon({
+                            className: '',
+                            html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
+                            iconSize: [38, 38],
+                            iconAnchor: [19, 19]
+                        })
+                    });
+                    
+                    centerMarker.on('click', function(e) {
+                        L.DomEvent.stopPropagation(e);
+                        activeSite.name = layer.feature?.properties?.name || "Unknown Area";
+                        activeSite.type = item.label;
+
+                        const props = layer.feature?.properties || {};
+                        document.getElementById('s-name').innerText = activeSite.name;
+                        document.getElementById('s-type').innerText = activeSite.type;
+                        document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
+                        document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
+                        document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
+
+                        const coverFrame = document.getElementById('cover-photo-frame');
+                        coverFrame.style.backgroundImage = '';
+                        coverFrame.classList.remove('has-photo');
+                        document.getElementById('cover-photo-upload').value = '';
+
+                        document.getElementById('site-info').style.display = 'block';
+                    });
+                    group.addLayer(centerMarker);
+                }
+            });
+            map.addLayer(group);
+        }).on('error', function(e) {
+            console.error("Failed to load: " + item.file, e);
+        });
+        
+        group.addLayer(runLayer);
+    });
+
+    window.toggleLayer = function(name, show) {
+        if(show) { map.addLayer(layers[name]); } 
+        else { map.removeLayer(layers[name]); }
+    };
+}
 
 function toggleFS() {
     const doc = window.document;
@@ -133,14 +231,6 @@ function closeSidebar() { document.getElementById('sidebar').classList.remove('o
 function toggleLayerList() {
     const el = document.getElementById('layer-container');
     el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-}
-
-function toggleLayer(name, show) {
-    if(show) {
-        map.addLayer(layers[name]);
-    } else {
-        map.removeLayer(layers[name]);
-    }
 }
 
 function openOverlay(type) { 
@@ -271,7 +361,6 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
-        // Reset fields
         document.getElementById('work-workers').value = "1";
         document.getElementById('work-area').value = "";
         document.getElementById('work-property').value = "";
@@ -417,106 +506,3 @@ function resumeAny(index) {
     bank.splice(index, 1);
     localStorage.setItem('tt_jobbank', JSON.stringify(bank));
 }
-
-const config = [
-    { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
-    { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
-    { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' },
-    { file: 'Thompson Property Group & Unique Paint SItes.kml', label: 'Unique', color: '#9b59b6', icon: '💎' },
-    { file: 'Traffic Light Box Sites.kml', label: 'Traffic', color: '#2ecc71', icon: '🚦' },
-    { file: 'Community Buildings.kml', label: 'Community', color: '#3498db', icon: '🏠' },
-    { file: 'PCC Mural Sites.kml', label: 'Mural', color: '#d35400', icon: '🖼️' },
-    { file: 'Power Pole Area Sweeps.kml', label: 'Power Pole', color: '#000000', icon: '💈' },
-    { file: 'PCC Off-street Carparks.kml', label: 'Carpark', color: '#34495e', icon: '🚗' }
-];
-
-const container = document.getElementById('layer-container');
-
-config.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'layer-item';
-    div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
-    container.appendChild(div);
-
-    const group = L.featureGroup();
-    layers[item.label] = group;
-
-    const customLayer = L.geoJson(null, {
-        style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
-        pointToLayer: function(feature, latlng) {
-            const marker = L.marker(latlng, {
-                icon: L.divIcon({
-                    className: '',
-                    html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
-                    iconSize: [38, 38],
-                    iconAnchor: [19, 19]
-                })
-            });
-            
-            marker.on('click', function(e) {
-                L.DomEvent.stopPropagation(e);
-                activeSite.name = feature.properties?.name || "Unknown Site";
-                activeSite.type = item.label;
-
-                const props = feature.properties || {};
-                document.getElementById('s-name').innerText = activeSite.name;
-                document.getElementById('s-type').innerText = activeSite.type;
-                document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
-                document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
-                document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
-
-                const coverFrame = document.getElementById('cover-photo-frame');
-                coverFrame.style.backgroundImage = '';
-                coverFrame.classList.remove('has-photo');
-                document.getElementById('cover-photo-upload').value = '';
-
-                document.getElementById('site-info').style.display = 'block';
-            });
-            return marker;
-        }
-    });
-
-    const runLayer = omnivore.kml(item.file, null, customLayer);
-    
-    runLayer.on('ready', function() {
-        runLayer.eachLayer(function(layer) {
-            if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                const center = layer.getBounds().getCenter();
-                const centerMarker = L.marker(center, {
-                    icon: L.divIcon({
-                        className: '',
-                        html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px; transition: transform 0.5s ease-out;">${item.icon}</div>`,
-                        iconSize: [38, 38],
-                        iconAnchor: [19, 19]
-                    })
-                });
-                
-                centerMarker.on('click', function(e) {
-                    L.DomEvent.stopPropagation(e);
-                    activeSite.name = layer.feature?.properties?.name || "Unknown Area";
-                    activeSite.type = item.label;
-
-                    const props = layer.feature?.properties || {};
-                    document.getElementById('s-name').innerText = activeSite.name;
-                    document.getElementById('s-type').innerText = activeSite.type;
-                    document.getElementById('s-address').value = props.ADDRESS || props.Address || props.address || props.description || "";
-                    document.getElementById('s-owner').value = props.OWNER || props.Owner || props.owner || "";
-                    document.getElementById('s-contact').value = props.CONTACT || props.Contact || props.contact || "";
-
-                    const coverFrame = document.getElementById('cover-photo-frame');
-                    coverFrame.style.backgroundImage = '';
-                    coverFrame.classList.remove('has-photo');
-                    document.getElementById('cover-photo-upload').value = '';
-
-                    document.getElementById('site-info').style.display = 'block';
-                });
-                group.addLayer(centerMarker);
-            }
-        });
-        map.addLayer(group);
-    }).on('error', function(e) {
-        console.error("Failed to load: " + item.file, e);
-    });
-    
-    group.addLayer(runLayer);
-});
