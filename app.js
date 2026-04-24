@@ -1,38 +1,29 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) {
-    document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.0`;
-}
-if(document.getElementById('brand-name')) {
-    document.getElementById('brand-name').innerText = BRAND_NAME;
-}
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.1.1`; }
+if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
-
 let workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
 let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
 
 function updateClock() {
     const now = new Date();
     const clockEl = document.getElementById('menu-clock');
-    if(clockEl) {
-        clockEl.innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' });
-    }
+    if(clockEl) { clockEl.innerText = now.toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }
 }
 updateClock();
 setInterval(updateClock, 1000);
 
 if(document.getElementById('map')) {
     const map = L.map('map', { zoomControl: false }).setView([-41.135, 174.84], 14);
-
     const baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
     baseMap.addTo(map);
 
     let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
-
     let userMarker = L.marker([0,0], { 
         icon: L.divIcon({ 
             className: '', 
@@ -58,21 +49,14 @@ if(document.getElementById('map')) {
                 trail.addLatLng(latlng);
                 
                 if (speed > 4.16) { followMode = true; }
+                if (heading !== null && !isNaN(heading) && speed > 1.5) { currentHeading = heading; }
 
-                if (heading !== null && !isNaN(heading) && speed > 1.5) {
-                    currentHeading = heading;
-                }
-
-                document.querySelectorAll('.van-inner').forEach(el => {
-                    el.style.transform = `rotate(${currentHeading + 90}deg)`;
-                });
+                document.querySelectorAll('.van-inner').forEach(el => { el.style.transform = `rotate(${currentHeading + 90}deg)`; });
 
                 if (followMode) {
                     map.panTo(latlng);
                     document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
-                    document.querySelectorAll('.marker-inner').forEach(el => {
-                        el.style.transform = `rotate(${currentHeading}deg)`;
-                    });
+                    document.querySelectorAll('.marker-inner').forEach(el => { el.style.transform = `rotate(${currentHeading}deg)`; });
                 }
             },
             function(err) { console.warn("GPS Error:", err); },
@@ -83,9 +67,7 @@ if(document.getElementById('map')) {
     map.on('dragstart', function() {
         followMode = false;
         document.getElementById('map').style.transform = `rotate(0deg)`;
-        document.querySelectorAll('.marker-inner').forEach(el => {
-            el.style.transform = `rotate(0deg)`;
-        });
+        document.querySelectorAll('.marker-inner').forEach(el => { el.style.transform = `rotate(0deg)`; });
     });
 
     window.centerGPS = function() {
@@ -94,9 +76,7 @@ if(document.getElementById('map')) {
         if(coords.lat !== 0) {
             map.panTo(coords);
             document.getElementById('map').style.transform = `rotate(${-currentHeading}deg)`;
-            document.querySelectorAll('.marker-inner').forEach(el => {
-                el.style.transform = `rotate(${currentHeading}deg)`;
-            });
+            document.querySelectorAll('.marker-inner').forEach(el => { el.style.transform = `rotate(${currentHeading}deg)`; });
         } else {
             alert("Acquiring GPS signal...");
         }
@@ -121,7 +101,6 @@ if(document.getElementById('map')) {
         div.className = 'layer-item';
         div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
         container.appendChild(div);
-
         const group = L.featureGroup();
         layers[item.label] = group;
 
@@ -141,7 +120,6 @@ if(document.getElementById('map')) {
                     L.DomEvent.stopPropagation(e);
                     activeSite.name = feature.properties?.name || "Unknown Site";
                     activeSite.type = item.label;
-
                     const props = feature.properties || {};
                     document.getElementById('s-name').innerText = activeSite.name;
                     document.getElementById('s-type').innerText = activeSite.type;
@@ -153,7 +131,6 @@ if(document.getElementById('map')) {
                     coverFrame.style.backgroundImage = '';
                     coverFrame.classList.remove('has-photo');
                     document.getElementById('cover-photo-upload').value = '';
-
                     document.getElementById('site-info').style.display = 'block';
                 });
                 return marker;
@@ -161,7 +138,6 @@ if(document.getElementById('map')) {
         });
 
         const runLayer = omnivore.kml(item.file, null, customLayer);
-        
         runLayer.on('ready', function() {
             runLayer.eachLayer(function(layer) {
                 if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
@@ -179,7 +155,6 @@ if(document.getElementById('map')) {
                         L.DomEvent.stopPropagation(e);
                         activeSite.name = layer.feature?.properties?.name || "Unknown Area";
                         activeSite.type = item.label;
-
                         const props = layer.feature?.properties || {};
                         document.getElementById('s-name').innerText = activeSite.name;
                         document.getElementById('s-type').innerText = activeSite.type;
@@ -191,23 +166,18 @@ if(document.getElementById('map')) {
                         coverFrame.style.backgroundImage = '';
                         coverFrame.classList.remove('has-photo');
                         document.getElementById('cover-photo-upload').value = '';
-
                         document.getElementById('site-info').style.display = 'block';
                     });
                     group.addLayer(centerMarker);
                 }
             });
             map.addLayer(group);
-        }).on('error', function(e) {
-            console.error("Failed to load: " + item.file, e);
-        });
-        
+        }).on('error', function(e) { console.error("Failed to load: " + item.file, e); });
         group.addLayer(runLayer);
     });
 
     window.toggleLayer = function(name, show) {
-        if(show) { map.addLayer(layers[name]); } 
-        else { map.removeLayer(layers[name]); }
+        if(show) { map.addLayer(layers[name]); } else { map.removeLayer(layers[name]); }
     };
 }
 
@@ -241,9 +211,7 @@ function openOverlay(type) {
     if(type === 'jobbank') renderJobBank();
 }
 
-function closeOverlay(type) { 
-    document.getElementById(type + '-overlay').style.display = 'none'; 
-}
+function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
 function handleCoverPhoto(input) {
     if (input.files && input.files[0]) {
@@ -283,7 +251,6 @@ function handleWorkPhoto(step) {
         workState.hasBefore = true;
         document.getElementById('pause-work-btn').disabled = false;
         startLiveTimer(now, workState.accumulated);
-        
         document.getElementById('ai-analysis-section').style.display = 'block';
     } else {
         workState.hasAfter = true;
@@ -305,9 +272,7 @@ function runAIAnalysis() {
         btn.style.background = "#2ecc71"; 
         
         const desc = document.getElementById('work-desc');
-        if(desc.value === "") {
-            desc.value = "AI Note: Detected tags 'VANDAL, 2K26'. Estimated size 1.2m x 0.8m.";
-        }
+        if(desc.value === "") { desc.value = "AI Note: Detected tags 'VANDAL, 2K26'. Estimated size 1.2m x 0.8m."; }
     }, 2500);
 }
 
@@ -333,9 +298,7 @@ function handleDropdown(el) {
         if(val) {
             const opt = document.createElement("option"); opt.text = val; opt.value = val;
             el.add(opt, el.options[el.options.length-1]); el.value = val;
-        } else {
-            el.value = "";
-        }
+        } else { el.value = ""; }
     }
 }
 
