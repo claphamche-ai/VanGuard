@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.1.1</title>
+    <title id="page-title">VanGuard | Agent v3.2.1</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=3.2.1" />
 </head>
 <body>
     <div id="live-timer-widget">00:00</div>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.1.1 | AGENT</div>
+        <div class="sidebar-version">Version 3.2.1 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -202,7 +202,6 @@
         </div>
     </div>
 
-    <!-- INSPECTION OVERLAY -->
     <div id="inspection-overlay" class="full-overlay">
         <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
         <div class="form-content">
@@ -239,6 +238,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js"></script>
+    <script src="app.js?v=3.2.1"></script>
 </body>
 </html>
