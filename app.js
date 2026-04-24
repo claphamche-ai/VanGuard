@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.3`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.4`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
 let timerInterval;

@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=3.3" />
+    <link rel="stylesheet" href="styles.css?v=3.4" />
 </head>
 <body class="admin-bg">
     
     <nav class="admin-topbar">
         <div class="admin-nav-group">
+            <div class="admin-nav-item logout-item" onclick="location.href='index.html'">
+                <span class="icon">🚪</span>
+                <span class="label">Log Out</span>
+            </div>
             <div class="admin-nav-item" onclick="alert('Accounts Panel (Coming Soon)')">
                 <span class="icon">👥</span>
                 <span class="label">Accounts</span>
@@ -30,11 +34,6 @@
                 <span class="icon">❓</span>
                 <span class="label">Help</span>
             </div>
-            <!-- Added Log Out to standard nav block -->
-            <div class="admin-nav-item logout-item" onclick="location.href='index.html'">
-                <span class="icon">🚪</span>
-                <span class="label">Log Out</span>
-            </div>
         </div>
 
         <div class="admin-controls">
@@ -44,12 +43,14 @@
 
     <main class="admin-content">
         <div class="admin-welcome-box">
-            <div class="login-frame" style="margin: 0 auto 30px;">🚐</div>
-            <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 0 0 30px 0;">Version 3.3 | Admin Console</p>
+            <img src="PCC_Logo.png" alt="Porirua City Council" style="max-width: 140px; margin: 0 auto 15px; display: block;">
+            <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h2>
             
-            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px;">
-                Welcome to the VanGuard Regional Management Portal. Select a module from the top navigation bar to manage field ops, view intelligence reports, or configure your regional settings.
+            <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.4 | Admin Console</p>
+            
+            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px; text-align: justify;">
+                VanGuard is a centralized, real-time field operations platform designed to track, manage, and dispatch asset maintenance teams. Utilizing live GPS telematics, rapid field reporting, and geographic data correlation, this portal provides comprehensive oversight of city-wide infrastructure preservation and rapid response efforts.
             </p>
 
             <button class="std-btn blue" style="max-width: 200px; margin: 0 auto;" onclick="alert('Intelligence Module (Coming Soon)')">View Reports</button>
