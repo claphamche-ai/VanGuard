@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.6</title>
+    <title id="page-title">VanGuard | Agent v3.7</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.6" />
+    <link rel="stylesheet" href="styles.css?v=3.7" />
 </head>
 <body>
     <div id="live-timer-widget">00:00</div>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.6 | AGENT</div>
+        <div class="sidebar-version">Version 3.7 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -26,7 +26,7 @@
         <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
         
-        <div class="nav-item" style="margin-top:20px; color:red; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
+        <div class="nav-item logout-item" style="margin-top:20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
 
         <div style="margin-top: 15px; padding-top: 10px;">
             <label style="font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px;">Menu Opacity</label>
@@ -238,6 +238,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=3.6"></script>
+    <script src="app.js?v=3.7"></script>
 </body>
 </html>
