@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tenant Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=3.12" />
+    <link rel="stylesheet" href="styles.css?v=3.13" />
 </head>
 <body class="admin-bg">
     <!-- TODO: DB HOOK - Fetch tenant branding data on load (Logo, Motto, Name) -->
@@ -52,7 +52,7 @@
             <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h2>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.12 | Regional Console</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.13 | Regional Console</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px; text-align: justify;">
                 VanGuard is a centralized, real-time field operations platform designed to track, manage, and dispatch asset maintenance teams. Utilizing live GPS telematics, rapid field reporting, and geographic data correlation, this portal provides comprehensive oversight of city-wide infrastructure preservation and rapid response efforts.
@@ -62,7 +62,6 @@
         <!-- SETTINGS MAIN HUB -->
         <div id="admin-tab-settings" class="admin-tab-content" style="display:none; width: 100%; max-width: 900px;">
             
-            <!-- Default Overview of Settings -->
             <div id="settings-overview">
                 <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">System Configuration</h2>
                 
@@ -155,89 +154,145 @@
                 <button class="std-btn gray" onclick="closeSettingsSubPanel()" style="max-width: 150px; margin-bottom: 20px; font-size: 12px; padding: 10px;">⬅ Back to Settings</button>
                 <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Form Field Manager</h2>
                 
-                <div class="tenant-panel">
+                <div class="tenant-panel" style="padding-top: 20px;">
                     <p style="color: #555; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
-                        <strong style="color: var(--b);">Database Integrity Lock:</strong> To prevent correlation errors and database corruption, the creation or deletion of root data fields is restricted to VanGuard Core Support. However, you have full administrative control over which fields are <strong>visible</strong> to your field agents, and which fields are <strong>mandatory</strong> to submit a job.
+                        <strong style="color: var(--b);">Database Integrity Lock:</strong> To prevent correlation errors, creation or deletion of root data fields is restricted. However, you have full administrative control over which fields (and specific drop-down options) are <strong>visible</strong> to your field agents, and which fields are <strong>mandatory</strong> to submit a job. Click any field with a <span style="color:var(--b);">▶</span> to expand its sub-options.
                     </p>
                     
                     <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
                         <tr style="border-bottom: 2px solid #ddd; color: #666;">
-                            <th style="padding: 10px 5px;">Data Field Name</th>
-                            <th style="padding: 10px 5px; text-align: center;">Visible in App</th>
-                            <th style="padding: 10px 5px; text-align: center;">Mandatory</th>
+                            <th style="padding: 10px 5px;">Data Field / Drop-Down Options</th>
+                            <th style="padding: 10px 5px; text-align: center; width: 120px;">Visible in App</th>
+                            <th style="padding: 10px 5px; text-align: center; width: 120px;">Mandatory</th>
                         </tr>
-                        <!-- TODO: DB HOOK - Fetch visibility/mandatory booleans from `tenant_settings` table -->
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Number of Workers</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
+                        
+                        <!-- TODO: DB HOOK - Fetch these values from tenant specific settings -->
+                        
+                        <!-- Single Input: Number of Workers -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fff;">
+                            <td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Number of Workers</td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Repaired Area (m²)</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
+
+                        <!-- Single Input: Repaired Area -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fff;">
+                            <td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Repaired Area (m²)</td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Property Type</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+
+                        <!-- Dropdown: Property Type -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
+                            <td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('sub-prop', 'icon-prop')">
+                                <span id="icon-prop" style="display:inline-block; width: 15px;">▶</span> Property Type
                             </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
-                            </td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label></td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Surface Type</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Graffiti Medium</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
-                            </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                        <tr id="sub-prop" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 15px 15px 20px 35px;">
+                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div class="sub-option-row"><span>Commercial Building</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Private Residence</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Public Fence</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Utility Box</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Underpass</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                </div>
                             </td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Removal Method</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+
+                        <!-- Dropdown: Surface Type -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
+                            <td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('sub-surf', 'icon-surf')">
+                                <span id="icon-surf" style="display:inline-block; width: 15px;">▶</span> Surface Type
                             </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                        </tr>
+                        <tr id="sub-surf" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 15px 15px 20px 35px;">
+                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div class="sub-option-row"><span>Brick</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Raw Wood</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Painted (Smooth)</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Metal</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Concrete / Stone</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Glass</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                </div>
                             </td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Paint Color Used</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+
+                        <!-- Dropdown: Graffiti Medium -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
+                            <td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('sub-med', 'icon-med')">
+                                <span id="icon-med" style="display:inline-block; width: 15px;">▶</span> Graffiti Medium
                             </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label></td>
+                        </tr>
+                        <tr id="sub-med" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 15px 15px 20px 35px;">
+                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div class="sub-option-row"><span>Spray Paint</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Paint (Brush/Roller)</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Felt Pen / Marker</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Etched / Scratched</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Sticker / Poster</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                </div>
                             </td>
                         </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px 5px; font-weight:bold;">Chemicals Used (ml/L)</td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+
+                        <!-- Dropdown: Removal Method -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
+                            <td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('sub-meth', 'icon-meth')">
+                                <span id="icon-meth" style="display:inline-block; width: 15px;">▶</span> Removal Method
                             </td>
-                            <td style="padding: 12px 5px; text-align: center;">
-                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                        </tr>
+                        <tr id="sub-meth" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 15px 15px 20px 35px;">
+                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div class="sub-option-row"><span>Painted over</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Chemical removal</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Pressure wash</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Sand blasting</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Mechanical sanding</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                </div>
                             </td>
+                        </tr>
+
+                        <!-- Dropdown: Paint Color Used -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
+                            <td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('sub-col', 'icon-col')">
+                                <span id="icon-col" style="display:inline-block; width: 15px;">▶</span> Paint Color Used
+                            </td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label></td>
+                        </tr>
+                        <tr id="sub-col" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
+                            <td colspan="3" style="padding: 15px 15px 20px 35px;">
+                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div class="sub-option-row"><span>White</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Black</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Grey</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Brown</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                    <div class="sub-option-row"><span>Colour Match</span><label class="toggle-switch small"><input type="checkbox" checked><span class="slider"></span></label></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Single Input: Chemicals Used -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fff;">
+                            <td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Chemicals Used (ml/L)</td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label></td>
                         </tr>
                     </table>
                     
@@ -270,6 +325,18 @@
             document.getElementById('settings-panel-layers').style.display = 'none';
             document.getElementById('settings-panel-fields').style.display = 'none';
             document.getElementById('settings-overview').style.display = 'block';
+        }
+
+        function toggleSubRow(rowId, iconId) {
+            const row = document.getElementById(rowId);
+            const icon = document.getElementById(iconId);
+            if(row.style.display === 'none' || row.style.display === '') {
+                row.style.display = 'table-row';
+                icon.innerText = '▼';
+            } else {
+                row.style.display = 'none';
+                icon.innerText = '▶';
+            }
         }
 
         function toggleAdminFS() {
