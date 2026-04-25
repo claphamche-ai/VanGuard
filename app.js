@@ -1,20 +1,129 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.18`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.19`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
-// --- DATABASE MOCK ENGINE ---
+// --- DATABASE MOCK ENGINE (Updated with User's Spoof Data) ---
 const defaultSchema = [
-    { id: 'srn', label: 'Service Request Number (SRN)', type: 'text', tenantVisible: true, tenantMandatory: false, options: null },
-    { id: 'workers', label: 'Number of Workers', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'1 Worker (Default)', visible:true}, {name:'2 Workers', visible:true}, {name:'3 Workers', visible:true}, {name:'4 Workers', visible:true}, {name:'5+ Workers', visible:true}] },
-    { id: 'area', label: 'Repaired Area (m²)', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'0.5', visible:true}, {name:'1', visible:true}, {name:'2', visible:true}, {name:'5', visible:true}, {name:'10', visible:true}, {name:'20', visible:true}] },
-    { id: 'property', label: 'Property Type', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Commercial Building', visible:true}, {name:'Private Residence', visible:true}, {name:'Public Fence', visible:true}, {name:'Utility Box', visible:true}, {name:'Underpass', visible:true}] },
-    { id: 'surface', label: 'Surface Type', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Brick', visible:true}, {name:'Raw Wood', visible:true}, {name:'Painted (Smooth)', visible:true}, {name:'Metal', visible:true}, {name:'Concrete / Stone', visible:true}, {name:'Glass', visible:true}] },
-    { id: 'medium', label: 'Graffiti Medium', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Spray Paint', visible:true}, {name:'Paint (Brush/Roller)', visible:true}, {name:'Felt Pen / Marker', visible:true}, {name:'Etched / Scratched', visible:true}, {name:'Sticker / Poster', visible:true}] },
-    { id: 'method', label: 'Removal Method', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Painted over', visible:true}, {name:'Chemical removal', visible:true}, {name:'Pressure wash', visible:true}, {name:'Sand blasting', visible:true}, {name:'Mechanical sanding', visible:true}] },
-    { id: 'color', label: 'Paint Color Used', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'White', visible:true}, {name:'Black', visible:true}, {name:'Grey', visible:true}, {name:'Brown', visible:true}, {name:'Colour Match', visible:true}] },
-    { id: 'chemicals', label: 'Chemicals Used (ml/L)', type: 'text', tenantVisible: true, tenantMandatory: false, options: null }
+    {
+        "id": "srn",
+        "label": "Service Request Number (SRN)",
+        "type": "text",
+        "tenantVisible": true,
+        "tenantMandatory": false,
+        "options": null
+    },
+    {
+        "id": "workers",
+        "label": "Number of Workers",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "1 Worker (Default)", "visible": true },
+            { "name": "2 Workers", "visible": true },
+            { "name": "3 Workers", "visible": true },
+            { "name": "4 Workers", "visible": true },
+            { "name": "5+ Workers", "visible": true }
+        ]
+    },
+    {
+        "id": "area",
+        "label": "Repaired Area (m²)",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "0.5", "visible": true },
+            { "name": "1", "visible": true },
+            { "name": "2", "visible": true },
+            { "name": "5", "visible": true },
+            { "name": "10", "visible": true },
+            { "name": "20", "visible": true }
+        ]
+    },
+    {
+        "id": "property",
+        "label": "Property Type",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "Commercial Building", "visible": true },
+            { "name": "Private Residence", "visible": true },
+            { "name": "Public Fence", "visible": true },
+            { "name": "Utility Box", "visible": true },
+            { "name": "Underpass", "visible": true },
+            { "name": "Private Fence.", "visible": true }
+        ]
+    },
+    {
+        "id": "surface",
+        "label": "Surface Type",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "Brick", "visible": true },
+            { "name": "Raw Wood", "visible": true },
+            { "name": "Painted (Smooth)", "visible": true },
+            { "name": "Metal", "visible": true },
+            { "name": "Concrete / Stone", "visible": true },
+            { "name": "Glass", "visible": true }
+        ]
+    },
+    {
+        "id": "medium",
+        "label": "Graffiti Medium",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "Spray Paint", "visible": true },
+            { "name": "Paint (Brush/Roller)", "visible": true },
+            { "name": "Felt Pen / Marker", "visible": true },
+            { "name": "Etched / Scratched", "visible": true },
+            { "name": "Sticker / Poster", "visible": true }
+        ]
+    },
+    {
+        "id": "method",
+        "label": "Removal Method",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "Painted over", "visible": true },
+            { "name": "Chemical removal", "visible": true },
+            { "name": "Pressure wash", "visible": true },
+            { "name": "Sand blasting", "visible": true },
+            { "name": "Mechanical sanding", "visible": true }
+        ]
+    },
+    {
+        "id": "color",
+        "label": "Paint Color Used",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            { "name": "White", "visible": true },
+            { "name": "Black", "visible": true },
+            { "name": "Grey", "visible": true },
+            { "name": "Brown", "visible": true },
+            { "name": "Colour Match", "visible": true },
+            { "name": "yellow", "visible": true }
+        ]
+    },
+    {
+        "id": "chemicals",
+        "label": "Chemicals Used (ml/L)",
+        "type": "text",
+        "tenantVisible": true,
+        "tenantMandatory": false,
+        "options": null
+    }
 ];
 
 function getDB() {
@@ -140,6 +249,13 @@ function addNewGodField() {
 
 // DOM INITIALIZATION
 document.addEventListener('DOMContentLoaded', () => {
+    // Overwrite local memory if the baked schema differs
+    const currentMemory = localStorage.getItem('vg_schema');
+    if(!currentMemory || currentMemory !== JSON.stringify(defaultSchema)) {
+        console.log("Loading new baked schema...");
+        localStorage.setItem('vg_schema', JSON.stringify(defaultSchema));
+    }
+    
     if(document.getElementById('god-schema-render')) renderGodSchema();
     if(document.getElementById('admin-schema-render')) renderAdminSchema();
     if(document.getElementById('dynamic-work-fields')) renderAgentFields();

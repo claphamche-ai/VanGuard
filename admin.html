@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tenant Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=3.18" />
+    <link rel="stylesheet" href="styles.css?v=3.19" />
 </head>
 <body class="admin-bg">
-    <!-- TODO: DB HOOK - Fetch tenant branding data on load (Logo, Motto, Name) -->
     <nav class="admin-topbar">
         <div class="admin-nav-group">
             <div class="admin-nav-item logout-item" onclick="location.href='index.html'">
@@ -52,7 +51,7 @@
             <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h2>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.18 | Regional Console</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.19 | Regional Console</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px; text-align: justify;">
                 VanGuard is a centralized, real-time field operations platform designed to track, manage, and dispatch asset maintenance teams. Utilizing live GPS telematics, rapid field reporting, and geographic data correlation, this portal provides comprehensive oversight of city-wide infrastructure preservation and rapid response efforts.
@@ -120,7 +119,7 @@
         </div>
     </main>
 
-    <script src="app.js?v=3.18"></script>
+    <script src="app.js?v=3.19"></script>
     <script>
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
