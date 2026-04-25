@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Login</title>
-    <link rel="stylesheet" href="styles.css?v=3.16" />
+    <link rel="stylesheet" href="styles.css?v=3.17" />
 </head>
 <body class="login-wrapper">
     <div class="login-frame">🚐</div>
     <form class="login-form" onsubmit="handleLogin(event)">
-        <!-- TODO: DB HOOK - Connect to Authentication API endpoint -->
+        <!-- DB HOOK - Connect to Authentication API endpoint -->
         <input type="text" id="username" class="std-input" placeholder="Username" required autocomplete="off" autocorrect="off" autocapitalize="off">
         <input type="password" id="password" class="std-input" placeholder="Password" required>
         <button type="submit" class="std-btn yellow">Log In</button>
         <div id="login-error" style="color:#e74c3c; text-align:center; margin-top:5px; font-size:13px; font-weight:bold; display:none;">Invalid credentials</div>
     </form>
     <div class="login-brand">
-        <h1>VanGuard <span class="version">v3.16</span></h1>
+        <h1>VanGuard <span class="version">v3.17</span></h1>
     </div>
     <script>
         function handleLogin(e) {

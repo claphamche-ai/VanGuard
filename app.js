@@ -1,6 +1,151 @@
 
 const BRAND_NAME = "VanGuard";
-// Full Agent Logic intact
+
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.17`; }
+if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
+
+// --- DATABASE MOCK ENGINE ---
+const defaultSchema = [
+    { id: 'srn', label: 'Service Request Number (SRN)', type: 'text', tenantVisible: true, tenantMandatory: false, options: null },
+    { id: 'workers', label: 'Number of Workers', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'1 Worker (Default)', visible:true}, {name:'2 Workers', visible:true}, {name:'3 Workers', visible:true}, {name:'4 Workers', visible:true}, {name:'5+ Workers', visible:true}] },
+    { id: 'area', label: 'Repaired Area (m²)', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'0.5', visible:true}, {name:'1', visible:true}, {name:'2', visible:true}, {name:'5', visible:true}, {name:'10', visible:true}, {name:'20', visible:true}] },
+    { id: 'property', label: 'Property Type', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Commercial Building', visible:true}, {name:'Private Residence', visible:true}, {name:'Public Fence', visible:true}, {name:'Utility Box', visible:true}, {name:'Underpass', visible:true}] },
+    { id: 'surface', label: 'Surface Type', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Brick', visible:true}, {name:'Raw Wood', visible:true}, {name:'Painted (Smooth)', visible:true}, {name:'Metal', visible:true}, {name:'Concrete / Stone', visible:true}, {name:'Glass', visible:true}] },
+    { id: 'medium', label: 'Graffiti Medium', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Spray Paint', visible:true}, {name:'Paint (Brush/Roller)', visible:true}, {name:'Felt Pen / Marker', visible:true}, {name:'Etched / Scratched', visible:true}, {name:'Sticker / Poster', visible:true}] },
+    { id: 'method', label: 'Removal Method', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'Painted over', visible:true}, {name:'Chemical removal', visible:true}, {name:'Pressure wash', visible:true}, {name:'Sand blasting', visible:true}, {name:'Mechanical sanding', visible:true}] },
+    { id: 'color', label: 'Paint Color Used', type: 'select', tenantVisible: true, tenantMandatory: true, options: [{name:'White', visible:true}, {name:'Black', visible:true}, {name:'Grey', visible:true}, {name:'Brown', visible:true}, {name:'Colour Match', visible:true}] },
+    { id: 'chemicals', label: 'Chemicals Used (ml/L)', type: 'text', tenantVisible: true, tenantMandatory: false, options: null }
+];
+
+function getDB() {
+    if(!localStorage.getItem('vg_schema')) { localStorage.setItem('vg_schema', JSON.stringify(defaultSchema)); }
+    return JSON.parse(localStorage.getItem('vg_schema'));
+}
+function saveDB(data) { localStorage.setItem('vg_schema', JSON.stringify(data)); }
+
+function toggleSubRow(rowId, iconId) {
+    const row = document.getElementById(rowId);
+    const icon = document.getElementById(iconId);
+    if(!row) return;
+    if(row.style.display === 'none' || row.style.display === '') {
+        row.style.display = 'table-row';
+        icon.innerText = '▼';
+    } else {
+        row.style.display = 'none';
+        icon.innerText = '▶';
+    }
+}
+
+// GOD DASHBOARD RENDERER
+function renderGodSchema() {
+    const container = document.getElementById('god-schema-render');
+    if(!container) return;
+    let db = getDB();
+    let html = '<table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;"><tr style="background: var(--nav-dark); color: white;"><th style="padding: 12px 15px;">Global Data Field</th><th style="padding: 12px 15px; width: 100px;">Type</th><th style="padding: 12px 15px; text-align: right; width: 100px;">Action</th></tr>';
+    db.forEach(f => {
+        html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
+        if(f.type === 'select') {
+            html += `<td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('god-sub-${f.id}', 'god-icon-${f.id}')"><span id="god-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`;
+        } else {
+            html += `<td style="padding: 15px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`;
+        }
+        html += `<td style="padding: 15px; color: #666;">${f.type==='select'?'Drop-down':'Input'}</td>`;
+        html += `<td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="deleteGodField('${f.id}')">Delete</button></td></tr>`;
+        
+        if(f.type === 'select') {
+            html += `<tr id="god-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 20px 20px 25px 45px;"><div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Manage Drop-down Options</div><div class="sub-options-list">`;
+            f.options.forEach(opt => {
+                html += `<div class="sub-option-row"><span>${opt.name}</span><button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="deleteGodOption('${f.id}', '${opt.name}')">✕</button></div>`;
+            });
+            html += `<div style="display: flex; gap: 10px; margin-top: 10px;"><input type="text" id="god-new-opt-${f.id}" class="std-input" placeholder="New Option..." style="margin-bottom: 0; padding: 10px;"><button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="addGodOption('${f.id}')">➕ Add</button></div></div></td></tr>`;
+        }
+    });
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+// TENANT ADMIN RENDERER
+function renderAdminSchema() {
+    const container = document.getElementById('admin-schema-render');
+    if(!container) return;
+    let db = getDB();
+    let html = '<table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;"><tr style="border-bottom: 2px solid #ddd; color: #666;"><th style="padding: 10px 5px;">Data Field / Drop-Down Options</th><th style="padding: 10px 5px; text-align: center; width: 120px;">Visible in App</th><th style="padding: 10px 5px; text-align: center; width: 120px;">Mandatory</th></tr>';
+    db.forEach(f => {
+        html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
+        if(f.type === 'select') {
+            html += `<td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('adm-sub-${f.id}', 'adm-icon-${f.id}')"><span id="adm-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`;
+        } else {
+            html += `<td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`;
+        }
+        html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantVisible?'checked':''} onchange="toggleFieldVis('${f.id}')"><span class="slider"></span></label></td>`;
+        html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantMandatory?'checked':''} onchange="toggleFieldMan('${f.id}')"><span class="slider"></span></label></td></tr>`;
+        
+        if(f.type === 'select') {
+            html += `<tr id="adm-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 15px 15px 20px 35px;"><div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div><div class="sub-options-list">`;
+            f.options.forEach(opt => {
+                html += `<div class="sub-option-row"><span>${opt.name}</span><label class="toggle-switch small"><input type="checkbox" ${opt.visible?'checked':''} onchange="toggleOptVis('${f.id}', '${opt.name}')"><span class="slider"></span></label></div>`;
+            });
+            html += `</div></td></tr>`;
+        }
+    });
+    html += '</table>';
+    container.innerHTML = html;
+}
+
+// AGENT FORM RENDERER
+function renderAgentFields() {
+    const container = document.getElementById('dynamic-work-fields');
+    if(!container) return;
+    let db = getDB();
+    let html = '';
+    db.forEach(f => {
+        if(!f.tenantVisible) return;
+        
+        if(f.type === 'select') {
+            html += `<select id="work-${f.id}" class="std-input" onchange="handleDropdown(this)"><option value="">${f.label}...</option>`;
+            f.options.forEach(opt => { if(opt.visible) html += `<option value="${opt.name}">${opt.name}</option>`; });
+            html += `<option value="ADD_NEW">➕ Manual Entry...</option></select>`;
+        } else {
+            let pType = f.type === 'number' ? 'number' : 'text';
+            html += `<input type="${pType}" id="work-${f.id}" class="std-input" placeholder="${f.label} ${f.tenantMandatory?'':'- Optional'}" style="margin-bottom: 10px;">`;
+        }
+    });
+    container.innerHTML = html;
+
+    // Map Inspection SRN visibility dynamically
+    let srnField = db.find(f => f.id === 'srn');
+    let inspSrn = document.getElementById('insp-srn');
+    if(inspSrn && srnField) { inspSrn.style.display = srnField.tenantVisible ? 'block' : 'none'; }
+}
+
+// DATABASE MUTATION FUNCTIONS
+function toggleFieldVis(id) { let db = getDB(); let f = db.find(x => x.id === id); if(f) { f.tenantVisible = !f.tenantVisible; saveDB(db); renderAdminSchema(); } }
+function toggleFieldMan(id) { let db = getDB(); let f = db.find(x => x.id === id); if(f) { f.tenantMandatory = !f.tenantMandatory; saveDB(db); renderAdminSchema(); } }
+function toggleOptVis(fieldId, optName) { let db = getDB(); let f = db.find(x => x.id === fieldId); if(f) { let o = f.options.find(y => y.name === optName); if(o) { o.visible = !o.visible; saveDB(db); renderAdminSchema(); } } }
+
+function deleteGodField(id) { if(!confirm("WARNING: Deleting a root field affects all global tenants. Proceed?")) return; let db = getDB(); db = db.filter(f => f.id !== id); saveDB(db); renderGodSchema(); }
+function deleteGodOption(fieldId, optName) { if(!confirm("WARNING: Deleting an option affects all global tenants. Proceed?")) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f) { f.options = f.options.filter(y => y.name !== optName); saveDB(db); renderGodSchema(); } }
+function addGodOption(fieldId) { let val = document.getElementById(`god-new-opt-${fieldId}`).value.trim(); if(!val) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f && !f.options.find(o=>o.name === val)) { f.options.push({name: val, visible: true}); saveDB(db); renderGodSchema(); } }
+function addNewGodField() {
+    let label = document.getElementById('new-global-field-name').value.trim();
+    let type = document.getElementById('new-global-field-type').value;
+    if(!label) return;
+    let id = label.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    let db = getDB();
+    if(db.find(f => f.id === id)) { alert("Field already exists!"); return; }
+    db.push({ id: id, label: label, type: type, tenantVisible: true, tenantMandatory: false, options: type === 'select' ? [] : null });
+    saveDB(db); renderGodSchema();
+    document.getElementById('new-global-field-name').value = '';
+}
+
+// DOM INITIALIZATION
+document.addEventListener('DOMContentLoaded', () => {
+    if(document.getElementById('god-schema-render')) renderGodSchema();
+    if(document.getElementById('admin-schema-render')) renderAdminSchema();
+    if(document.getElementById('dynamic-work-fields')) renderAgentFields();
+});
+
+// --- LEAFLET MAP LOGIC (Intact) ---
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
@@ -321,15 +466,8 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
-        document.getElementById('work-srn').value = "";
-        document.getElementById('work-workers').value = "1";
-        document.getElementById('work-area').value = "";
-        document.getElementById('work-property').value = "";
-        document.getElementById('work-surface').value = "";
-        document.getElementById('work-medium').value = "";
-        document.getElementById('work-method').value = "";
-        document.getElementById('work-paint-color').value = "N/A";
-        document.getElementById('work-chemical-amount').value = "";
+        // Dynamically reset memory fields
+        renderAgentFields();
         document.getElementById('work-desc').value = "";
         document.getElementById('work-materials').value = "";
         
@@ -362,7 +500,8 @@ function cancelInsp() {
         document.getElementById('insp-extra-count').innerText = "0 extra photos";
         document.getElementById('insp-extra-count').style.color = "#888";
         
-        document.getElementById('insp-srn').value = "";
+        // Reset dynamic field
+        renderAgentFields();
         document.getElementById('insp-notes').value = "";
         
         document.getElementById('pause-insp-btn').disabled = true;
@@ -387,21 +526,29 @@ function submitWork() {
     const totalMs = (new Date() - workState.startTime) + workState.accumulated;
     const mins = Math.round(totalMs / 60000);
     
-    const srn = document.getElementById('work-srn').value;
-    const workers = document.getElementById('work-workers').value;
-    const area = document.getElementById('work-area').value;
-    const prop = document.getElementById('work-property').value;
-    const sur = document.getElementById('work-surface').value;
-    const med = document.getElementById('work-medium').value;
-    const method = document.getElementById('work-method').value;
-    const pColor = document.getElementById('work-paint-color').value;
-    const chemAmt = document.getElementById('work-chemical-amount').value;
+    let db = getDB();
+    let body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0A%0D%0A--- FIELD DATA ---%0D%0A`;
+    let failed = false;
+
+    db.forEach(f => {
+        if(!f.tenantVisible) return;
+        const el = document.getElementById(`work-${f.id}`);
+        if(el) {
+            const val = el.value;
+            if(f.tenantMandatory && (!val || val === "")) { 
+                alert(`Please complete the required field: ${f.label}`); 
+                failed = true; 
+            }
+            body += `${f.label}: ${val || 'N/A'}%0D%0A`;
+        }
+    });
+
+    if(failed) return;
+
     const desc = document.getElementById('work-desc').value;
-    const extraMat = document.getElementById('work-materials').value;
+    const mats = document.getElementById('work-materials').value;
     
-    if(!prop || !sur || !med || !method || !area) { alert("Please complete all required dropdown selections."); return; }
-    
-    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn || 'N/A'}%0D%0ADuration: ${mins} mins%0D%0AWorkers on site: ${workers}%0D%0ARepaired Area: ${area} sqm%0D%0A%0D%0A--- PROBLEM ---%0D%0AProperty: ${prop}%0D%0ASurface: ${sur}%0D%0AMedium: ${med}%0D%0A%0D%0A--- TREATMENT ---%0D%0AMethod: ${method}%0D%0APaint Color: ${pColor}%0D%0AChemicals Used: ${chemAmt}%0D%0AExtra Materials: ${extraMat}%0D%0A%0D%0ANotes: ${desc}`;
+    body += `%0D%0A--- NOTES ---%0D%0ADescription: ${desc}%0D%0AExtra Materials: ${mats}`;
     
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
     
@@ -423,10 +570,14 @@ function pauseInsp() {
 function submitInsp() {
     const totalMs = (new Date() - inspState.startTime) + inspState.accumulated;
     const mins = Math.round(totalMs / 60000);
-    const srn = document.getElementById('insp-srn').value;
+    
+    // Check dynamic SRN
+    const srnEl = document.getElementById('insp-srn');
+    const srn = (srnEl && srnEl.style.display !== 'none') ? srnEl.value : 'N/A';
+    
     const notes = document.getElementById('insp-notes').value;
     
-    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn || 'N/A'}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
+    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection Log: ${activeSite.name}&body=${body}`;
     
     stopLiveTimer();

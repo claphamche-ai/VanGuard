@@ -82,7 +82,6 @@ input:checked + .toggle-switch.small .slider:before { transform: translateX(16px
 .textarea { height:80px; resize:none; margin-bottom: 10px; }
 .footer-btns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; padding:20px 0; margin-top: 10px; border-top: 1px solid #ddd; }
 
-/* Complete Agent Map Styles included silently so the mobile agent stays fully functional */
 #map-wrapper { position: absolute; top: -50vh; left: -50vw; width: 200vw; height: 200vh; z-index: 1; overflow: hidden; }
 #map { width: 100%; height: 100%; transition: transform 0.5s ease-out; transform-origin: center center; background: #e5e5e5; }
 #live-timer-widget { position:fixed; top:15px; right:15px; background:#ff4757; color:white; padding:12px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }

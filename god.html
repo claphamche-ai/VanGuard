@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Super Admin Configuration</title>
-    <link rel="stylesheet" href="styles.css?v=3.16" />
+    <link rel="stylesheet" href="styles.css?v=3.17" />
 </head>
 <body class="admin-bg">
     <nav class="admin-topbar">
@@ -42,34 +42,23 @@
             <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.16 | System Configuration Node</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.17 | System Configuration Node</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
                 Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
             </p>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #f1c40f; margin-top: 30px; font-size: 13px; text-align: left;">
+                <strong>LOCAL STORAGE MOCKING ACTIVE</strong><br>
+                Changes made in the Database tab will now automatically cascade and rebuild the forms in both the Tenant Admin dashboard and the Field Agent app using your browser's local memory.
+            </div>
         </div>
 
-        <!-- TENANTS PROVISIONING TAB -->
+        <!-- TENANTS PROVISIONING TAB (Static Prototype) -->
         <div id="god-tab-tenants" class="god-tab-content" style="display:none; width: 100%; max-width: 800px;">
             <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Tenant Provisioning & Control</h2>
-            
             <div class="tenant-panel">
-                <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--b);">Deploy New Tenant Instance</h3>
-                <form id="tenant-form" onsubmit="provisionTenant(event)">
-                    <!-- CORE DETAILS -->
-                    <div class="section-label" style="margin-top: 0;">Core Identity</div>
-                    <div class="form-grid">
-                        <div class="form-col">
-                            <label class="input-label">Tenant Name</label>
-                            <input type="text" id="new-t-name" class="std-input" placeholder="Entity Name" required oninput="generateTenantID()">
-                        </div>
-                        <div class="form-col">
-                            <label class="input-label">Assigned Tenant ID</label>
-                            <input type="text" id="new-t-id" class="std-input" placeholder="Auto-Generated" readonly style="background: #eee; cursor: not-allowed;">
-                        </div>
-                    </div>
-                    <button type="submit" class="std-btn green">Deploy Tenant Architecture</button>
-                </form>
+                <p style="color: #555; font-size: 14px;">(Tenant creation prototype untouched in this module test)</p>
             </div>
         </div>
 
@@ -82,100 +71,20 @@
                     <strong style="color: #e74c3c;">Super Admin Access:</strong> Modifications here manipulate the core database structure. Adding or removing data fields and drop-down options will immediately cascade to all active tenant instances globally. Proceed with caution.
                 </p>
 
-                <!-- Root Fields Table -->
-                <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
-                        <tr style="background: var(--nav-dark); color: white;">
-                            <th style="padding: 12px 15px;">Global Data Field</th>
-                            <th style="padding: 12px 15px; width: 100px;">Type</th>
-                            <th style="padding: 12px 15px; text-align: right; width: 100px;">Action</th>
-                        </tr>
-                        
-                        <!-- Standard Text Input -->
-                        <tr style="border-bottom: 1px solid #eee; background: #fff;">
-                            <td style="padding: 15px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Service Request Number (SRN)</td>
-                            <td style="padding: 15px; color: #666;">Text Input</td>
-                            <td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="alert('Delete Root Field?')">Delete</button></td>
-                        </tr>
-
-                        <!-- Dropdown Field: Removal Method -->
-                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
-                            <td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('god-sub-meth', 'god-icon-meth')">
-                                <span id="god-icon-meth" style="display:inline-block; width: 15px;">▶</span> Removal Method
-                            </td>
-                            <td style="padding: 15px; color: #666;">Drop-down</td>
-                            <td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="alert('Delete Root Field?')">Delete</button></td>
-                        </tr>
-                        <tr id="god-sub-meth" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
-                            <td colspan="3" style="padding: 20px 20px 25px 45px;">
-                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Manage Drop-down Options</div>
-                                <div class="sub-options-list">
-                                    <div class="sub-option-row">
-                                        <span>Painted over</span>
-                                        <button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="alert('Delete Option?')">✕</button>
-                                    </div>
-                                    <div class="sub-option-row">
-                                        <span>Chemical removal</span>
-                                        <button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="alert('Delete Option?')">✕</button>
-                                    </div>
-                                    <div class="sub-option-row">
-                                        <span>Pressure wash</span>
-                                        <button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="alert('Delete Option?')">✕</button>
-                                    </div>
-                                    
-                                    <!-- Add New Option Input -->
-                                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                        <input type="text" class="std-input" placeholder="New Drop-down Option..." style="margin-bottom: 0; padding: 10px;">
-                                        <button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="alert('Option Added to Global Dictionary.')">➕ Add</button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Dropdown Field: Surface Type -->
-                        <tr style="border-bottom: 1px solid #eee; background: #fcfcfc;">
-                            <td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('god-sub-surf', 'god-icon-surf')">
-                                <span id="god-icon-surf" style="display:inline-block; width: 15px;">▶</span> Surface Type
-                            </td>
-                            <td style="padding: 15px; color: #666;">Drop-down</td>
-                            <td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="alert('Delete Root Field?')">Delete</button></td>
-                        </tr>
-                        <tr id="god-sub-surf" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;">
-                            <td colspan="3" style="padding: 20px 20px 25px 45px;">
-                                <div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Manage Drop-down Options</div>
-                                <div class="sub-options-list">
-                                    <div class="sub-option-row">
-                                        <span>Brick</span>
-                                        <button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="alert('Delete Option?')">✕</button>
-                                    </div>
-                                    <div class="sub-option-row">
-                                        <span>Raw Wood</span>
-                                        <button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="alert('Delete Option?')">✕</button>
-                                    </div>
-                                    
-                                    <!-- Add New Option Input -->
-                                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                        <input type="text" class="std-input" placeholder="New Drop-down Option..." style="margin-bottom: 0; padding: 10px;">
-                                        <button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="alert('Option Added to Global Dictionary.')">➕ Add</button>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </table>
-                </div>
+                <!-- DYNAMIC SCHEMA RENDERING -->
+                <div id="god-schema-render" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;"></div>
 
                 <!-- Add New Global Field -->
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee;">
                     <h3 style="margin-top:0; color: var(--b);">➕ Append New Global Field</h3>
                     <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 10px; align-items: center;">
-                        <input type="text" class="std-input" placeholder="New Field Title (e.g. Asset ID)" style="margin-bottom: 0;">
-                        <select class="std-input" style="margin-bottom: 0;">
+                        <input type="text" id="new-global-field-name" class="std-input" placeholder="New Field Title (e.g. Asset ID)" style="margin-bottom: 0;">
+                        <select id="new-global-field-type" class="std-input" style="margin-bottom: 0;">
                             <option value="text">Text Input</option>
                             <option value="number">Number Input</option>
-                            <option value="dropdown">Drop-down Menu</option>
+                            <option value="select">Drop-down Menu</option>
                         </select>
-                        <button class="std-btn blue" style="width: auto; padding: 0 25px;" onclick="alert('Global Field Created.')">Create</button>
+                        <button class="std-btn blue" style="width: auto; padding: 0 25px;" onclick="addNewGodField()">Create</button>
                     </div>
                 </div>
 
@@ -184,6 +93,7 @@
 
     </main>
 
+    <script src="app.js?v=3.17"></script>
     <script>
         function switchGodTab(tabId) {
             document.querySelectorAll('.god-tab-content').forEach(el => el.style.display = 'none');
@@ -191,18 +101,6 @@
             
             document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
             event.currentTarget.classList.add('active-nav');
-        }
-
-        function toggleSubRow(rowId, iconId) {
-            const row = document.getElementById(rowId);
-            const icon = document.getElementById(iconId);
-            if(row.style.display === 'none' || row.style.display === '') {
-                row.style.display = 'table-row';
-                icon.innerText = '▼';
-            } else {
-                row.style.display = 'none';
-                icon.innerText = '▶';
-            }
         }
 
         function toggleAdminFS() {

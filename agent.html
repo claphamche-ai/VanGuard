@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.15</title>
+    <title id="page-title">VanGuard | Agent v3.17</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.15" />
+    <link rel="stylesheet" href="styles.css?v=3.17" />
 </head>
 <body>
     <div id="live-timer-widget">00:00</div>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.15 | AGENT</div>
+        <div class="sidebar-version">Version 3.17 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -87,111 +87,10 @@
                 </div>
             </div>
 
-            <div class="section-label">Logistics & Problem</div>
+            <div class="section-label">Logistics & Problem Data</div>
             
-            <input type="text" id="work-srn" class="std-input" placeholder="Service Request Number (SRN) - Optional" style="margin-bottom: 10px;">
-
-            <div class="form-grid">
-                <div class="form-col">
-                    <select id="work-workers" class="std-input" onchange="handleDropdown(this)">
-                        <option value="1">1 Worker (Default)</option>
-                        <option value="2">2 Workers</option>
-                        <option value="3">3 Workers</option>
-                        <option value="4">4 Workers</option>
-                        <option value="5+">5+ Workers</option>
-                    </select>
-                </div>
-                <div class="form-col">
-                    <select id="work-area" class="std-input" onchange="handleDropdown(this)">
-                        <option value="">Repaired Area (m²)...</option>
-                        <option value="0.5">0.5 m²</option>
-                        <option value="1">1 m²</option>
-                        <option value="2">2 m²</option>
-                        <option value="3">3 m²</option>
-                        <option value="4">4 m²</option>
-                        <option value="5">5 m²</option>
-                        <option value="6">6 m²</option>
-                        <option value="7">7 m²</option>
-                        <option value="8">8 m²</option>
-                        <option value="9">9 m²</option>
-                        <option value="10">10 m²</option>
-                        <option value="11">11 m²</option>
-                        <option value="12">12 m²</option>
-                        <option value="13">13 m²</option>
-                        <option value="14">14 m²</option>
-                        <option value="15">15 m²</option>
-                        <option value="16">16 m²</option>
-                        <option value="17">17 m²</option>
-                        <option value="18">18 m²</option>
-                        <option value="19">19 m²</option>
-                        <option value="20">20 m²</option>
-                        <option value="ADD_NEW">➕ Manual Entry...</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-grid">
-                <div class="form-col">
-                    <select id="work-property" class="std-input" onchange="handleDropdown(this)">
-                        <option value="">Property Type...</option>
-                        <option value="Commercial">Commercial Building</option>
-                        <option value="Private">Private Residence</option>
-                        <option value="Public">Public Fence</option>
-                        <option value="Utility Box">Utility Box</option>
-                        <option value="Underpass">Underpass</option>
-                        <option value="ADD_NEW">➕ Add New...</option>
-                    </select>
-                </div>
-                <div class="form-col">
-                    <select id="work-surface" class="std-input" onchange="handleDropdown(this)">
-                        <option value="">Surface Type...</option>
-                        <option value="Brick">Brick</option>
-                        <option value="Raw Wood">Raw Wood</option>
-                        <option value="Painted">Painted (Smooth)</option>
-                        <option value="Metal">Metal</option>
-                        <option value="Concrete">Concrete / Stone</option>
-                        <option value="Glass">Glass</option>
-                        <option value="ADD_NEW">➕ Add New...</option>
-                    </select>
-                </div>
-            </div>
-            
-            <select id="work-medium" class="std-input" onchange="handleDropdown(this)">
-                <option value="">Graffiti Medium...</option>
-                <option value="Spray Paint">Spray Paint</option>
-                <option value="Paint">Paint (Brush/Roller)</option>
-                <option value="Felt Pen">Felt Pen / Marker</option>
-                <option value="Etched">Etched / Scratched</option>
-                <option value="Sticker">Sticker / Poster</option>
-                <option value="ADD_NEW">➕ Add New...</option>
-            </select>
-
-            <div class="section-label">Treatment & Removal</div>
-            <select id="work-method" class="std-input" onchange="handleDropdown(this)">
-                <option value="">Removal Method...</option>
-                <option value="Painted over">Painted over</option>
-                <option value="Chemical removal">Chemical removal</option>
-                <option value="Pressure wash">Pressure wash</option>
-                <option value="Sand blasting">Sand blasting</option>
-                <option value="Mechanical sanding">Mechanical sanding</option>
-                <option value="ADD_NEW">➕ Add New...</option>
-            </select>
-
-            <div class="form-grid">
-                <div class="form-col">
-                    <select id="work-paint-color" class="std-input" onchange="handleDropdown(this)">
-                        <option value="N/A">Paint Color Used...</option>
-                        <option value="White">White</option>
-                        <option value="Black">Black</option>
-                        <option value="Grey">Grey</option>
-                        <option value="Brown">Brown</option>
-                        <option value="Colour Match">Colour Match</option>
-                        <option value="ADD_NEW">➕ Add New...</option>
-                    </select>
-                </div>
-                <div class="form-col">
-                    <input type="text" id="work-chemical-amount" class="std-input" placeholder="Chemicals Used (ml/L)...">
-                </div>
-            </div>
+            <!-- DYNAMIC FORM FIELDS INJECTED HERE -->
+            <div id="dynamic-work-fields"></div>
             
             <div class="section-label">Notes</div>
             <textarea id="work-desc" class="std-input textarea" placeholder="Work Description & Details..."></textarea>
@@ -221,6 +120,7 @@
             <input type="file" id="photo-insp-extra" multiple style="display:none;" onchange="updateExtraCount('insp')">
 
             <div class="section-label" style="margin-top:0;">Details</div>
+            <!-- DYNAMIC SRN INJECTION TARGET -->
             <input type="text" id="insp-srn" class="std-input" placeholder="Service Request Number (SRN) - Optional" style="margin-bottom: 10px;">
             <textarea id="insp-notes" class="std-input textarea" placeholder="Inspection Notes..."></textarea>
             
@@ -243,6 +143,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=3.15"></script>
+    <script src="app.js?v=3.17"></script>
 </body>
 </html>
