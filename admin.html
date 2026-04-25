@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tenant Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=3.13" />
+    <link rel="stylesheet" href="styles.css?v=3.14" />
 </head>
 <body class="admin-bg">
     <!-- TODO: DB HOOK - Fetch tenant branding data on load (Logo, Motto, Name) -->
@@ -52,7 +52,7 @@
             <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h2>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.13 | Regional Console</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.14 | Regional Console</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px; text-align: justify;">
                 VanGuard is a centralized, real-time field operations platform designed to track, manage, and dispatch asset maintenance teams. Utilizing live GPS telematics, rapid field reporting, and geographic data correlation, this portal provides comprehensive oversight of city-wide infrastructure preservation and rapid response efforts.
@@ -168,6 +168,13 @@
                         
                         <!-- TODO: DB HOOK - Fetch these values from tenant specific settings -->
                         
+                        <!-- NEW: SRN Field -->
+                        <tr style="border-bottom: 1px solid #eee; background: #fff;">
+                            <td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Service Request Number (SRN)</td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label></td>
+                            <td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label></td>
+                        </tr>
+
                         <!-- Single Input: Number of Workers -->
                         <tr style="border-bottom: 1px solid #eee; background: #fff;">
                             <td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> Number of Workers</td>

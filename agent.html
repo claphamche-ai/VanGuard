@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.12</title>
+    <title id="page-title">VanGuard | Agent v3.14</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.12" />
+    <link rel="stylesheet" href="styles.css?v=3.14" />
 </head>
 <body>
     <div id="live-timer-widget">00:00</div>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.12 | AGENT</div>
+        <div class="sidebar-version">Version 3.14 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -88,6 +88,10 @@
             </div>
 
             <div class="section-label">Logistics & Problem</div>
+            
+            <!-- NEW SRN FIELD -->
+            <input type="text" id="work-srn" class="std-input" placeholder="Service Request Number (SRN) - Optional" style="margin-bottom: 10px;">
+
             <div class="form-grid">
                 <div class="form-col">
                     <select id="work-workers" class="std-input" onchange="handleDropdown(this)">
@@ -217,6 +221,9 @@
             <div id="insp-extra-count" class="extra-label">0 extra photos</div>
             <input type="file" id="photo-insp-extra" multiple style="display:none;" onchange="updateExtraCount('insp')">
 
+            <div class="section-label" style="margin-top:0;">Details</div>
+            <!-- NEW SRN FIELD -->
+            <input type="text" id="insp-srn" class="std-input" placeholder="Service Request Number (SRN) - Optional" style="margin-bottom: 10px;">
             <textarea id="insp-notes" class="std-input textarea" placeholder="Inspection Notes..."></textarea>
             
             <div class="footer-btns">
@@ -238,6 +245,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=3.12"></script>
+    <script src="app.js?v=3.14"></script>
 </body>
 </html>

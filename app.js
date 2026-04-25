@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.13`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.14`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
 let timerInterval;
@@ -324,6 +324,7 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
+        document.getElementById('work-srn').value = "";
         document.getElementById('work-workers').value = "1";
         document.getElementById('work-area').value = "";
         document.getElementById('work-property').value = "";
@@ -364,6 +365,7 @@ function cancelInsp() {
         document.getElementById('insp-extra-count').innerText = "0 extra photos";
         document.getElementById('insp-extra-count').style.color = "#888";
         
+        document.getElementById('insp-srn').value = "";
         document.getElementById('insp-notes').value = "";
         
         document.getElementById('pause-insp-btn').disabled = true;
@@ -388,6 +390,7 @@ function submitWork() {
     const totalMs = (new Date() - workState.startTime) + workState.accumulated;
     const mins = Math.round(totalMs / 60000);
     
+    const srn = document.getElementById('work-srn').value;
     const workers = document.getElementById('work-workers').value;
     const area = document.getElementById('work-area').value;
     const prop = document.getElementById('work-property').value;
@@ -401,7 +404,7 @@ function submitWork() {
     
     if(!prop || !sur || !med || !method || !area) { alert("Please complete all required dropdown selections."); return; }
     
-    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0AWorkers on site: ${workers}%0D%0ARepaired Area: ${area} sqm%0D%0A%0D%0A--- PROBLEM ---%0D%0AProperty: ${prop}%0D%0ASurface: ${sur}%0D%0AMedium: ${med}%0D%0A%0D%0A--- TREATMENT ---%0D%0AMethod: ${method}%0D%0APaint Color: ${pColor}%0D%0AChemicals Used: ${chemAmt}%0D%0AExtra Materials: ${extraMat}%0D%0A%0D%0ANotes: ${desc}`;
+    const body = `WORK LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn || 'N/A'}%0D%0ADuration: ${mins} mins%0D%0AWorkers on site: ${workers}%0D%0ARepaired Area: ${area} sqm%0D%0A%0D%0A--- PROBLEM ---%0D%0AProperty: ${prop}%0D%0ASurface: ${sur}%0D%0AMedium: ${med}%0D%0A%0D%0A--- TREATMENT ---%0D%0AMethod: ${method}%0D%0APaint Color: ${pColor}%0D%0AChemicals Used: ${chemAmt}%0D%0AExtra Materials: ${extraMat}%0D%0A%0D%0ANotes: ${desc}`;
     
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Work Log: ${activeSite.name}&body=${body}`;
     
@@ -423,9 +426,10 @@ function pauseInsp() {
 function submitInsp() {
     const totalMs = (new Date() - inspState.startTime) + inspState.accumulated;
     const mins = Math.round(totalMs / 60000);
+    const srn = document.getElementById('insp-srn').value;
     const notes = document.getElementById('insp-notes').value;
     
-    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
+    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn || 'N/A'}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection Log: ${activeSite.name}&body=${body}`;
     
     stopLiveTimer();
