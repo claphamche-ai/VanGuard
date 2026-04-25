@@ -22,8 +22,6 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .admin-nav-item:hover, .admin-nav-item.active-nav { color: var(--bg-white); }
 .admin-nav-item .icon { font-size: 26px; margin-bottom: 4px; }
 .admin-nav-item .label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-
-/* Logout Item styling for Admin Bar */
 .logout-item { color: #e74c3c; }
 .logout-item:hover { color: #c0392b !important; }
 
@@ -35,9 +33,9 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .admin-welcome-box { background: var(--bg-white); width: 100%; max-width: 600px; padding: 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; border: 1px solid #eaeaea; }
 
 /* Tenant Provisioning Styles */
-.tenant-panel { background: var(--bg-white); padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eaeaea; }
+.tenant-panel { background: var(--bg-white); padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eaeaea; text-align: left; }
 .input-label { display: block; font-size: 12px; font-weight: bold; color: #666; margin-bottom: 5px; text-transform: uppercase; }
-.tenant-card { background: var(--bg-light); border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; }
+.tenant-card { background: var(--bg-light); border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; text-align: left;}
 .tenant-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 16px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
 .tenant-card-body { display: flex; justify-content: space-between; font-size: 13px; color: #555; font-weight: bold; }
 .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 900; color: white; }
@@ -62,13 +60,17 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .red { background: #e74c3c; color: white; }
 .yellow { background: var(--y); color: #000; }
 
+.section-label { display:block; font-size:12px; font-weight:900; color:#555; margin-top:20px; margin-bottom:8px; text-transform:uppercase; border-bottom: 2px solid #ddd; padding-bottom: 4px; text-align: left;}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.textarea { height:80px; resize:none; margin-bottom: 10px; }
+.footer-btns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; padding:20px 0; margin-top: 10px; border-top: 1px solid #ddd; }
+
+/* Keep Agent Map Styles Hidden from Admin Pages via specific IDs */
 #map-wrapper { position: absolute; top: -50vh; left: -50vw; width: 200vw; height: 200vh; z-index: 1; overflow: hidden; }
 #map { width: 100%; height: 100%; transition: transform 0.5s ease-out; transform-origin: center center; background: #e5e5e5; }
 #live-timer-widget { position:fixed; top:15px; right:15px; background:#ff4757; color:white; padding:12px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
-
 #menu-trigger { position:fixed; top:15px; left:15px; z-index:2000; background:var(--y); padding:12px; border-radius:10px; border:2px solid #000; cursor:pointer; }
 .menu-trigger span { display:block; width:22px; height:3px; background:#000; margin:4px 0; }
-
 .map-control-btn { position:fixed; z-index:2000; background:var(--bg-white); border:2px solid #ccc; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:center; width:60px; height:60px; border-radius:50%; font-size:28px; font-weight:bold; color: var(--text-dark);}
 .map-control-btn:active { background:#eee; }
 .fs-btn { bottom:90px; right:20px; }
@@ -109,8 +111,3 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .photo-box { border:2px dashed #ccc; padding:20px 10px; text-align:center; border-radius:10px; font-weight:bold; background:var(--bg-white); cursor:pointer; font-size:16px; color: var(--text-dark); }
 .photo-box.done { background:#e8f5e9; border:solid 2px #2ecc71; color: #27ae60; }
 .extra-label { font-size:11px; text-align:center; color:#888; margin-top:5px; margin-bottom:10px; font-weight:bold; }
-
-.section-label { display:block; font-size:12px; font-weight:900; color:#555; margin-top:20px; margin-bottom:8px; text-transform:uppercase; border-bottom: 2px solid #ddd; padding-bottom: 4px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.textarea { height:80px; resize:none; margin-bottom: 10px; }
-.footer-btns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; padding:20px 0; margin-top: 10px; border-top: 1px solid #ddd; }

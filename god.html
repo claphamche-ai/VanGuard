@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Super Admin Configuration</title>
-    <link rel="stylesheet" href="styles.css?v=3.7" />
+    <link rel="stylesheet" href="styles.css?v=3.8" />
 </head>
 <body class="admin-bg">
     <nav class="admin-topbar">
@@ -42,7 +42,7 @@
             <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.7 | System Configuration Node</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.8 | System Configuration Node</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
                 Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
@@ -57,6 +57,10 @@
                 <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--b);">Deploy New Tenant Instance</h3>
                 
                 <form id="tenant-form" onsubmit="provisionTenant(event)">
+                    
+                    <!-- CORE DETAILS -->
+                    <div class="section-label" style="margin-top: 0;">Core Identity</div>
+                    <!-- TODO: DB HOOK - Store in `tenants` table -->
                     <div class="form-grid">
                         <div class="form-col">
                             <label class="input-label">Tenant Name (e.g. Porirua City Council)</label>
@@ -75,10 +79,53 @@
                         </div>
                         <div class="form-col">
                             <label class="input-label">Master Admin Password</label>
+                            <!-- TODO: DB HOOK - Hash password before saving to `users` table -->
                             <input type="text" id="new-t-pass" class="std-input" placeholder="secure_password" required>
                         </div>
                     </div>
 
+                    <!-- MULTIPLE CONTACTS SECTION -->
+                    <div class="section-label">Stakeholder Contacts</div>
+                    
+                    <label class="input-label" style="color: var(--b);">Primary Administrative Contact</label>
+                    <div class="form-grid">
+                        <div class="form-col">
+                            <input type="text" id="admin-contact-name" class="std-input" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-col">
+                            <input type="text" id="admin-contact-title" class="std-input" placeholder="Job Title / Department">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-col">
+                            <input type="email" id="admin-contact-email" class="std-input" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-col">
+                            <input type="tel" id="admin-contact-phone" class="std-input" placeholder="Phone Number" required>
+                        </div>
+                    </div>
+
+                    <label class="input-label" style="color: var(--b); margin-top: 10px;">Billing & Accounts Payable</label>
+                    <div class="form-grid">
+                        <div class="form-col">
+                            <input type="text" id="billing-contact-name" class="std-input" placeholder="Billing Name / Department">
+                        </div>
+                        <div class="form-col">
+                            <input type="email" id="billing-contact-email" class="std-input" placeholder="Billing Email Address">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-col">
+                            <input type="tel" id="billing-contact-phone" class="std-input" placeholder="Phone Number">
+                        </div>
+                        <div class="form-col">
+                            <!-- TODO: DB HOOK - Save to tenant_billing table -->
+                            <input type="text" id="billing-po-req" class="std-input" placeholder="Standard PO Number (Optional)">
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM CONFIGURATION -->
+                    <div class="section-label">System Configuration</div>
                     <div class="form-grid">
                         <div class="form-col">
                             <label class="input-label">Worker License Allocation</label>
@@ -97,6 +144,7 @@
                     </div>
 
                     <label class="input-label">Municipal Branding</label>
+                    <!-- TODO: DB HOOK - Upload image to S3 bucket, store URL in tenant settings -->
                     <div class="photo-box" onclick="document.getElementById('tenant-logo').click()" style="margin-bottom: 20px;">
                         📷 Upload Primary Logo (PNG/SVG)
                     </div>
@@ -106,6 +154,7 @@
                 </form>
             </div>
 
+            <!-- TODO: DB HOOK - Fetch all active tenants from `tenants` table -->
             <div class="tenant-panel" style="margin-top: 30px;">
                 <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--b);">Active Database Tenants</h3>
                 <div class="tenant-list" id="active-tenants-list">
@@ -119,6 +168,9 @@
                             <span>Geofence: Active (50km)</span>
                             <span style="color: #2ecc71; font-weight: bold;">Status: Online</span>
                         </div>
+                        <div style="font-size: 11px; color: #888; margin-top: 5px; border-top: 1px dashed #ddd; padding-top: 5px;">
+                            Admin: John Doe (Graffiti Coord.) | Billing: AP Dept.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,6 +181,9 @@
         function switchGodTab(tabId) {
             document.querySelectorAll('.god-tab-content').forEach(el => el.style.display = 'none');
             document.getElementById('god-tab-' + tabId).style.display = 'block';
+            
+            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
+            event.currentTarget.classList.add('active-nav');
         }
 
         function generateTenantID() {
@@ -137,21 +192,22 @@
                 document.getElementById('new-t-id').value = '';
                 return;
             }
-            // Generate initials: "Porirua City Council" -> "PCC"
             let initials = name.split(' ').map(w => w.charAt(0)).join('').toUpperCase();
             if(initials.length > 4) initials = initials.substring(0,4);
             if(initials.length < 2) initials = name.substring(0,3).toUpperCase();
             
-            // Mock a random 3 digit number for the DB shard
             const rand = Math.floor(Math.random() * 900) + 100;
             document.getElementById('new-t-id').value = `${initials}_${rand}`;
         }
 
         function provisionTenant(e) {
             e.preventDefault();
+            // TODO: DB HOOK - Build JSON payload here to send to backend API
+            
             const name = document.getElementById('new-t-name').value;
             const id = document.getElementById('new-t-id').value;
             const lic = document.getElementById('new-t-licenses').value;
+            const adminName = document.getElementById('admin-contact-name').value || 'Pending';
             
             const list = document.getElementById('active-tenants-list');
             const html = `
@@ -164,6 +220,9 @@
                         <span>Licenses: 0/${lic}</span>
                         <span>Geofence: Pending Configuration</span>
                         <span style="color: #2ecc71; font-weight: bold;">Status: Online (Provisioned)</span>
+                    </div>
+                    <div style="font-size: 11px; color: #888; margin-top: 5px; border-top: 1px dashed #ddd; padding-top: 5px;">
+                        Admin: ${adminName} | Billing: Assigned
                     </div>
                 </div>
             `;
