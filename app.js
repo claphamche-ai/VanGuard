@@ -1,7 +1,7 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.17`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.18`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
 // --- DATABASE MOCK ENGINE ---
@@ -107,7 +107,7 @@ function renderAgentFields() {
             html += `<option value="ADD_NEW">➕ Manual Entry...</option></select>`;
         } else {
             let pType = f.type === 'number' ? 'number' : 'text';
-            html += `<input type="${pType}" id="work-${f.id}" class="std-input" placeholder="${f.label} ${f.tenantMandatory?'':'- Optional'}" style="margin-bottom: 10px;">`;
+            html += `<input type="${pType}" id="work-${f.id}" class="std-input" placeholder="${f.label} ${f.tenantMandatory?'':'(Optional)'}" style="margin-bottom: 10px;">`;
         }
     });
     container.innerHTML = html;
@@ -125,7 +125,7 @@ function toggleOptVis(fieldId, optName) { let db = getDB(); let f = db.find(x =>
 
 function deleteGodField(id) { if(!confirm("WARNING: Deleting a root field affects all global tenants. Proceed?")) return; let db = getDB(); db = db.filter(f => f.id !== id); saveDB(db); renderGodSchema(); }
 function deleteGodOption(fieldId, optName) { if(!confirm("WARNING: Deleting an option affects all global tenants. Proceed?")) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f) { f.options = f.options.filter(y => y.name !== optName); saveDB(db); renderGodSchema(); } }
-function addGodOption(fieldId) { let val = document.getElementById(`god-new-opt-${fieldId}`).value.trim(); if(!val) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f && !f.options.find(o=>o.name === val)) { f.options.push({name: val, visible: true}); saveDB(db); renderGodSchema(); } }
+function addGodOption(fieldId) { let val = document.getElementById(`god-new-opt-${fieldId}`).value.trim(); if(!val) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f && !f.options.find(o=>o.name === val)) { f.options.push({name: val, visible: true}); saveDB(db); renderGodSchema(); } document.getElementById(`god-new-opt-${fieldId}`).value = ''; }
 function addNewGodField() {
     let label = document.getElementById('new-global-field-name').value.trim();
     let type = document.getElementById('new-global-field-type').value;
@@ -466,8 +466,7 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
-        // Dynamically reset memory fields
-        renderAgentFields();
+        renderAgentFields(); // Resets dynamic fields automatically
         document.getElementById('work-desc').value = "";
         document.getElementById('work-materials').value = "";
         
@@ -500,8 +499,7 @@ function cancelInsp() {
         document.getElementById('insp-extra-count').innerText = "0 extra photos";
         document.getElementById('insp-extra-count').style.color = "#888";
         
-        // Reset dynamic field
-        renderAgentFields();
+        renderAgentFields(); // Resets dynamic SRN field
         document.getElementById('insp-notes').value = "";
         
         document.getElementById('pause-insp-btn').disabled = true;
@@ -571,13 +569,11 @@ function submitInsp() {
     const totalMs = (new Date() - inspState.startTime) + inspState.accumulated;
     const mins = Math.round(totalMs / 60000);
     
-    // Check dynamic SRN
     const srnEl = document.getElementById('insp-srn');
     const srn = (srnEl && srnEl.style.display !== 'none') ? srnEl.value : 'N/A';
-    
     const notes = document.getElementById('insp-notes').value;
     
-    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
+    const body = `INSPECTION LOG%0D%0ASite: ${activeSite.name}%0D%0ASRN: ${srn || 'N/A'}%0D%0ADuration: ${mins} mins%0D%0ANotes: ${notes}`;
     window.location.href = `mailto:tracktagstgs@gmail.com?subject=Inspection Log: ${activeSite.name}&body=${body}`;
     
     stopLiveTimer();

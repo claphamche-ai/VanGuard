@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Super Admin Configuration</title>
-    <link rel="stylesheet" href="styles.css?v=3.17" />
+    <link rel="stylesheet" href="styles.css?v=3.18" />
 </head>
 <body class="admin-bg">
     <nav class="admin-topbar">
@@ -42,7 +42,7 @@
             <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
             
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.17 | System Configuration Node</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.18 | System Configuration Node</p>
             
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
                 Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
@@ -51,6 +51,16 @@
             <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #f1c40f; margin-top: 30px; font-size: 13px; text-align: left;">
                 <strong>LOCAL STORAGE MOCKING ACTIVE</strong><br>
                 Changes made in the Database tab will now automatically cascade and rebuild the forms in both the Tenant Admin dashboard and the Field Agent app using your browser's local memory.
+            </div>
+
+            <!-- EXPORT DATABASE UTILITY -->
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; text-align: left;">
+                <h3 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Export Code Pipeline</h3>
+                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">
+                    When you are finished prototyping the data dictionary, click below to generate the exact JSON array code block. You can paste this block back to me to permanently bake your changes into the next version.
+                </p>
+                <textarea id="db-export-box" class="std-input textarea" readonly style="font-family: monospace; font-size: 11px; height: 100px; background: #fafafa; cursor: text;" placeholder="Database code will appear here..."></textarea>
+                <button class="std-btn blue" onclick="exportDatabaseToBox()">Generate Export Code</button>
             </div>
         </div>
 
@@ -93,7 +103,7 @@
 
     </main>
 
-    <script src="app.js?v=3.17"></script>
+    <script src="app.js?v=3.18"></script>
     <script>
         function switchGodTab(tabId) {
             document.querySelectorAll('.god-tab-content').forEach(el => el.style.display = 'none');
@@ -117,6 +127,19 @@
                 cancelFullScreen.call(doc);
                 btn.innerText = "⛶"; 
             }
+        }
+
+        // --- NEW EXPORT FUNCTION ---
+        function exportDatabaseToBox() {
+            const db = getDB();
+            const exportBox = document.getElementById('db-export-box');
+            // Format it exactly as the defaultSchema variable is written in app.js
+            const exportString = `const defaultSchema = ${JSON.stringify(db, null, 4)};`;
+            exportBox.value = exportString;
+            
+            // Auto select so it's easy to copy
+            exportBox.select();
+            exportBox.setSelectionRange(0, 99999); 
         }
     </script>
 </body>
