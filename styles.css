@@ -6,7 +6,9 @@
     --bg-light: #f4f6f8;
     --nav-dark: #1a1a1a;
 }
-body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-white); color: var(--text-dark); touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-white); color: var(--text-dark); overflow:hidden; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.admin-bg { overflow-y: auto !important; }
+.dash-bg { overflow-y: auto !important; }
 
 .login-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: var(--bg-white); padding: 20px; box-sizing: border-box;}
 .login-frame { width: 140px; height: 140px; background: var(--bg-light); border: 4px solid #ddd; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 60px; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
@@ -15,13 +17,14 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .login-brand h1 { font-size: 40px; font-weight: 900; margin: 0; color: var(--text-dark); text-transform: uppercase; letter-spacing: -1px;}
 .login-brand .version { font-size: 16px; font-weight: bold; color: #888; margin-left: 5px; vertical-align: middle;}
 
-.admin-bg { background: var(--bg-light); overflow-y: auto; }
 .admin-topbar { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background: var(--nav-dark); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; box-sizing: border-box; z-index: 9999; border-bottom: 4px solid var(--y); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 .admin-nav-group { display: flex; gap: 40px; height: 100%; align-items: center; }
 .admin-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #aaa; cursor: pointer; transition: color 0.2s ease; height: 100%; padding: 0 10px; }
 .admin-nav-item:hover, .admin-nav-item.active-nav { color: var(--bg-white); }
 .admin-nav-item .icon { font-size: 26px; margin-bottom: 4px; }
 .admin-nav-item .label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Logout Item styling for Admin Bar */
 .logout-item { color: #e74c3c; }
 .logout-item:hover { color: #c0392b !important; }
 
@@ -41,7 +44,6 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 900; color: white; }
 .badge.blue { background: var(--b); }
 
-.dash-bg { background: var(--bg-light); text-align: center; padding-top: 80px; overflow-y: auto;}
 .dash-box { background: var(--bg-white); padding: 40px; border-radius: 15px; width: 90%; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid #eee; }
 .dash-box h1 { color: var(--text-dark); margin-top: 0; font-weight: 900; }
 .dash-box p { color: #666; margin-bottom: 30px; font-weight: bold; }
