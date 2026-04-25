@@ -1,10 +1,10 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.19`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.20`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
-// --- DATABASE MOCK ENGINE (Updated with User's Spoof Data) ---
+// --- DATABASE MOCK ENGINE (Using Custom Uploaded Payload) ---
 const defaultSchema = [
     {
         "id": "srn",
@@ -249,10 +249,9 @@ function addNewGodField() {
 
 // DOM INITIALIZATION
 document.addEventListener('DOMContentLoaded', () => {
-    // Overwrite local memory if the baked schema differs
+    // Sync spoof database
     const currentMemory = localStorage.getItem('vg_schema');
     if(!currentMemory || currentMemory !== JSON.stringify(defaultSchema)) {
-        console.log("Loading new baked schema...");
         localStorage.setItem('vg_schema', JSON.stringify(defaultSchema));
     }
     
@@ -261,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(document.getElementById('dynamic-work-fields')) renderAgentFields();
 });
 
-// --- LEAFLET MAP LOGIC (Intact) ---
+// --- LEAFLET MAP LOGIC FOR AGENT ---
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
@@ -582,7 +581,7 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
-        renderAgentFields(); // Resets dynamic fields automatically
+        renderAgentFields();
         document.getElementById('work-desc').value = "";
         document.getElementById('work-materials').value = "";
         
@@ -615,7 +614,7 @@ function cancelInsp() {
         document.getElementById('insp-extra-count').innerText = "0 extra photos";
         document.getElementById('insp-extra-count').style.color = "#888";
         
-        renderAgentFields(); // Resets dynamic SRN field
+        renderAgentFields();
         document.getElementById('insp-notes').value = "";
         
         document.getElementById('pause-insp-btn').disabled = true;

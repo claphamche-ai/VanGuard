@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tenant Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=3.19" />
+    <link rel="stylesheet" href="styles.css?v=3.20" />
 </head>
 <body class="admin-bg">
     <nav class="admin-topbar">
@@ -17,109 +17,45 @@
                 <span class="icon">🏠</span>
                 <span class="label">Home</span>
             </div>
-            <div class="admin-nav-item" onclick="alert('Accounts Panel (Coming Soon)')">
-                <span class="icon">👥</span>
-                <span class="label">Accounts</span>
-            </div>
             <div class="admin-nav-item" onclick="location.href='dispatch.html'">
                 <span class="icon">📡</span>
                 <span class="label">Dispatch</span>
-            </div>
-            <div class="admin-nav-item" onclick="location.href='reporter.html'">
-                <span class="icon">📝</span>
-                <span class="label">Reporter</span>
             </div>
             <div class="admin-nav-item" onclick="switchAdminTab('settings')">
                 <span class="icon">⚙️</span>
                 <span class="label">Settings</span>
             </div>
-            <div class="admin-nav-item" onclick="alert('Help & Documentation (Coming Soon)')">
-                <span class="icon">❓</span>
-                <span class="label">Help</span>
-            </div>
         </div>
-
         <div class="admin-controls">
             <button id="admin-fs-btn" class="admin-btn" onclick="toggleAdminFS()" title="Full Screen">⛶</button>
         </div>
     </nav>
 
     <main class="admin-content">
-        <!-- WELCOME TAB -->
         <div id="admin-tab-welcome" class="admin-welcome-box admin-tab-content">
-            <img src="PCC_Logo.png" alt="Porirua City Council" style="max-width: 280px; margin: 0 auto 15px; display: block;">
-            <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h2>
-            
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.19 | Regional Console</p>
-            
-            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 40px; text-align: justify;">
-                VanGuard is a centralized, real-time field operations platform designed to track, manage, and dispatch asset maintenance teams. Utilizing live GPS telematics, rapid field reporting, and geographic data correlation, this portal provides comprehensive oversight of city-wide infrastructure preservation and rapid response efforts.
-            </p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.20 | Regional Console</p>
         </div>
 
-        <!-- SETTINGS MAIN HUB -->
         <div id="admin-tab-settings" class="admin-tab-content" style="display:none; width: 100%; max-width: 900px;">
-            
             <div id="settings-overview">
                 <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">System Configuration</h2>
-                
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <!-- Map Config -->
-                    <div class="tenant-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="font-size: 40px; margin-bottom: 15px;">🗺️</div>
-                            <h3 style="margin-top:0; color: var(--b);">Map & Layer Configuration</h3>
-                            <p style="color: #555; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
-                                Upload and manage the geographic areas, specific assets, KML files, and boundaries that your field workers will see on their live map.
-                            </p>
-                        </div>
-                        <button class="std-btn blue" onclick="openSettingsSubPanel('layers')">Manage Map Layers</button>
-                    </div>
-
-                    <!-- Field Config -->
-                    <div class="tenant-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="font-size: 40px; margin-bottom: 15px;">📋</div>
-                            <h3 style="margin-top:0; color: var(--b);">Data Collection Fields</h3>
-                            <p style="color: #555; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
-                                Customize which fields are required and visible to your team when logging work and completing site inspections.
-                            </p>
-                        </div>
+                    <div class="tenant-panel">
+                        <h3 style="margin-top:0; color: var(--b);">Data Collection Fields</h3>
                         <button class="std-btn blue" onclick="openSettingsSubPanel('fields')">Manage Form Fields</button>
                     </div>
                 </div>
             </div>
-
-            <!-- LAYERS MANAGER PANEL (Static prototype) -->
-            <div id="settings-panel-layers" style="display:none;">
-                <button class="std-btn gray" onclick="closeSettingsSubPanel()" style="max-width: 150px; margin-bottom: 20px; font-size: 12px; padding: 10px;">⬅ Back to Settings</button>
-                <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Map Layer Manager</h2>
-                <div class="tenant-panel">
-                    <p style="color: #555; font-size: 14px;">(Map layers prototype untouched in this module test)</p>
-                </div>
-            </div>
-
-            <!-- FIELDS MANAGER PANEL (Dynamic Storage) -->
             <div id="settings-panel-fields" style="display:none;">
                 <button class="std-btn gray" onclick="closeSettingsSubPanel()" style="max-width: 150px; margin-bottom: 20px; font-size: 12px; padding: 10px;">⬅ Back to Settings</button>
-                <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Form Field Manager</h2>
-                
                 <div class="tenant-panel" style="padding-top: 20px;">
-                    <p style="color: #555; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
-                        <strong style="color: var(--b);">Database Integrity Lock:</strong> To prevent correlation errors, creation or deletion of root data fields is restricted to VanGuard God Mode. However, you have full control over which fields are <strong>visible</strong> to your field agents, and which fields are <strong>mandatory</strong> to submit a job. Click any field with a <span style="color:var(--b);">▶</span> to expand its sub-options.
-                    </p>
-                    
-                    <!-- DYNAMIC SCHEMA RENDERING -->
                     <div id="admin-schema-render"></div>
-                    
                 </div>
             </div>
-
         </div>
     </main>
-
-    <script src="app.js?v=3.19"></script>
+    <script src="app.js?v=3.20"></script>
     <script>
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
@@ -128,32 +64,17 @@
             event.currentTarget.classList.add('active-nav');
             if(tabId === 'settings') { closeSettingsSubPanel(); }
         }
-
         function openSettingsSubPanel(panelName) {
             document.getElementById('settings-overview').style.display = 'none';
             document.getElementById('settings-panel-' + panelName).style.display = 'block';
         }
-
         function closeSettingsSubPanel() {
-            document.getElementById('settings-panel-layers').style.display = 'none';
             document.getElementById('settings-panel-fields').style.display = 'none';
             document.getElementById('settings-overview').style.display = 'block';
         }
-
         function toggleAdminFS() {
-            const doc = window.document;
-            const docEl = doc.documentElement;
-            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-            const btn = document.getElementById('admin-fs-btn');
-            
-            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                requestFullScreen.call(docEl);
-                btn.innerText = "🗗"; 
-            } else {
-                cancelFullScreen.call(doc);
-                btn.innerText = "⛶"; 
-            }
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); } 
+            else { document.exitFullscreen(); }
         }
     </script>
 </body>

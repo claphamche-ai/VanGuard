@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Super Admin Configuration</title>
-    <link rel="stylesheet" href="styles.css?v=3.19" />
+    <link rel="stylesheet" href="styles.css?v=3.20" />
 </head>
 <body class="admin-bg">
     <nav class="admin-topbar">
@@ -17,78 +17,31 @@
                 <span class="icon">🌍</span>
                 <span class="label">Core</span>
             </div>
-            <div class="admin-nav-item" onclick="switchGodTab('tenants')">
-                <span class="icon">🏛️</span>
-                <span class="label">Tenants</span>
-            </div>
             <div class="admin-nav-item" onclick="switchGodTab('database')">
                 <span class="icon">🗄️</span>
                 <span class="label">Database</span>
             </div>
-            <div class="admin-nav-item" onclick="alert('API Connections (Coming Soon)')">
-                <span class="icon">🔗</span>
-                <span class="label">API Config</span>
-            </div>
-        </div>
-
-        <div class="admin-controls">
-            <button id="admin-fs-btn" class="admin-btn" onclick="toggleAdminFS()" title="Full Screen">⛶</button>
         </div>
     </nav>
 
     <main class="admin-content">
-        <!-- WELCOME TAB -->
         <div id="god-tab-welcome" class="admin-welcome-box god-tab-content">
-            <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
-            
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.19 | System Configuration Node</p>
-            
-            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
-                Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
-            </p>
-            
-            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #f1c40f; margin-top: 30px; font-size: 13px; text-align: left;">
-                <strong>LOCAL STORAGE MOCKING ACTIVE</strong><br>
-                Changes made in the Database tab will now automatically cascade and rebuild the forms in both the Tenant Admin dashboard and the Field Agent app using your browser's local memory.
-            </div>
-
-            <!-- EXPORT DATABASE UTILITY -->
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 3.20 | System Configuration Node</p>
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; text-align: left;">
                 <h3 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Export Code Pipeline</h3>
-                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">
-                    When you are finished prototyping the data dictionary, click below to generate the exact JSON array code block. You can paste this block back to me to permanently bake your changes into the next version.
-                </p>
                 <textarea id="db-export-box" class="std-input textarea" readonly style="font-family: monospace; font-size: 11px; height: 100px; background: #fafafa; cursor: text;" placeholder="Database code will appear here..."></textarea>
                 <button class="std-btn blue" onclick="exportDatabaseToBox()">Generate Export Code</button>
             </div>
         </div>
-
-        <!-- TENANTS PROVISIONING TAB (Static Prototype) -->
-        <div id="god-tab-tenants" class="god-tab-content" style="display:none; width: 100%; max-width: 800px;">
-            <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Tenant Provisioning & Control</h2>
-            <div class="tenant-panel">
-                <p style="color: #555; font-size: 14px;">(Tenant creation prototype untouched in this module test)</p>
-            </div>
-        </div>
-
-        <!-- DATABASE SCHEMA CONFIG TAB -->
         <div id="god-tab-database" class="god-tab-content" style="display:none; width: 100%; max-width: 800px;">
             <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">Master Schema Dictionary</h2>
-            
             <div class="tenant-panel" style="padding-top: 20px;">
-                <p style="color: #555; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
-                    <strong style="color: #e74c3c;">Super Admin Access:</strong> Modifications here manipulate the core database structure. Adding or removing data fields and drop-down options will immediately cascade to all active tenant instances globally. Proceed with caution.
-                </p>
-
-                <!-- DYNAMIC SCHEMA RENDERING -->
                 <div id="god-schema-render" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;"></div>
-
-                <!-- Add New Global Field -->
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee;">
                     <h3 style="margin-top:0; color: var(--b);">➕ Append New Global Field</h3>
                     <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 10px; align-items: center;">
-                        <input type="text" id="new-global-field-name" class="std-input" placeholder="New Field Title (e.g. Asset ID)" style="margin-bottom: 0;">
+                        <input type="text" id="new-global-field-name" class="std-input" placeholder="New Field Title" style="margin-bottom: 0;">
                         <select id="new-global-field-type" class="std-input" style="margin-bottom: 0;">
                             <option value="text">Text Input</option>
                             <option value="number">Number Input</option>
@@ -97,47 +50,21 @@
                         <button class="std-btn blue" style="width: auto; padding: 0 25px;" onclick="addNewGodField()">Create</button>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </main>
-
-    <script src="app.js?v=3.19"></script>
+    <script src="app.js?v=3.20"></script>
     <script>
         function switchGodTab(tabId) {
             document.querySelectorAll('.god-tab-content').forEach(el => el.style.display = 'none');
             document.getElementById('god-tab-' + tabId).style.display = 'block';
-            
             document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
             event.currentTarget.classList.add('active-nav');
         }
-
-        function toggleAdminFS() {
-            const doc = window.document;
-            const docEl = doc.documentElement;
-            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-            const btn = document.getElementById('admin-fs-btn');
-            
-            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-                requestFullScreen.call(docEl);
-                btn.innerText = "🗗"; 
-            } else {
-                cancelFullScreen.call(doc);
-                btn.innerText = "⛶"; 
-            }
-        }
-
-        // --- NEW EXPORT FUNCTION ---
         function exportDatabaseToBox() {
             const db = getDB();
             const exportBox = document.getElementById('db-export-box');
-            // Format it exactly as the defaultSchema variable is written in app.js
-            const exportString = `const defaultSchema = ${JSON.stringify(db, null, 4)};`;
-            exportBox.value = exportString;
-            
-            // Auto select so it's easy to copy
+            exportBox.value = `const defaultSchema = ${JSON.stringify(db, null, 4)};`;
             exportBox.select();
             exportBox.setSelectionRange(0, 99999); 
         }

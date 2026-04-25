@@ -1,1 +1,174 @@
-<!DOCTYPE html><html><head><title>Dispatch v3.19</title><script>window.location.href='index.html';</script></head><body></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Dispatch Terminal v3.20</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css?v=3.20" />
+</head>
+<body style="overflow: hidden;">
+    <nav class="admin-topbar">
+        <div class="admin-nav-group">
+            <div class="admin-nav-item logout-item" onclick="location.href='index.html'">
+                <span class="icon">🚪</span>
+                <span class="label">Log Out</span>
+            </div>
+            <div class="admin-nav-item" onclick="location.href='admin.html'">
+                <span class="icon">🏛️</span>
+                <span class="label">Admin</span>
+            </div>
+            <div class="admin-nav-item active-nav">
+                <span class="icon">📡</span>
+                <span class="label">Dispatch Live</span>
+            </div>
+        </div>
+        <div style="color: white; font-weight: 900; font-size: 20px; letter-spacing: 1px;">VANGUARD DISPATCH</div>
+        <div class="admin-controls">
+            <button class="admin-btn" onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen();}else{document.exitFullscreen();}" title="Full Screen">⛶</button>
+        </div>
+    </nav>
+
+    <div class="dispatch-layout">
+        <!-- Live Map Area -->
+        <div class="dispatch-map-area" id="dispatch-map"></div>
+
+        <!-- Dispatch Control Panel -->
+        <div class="dispatch-panel">
+            <div class="dispatch-panel-header">
+                <h2>📋 Operations Control</h2>
+            </div>
+            
+            <div class="dispatch-panel-section">
+                <div class="section-label" style="margin-top: 0;">Address & Geo-Search</div>
+                <div class="form-grid" style="grid-template-columns: 1fr auto; margin-bottom: 0;">
+                    <input type="text" id="dispatch-search" class="std-input" placeholder="Search address, park, POI..." style="margin-bottom:0;">
+                    <button class="std-btn blue" style="width: auto; padding: 0 20px;" onclick="searchDispatchAddress()">🔍</button>
+                </div>
+            </div>
+
+            <div class="dispatch-panel-section">
+                <div class="section-label" style="margin-top: 0;">Create & Dispatch Job</div>
+                <input type="text" id="dispatch-addr" class="std-input" placeholder="Site Location / Address" required>
+                <input type="text" id="dispatch-srn" class="std-input" placeholder="Service Request Number (SRN)">
+                <textarea id="dispatch-notes" class="std-input textarea" placeholder="Job details, constraints, reporting party info..." style="height: 60px;"></textarea>
+                <button class="std-btn green" onclick="dispatchNewJob()">📡 Route to Job Bank</button>
+            </div>
+
+            <div class="dispatch-panel-section" style="flex: 1; overflow-y: auto; padding-right: 5px;">
+                <div class="section-label" style="margin-top: 0;">Live Job Bank (Global)</div>
+                <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                    <button class="std-btn blue" style="padding: 10px; font-size: 12px;" onclick="renderDispatchBank('PENDING')">Active / Pending</button>
+                    <button class="std-btn gray" style="padding: 10px; font-size: 12px;" onclick="renderDispatchBank('COMPLETED')">Completed</button>
+                </div>
+                <div id="dispatch-bank-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Init Dispatch Map
+        const dispatchMap = L.map('dispatch-map').setView([-41.135, 174.84], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(dispatchMap);
+        let searchMarker = null;
+
+        // Address Search (Nominatim OpenStreetMap)
+        async function searchDispatchAddress() {
+            const query = document.getElementById('dispatch-search').value;
+            if(!query) return;
+            
+            try {
+                // Fetching from New Zealand bounds specifically for accuracy
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=nz`);
+                const data = await res.json();
+                
+                if(data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    dispatchMap.setView([lat, lon], 17);
+                    
+                    if(searchMarker) dispatchMap.removeLayer(searchMarker);
+                    searchMarker = L.marker([lat, lon]).addTo(dispatchMap).bindPopup("<b>Target Location:</b><br>" + data[0].display_name).openPopup();
+                    
+                    // Auto-fill the dispatch creation form
+                    document.getElementById('dispatch-addr').value = data[0].display_name.split(',')[0]; 
+                } else {
+                    alert("Location not found. Try a broader search term.");
+                }
+            } catch(e) {
+                console.error("Geocoding failed", e);
+            }
+        }
+
+        // Create New Job
+        function dispatchNewJob() {
+            const addr = document.getElementById('dispatch-addr').value.trim();
+            const srn = document.getElementById('dispatch-srn').value.trim();
+            const notes = document.getElementById('dispatch-notes').value.trim();
+            
+            if(!addr) { alert("Site Location is required to dispatch a job."); return; }
+
+            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
+            
+            const newJob = {
+                site: addr,
+                srn: srn || 'N/A',
+                type: 'PENDING',
+                notes: notes,
+                accumulated: 0,
+                pausedAt: new Date().toLocaleString('en-NZ'),
+                dispatchId: 'D-' + Math.floor(Math.random() * 90000 + 10000)
+            };
+            
+            // Add to top of queue
+            bank.unshift(newJob);
+            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
+            
+            // Reset form
+            document.getElementById('dispatch-addr').value = '';
+            document.getElementById('dispatch-srn').value = '';
+            document.getElementById('dispatch-notes').value = '';
+            document.getElementById('dispatch-search').value = '';
+            if(searchMarker) dispatchMap.removeLayer(searchMarker);
+            
+            renderDispatchBank('PENDING');
+        }
+
+        // Render Bank
+        function renderDispatchBank(filterType = 'PENDING') {
+            const listEl = document.getElementById('dispatch-bank-list');
+            const data = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
+            
+            // Mocking complete/pending logic based on local storage structure
+            const filtered = data.filter(job => 
+                (filterType === 'PENDING' && job.type !== 'COMPLETED') ||
+                (filterType === 'COMPLETED' && job.type === 'COMPLETED')
+            );
+            
+            if (filtered.length === 0) { 
+                listEl.innerHTML = `<p style="text-align:center; color:#888; font-size:13px; margin-top:20px;">No ${filterType.toLowerCase()} jobs in queue.</p>`; 
+                return; 
+            }
+            
+            listEl.innerHTML = filtered.map((job, i) => `
+                <div style="background:var(--bg-white); border: 1px solid #ddd; margin-bottom:10px; padding:15px; border-radius:8px; font-size:13px; border-left: 4px solid ${job.type==='WORK'?'#f1c40f':(job.type==='INSPECTION'?'#3498db':'#e74c3c')};">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <strong style="color:var(--text-dark);">${job.site}</strong>
+                        <span class="badge blue" style="background:#333;">${job.srn !== 'N/A' && job.srn ? job.srn : 'No SRN'}</span>
+                    </div>
+                    <div style="color:#666; margin-bottom: 5px;">Status: <span style="font-weight:bold; color:var(--b);">${job.type}</span></div>
+                    <div style="color:#888; font-size: 11px;">Timestamp: ${job.pausedAt}</div>
+                    ${job.notes ? `<div style="margin-top:8px; padding:8px; background:#f9f9f9; border-radius:4px; color:#555;"><i>"${job.notes}"</i></div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Initialize queue on load
+        document.addEventListener('DOMContentLoaded', () => renderDispatchBank('PENDING'));
+
+    </script>
+</body>
+</html>
