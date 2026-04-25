@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Login</title>
-    <link rel="stylesheet" href="styles.css?v=3.10" />
+    <link rel="stylesheet" href="styles.css?v=3.11" />
 </head>
 <body class="login-wrapper">
     <div class="login-frame">🚐</div>
@@ -16,7 +16,7 @@
         <div id="login-error" style="color:#e74c3c; text-align:center; margin-top:5px; font-size:13px; font-weight:bold; display:none;">Invalid credentials</div>
     </form>
     <div class="login-brand">
-        <h1>VanGuard <span class="version">v3.10</span></h1>
+        <h1>VanGuard <span class="version">v3.11</span></h1>
     </div>
     <script>
         function handleLogin(e) {
@@ -26,7 +26,6 @@
             const err = document.getElementById('login-error');
             err.style.display = 'none';
             
-            // TODO: Replace client-side routing with JWT token evaluation from backend
             if (u === 'worker' && p === 'worker') { window.location.href = 'agent.html'; } 
             else if (u === 'dispatch' && p === 'dispatch') { window.location.href = 'dispatch.html'; } 
             else if (u === 'reporter' && p === 'reporter') { window.location.href = 'reporter.html'; } 
