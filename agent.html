@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.20</title>
+    <title id="page-title">VanGuard | Agent v3.21</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.20" />
+    <link rel="stylesheet" href="styles.css?v=3.21" />
 </head>
 <body>
     <div id="live-timer-widget">00:00</div>
@@ -18,7 +18,7 @@
     <div id="sidebar">
         <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
         <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.20 | AGENT</div>
+        <div class="sidebar-version">Version 3.21 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
         <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
@@ -72,6 +72,16 @@
             <div id="work-extra-count" class="extra-label">0 extra photos</div>
             <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
 
+            <div id="ai-analysis-section" style="display:none; margin-top: 15px;">
+                <button id="ai-analyze-btn" class="std-btn purple" onclick="runAIAnalysis()">🤖 Extract Tags & Size (AI)</button>
+                <div id="ai-results" style="display:none; background:#f4ebf9; padding:15px; border-radius:8px; border-left:4px solid #9b59b6; font-size:13px; color:#333; margin-top: 10px;">
+                    <strong style="color:#8e44ad; font-size:14px;">Vision Analysis Data</strong><br>
+                    <span style="color:#7f8c8d; font-size:11px;">(Requires backend API connection for live data)</span><br><br>
+                    <strong>Deciphered Tags:</strong> <span id="ai-tag">--</span><br>
+                    <strong>Estimated Area:</strong> <span id="ai-size">--</span>
+                </div>
+            </div>
+
             <div class="section-label">Logistics & Problem Data</div>
             <div id="dynamic-work-fields"></div>
             <div class="section-label">Notes</div>
@@ -123,6 +133,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=3.20"></script>
+    <script src="app.js?v=3.21"></script>
 </body>
 </html>

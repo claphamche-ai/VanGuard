@@ -1,10 +1,9 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.20`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.21`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
-// --- DATABASE MOCK ENGINE (Using Custom Uploaded Payload) ---
 const defaultSchema = [
     {
         "id": "srn",
@@ -581,7 +580,7 @@ function cancelJob() {
         document.getElementById('work-extra-count').innerText = "0 extra photos";
         document.getElementById('work-extra-count').style.color = "#888";
         
-        renderAgentFields();
+        renderAgentFields(); // Resets dynamic fields automatically
         document.getElementById('work-desc').value = "";
         document.getElementById('work-materials').value = "";
         
@@ -614,7 +613,7 @@ function cancelInsp() {
         document.getElementById('insp-extra-count').innerText = "0 extra photos";
         document.getElementById('insp-extra-count').style.color = "#888";
         
-        renderAgentFields();
+        renderAgentFields(); // Resets dynamic SRN field
         document.getElementById('insp-notes').value = "";
         
         document.getElementById('pause-insp-btn').disabled = true;
