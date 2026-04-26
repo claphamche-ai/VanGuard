@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V4.8 - REFINED ACCOUNTS UI
+// VANGUARD V4.9 - LAYOUT FIX
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
@@ -265,7 +265,7 @@ const AdminCtrl = {
             if(logoEl) { if(t.logo) logoEl.innerHTML = `<img src="${t.logo}" style="max-height:80px; max-width:200px;">`; else logoEl.innerHTML = `⚓`; }
         }
     },
-    switchTab: function(id) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); document.getElementById('tab-' + id).style.display = 'flex'; if(id === 'settings') this.closeSubPanel(); },
+    switchTab: function(id) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); document.getElementById('tab-' + id).style.display = 'block'; if(id === 'settings') this.closeSubPanel(); },
     loadModule: function(url, navElement) { document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); if(navElement) navElement.classList.add('active-nav'); this.switchTab('iframe'); document.getElementById('admin-module-frame').src = url; },
     openSubPanel: function(id) { document.getElementById('settings-overview').style.display = 'none'; document.getElementById('panel-' + id).style.display = 'block'; },
     closeSubPanel: function() { document.getElementById('panel-fields').style.display = 'none'; document.getElementById('settings-overview').style.display = 'block'; },
