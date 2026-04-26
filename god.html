@@ -1,1 +1,44 @@
-<!-- God V3.22 Keep intact -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Core Admin</title>
+    <link rel="stylesheet" href="styles.css?v=4.0" />
+</head>
+<body data-role="god" class="admin-bg">
+    <nav class="admin-topbar">
+        <div class="admin-nav-group">
+            <div class="admin-nav-item logout-item" onclick="location.href='index.html'"><span class="icon">🚪</span><span class="label">Log Out</span></div>
+            <div class="admin-nav-item active-nav" onclick="GodCtrl.switchTab('welcome')"><span class="icon">🌍</span><span class="label">Core</span></div>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('database')"><span class="icon">🗄️</span><span class="label">Database</span></div>
+        </div>
+    </nav>
+    <main class="admin-content">
+        <div id="tab-welcome" class="admin-tab-content admin-welcome-box">
+            <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Core</h1>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; text-align: left;">
+                <h3>Export Code Pipeline</h3>
+                <textarea id="db-export-box" class="std-input textarea" readonly style="font-family: monospace; font-size: 11px; height: 100px; background: #fafafa; cursor: text;"></textarea>
+                <button class="std-btn blue" onclick="GodCtrl.exportDB()">Generate Export Code</button>
+            </div>
+        </div>
+        <div id="tab-database" class="admin-tab-content" style="display:none; width: 100%; max-width: 800px;">
+            <div class="tenant-panel" style="padding-top: 20px;">
+                <div id="god-schema-render" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;"></div>
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee;">
+                    <h3 style="margin-top:0; color: var(--b);">➕ Append New Global Field</h3>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 10px; align-items: center;">
+                        <input type="text" id="new-global-field-name" class="std-input" placeholder="New Field Title" style="margin-bottom: 0;">
+                        <select id="new-global-field-type" class="std-input" style="margin-bottom: 0;">
+                            <option value="text">Text Input</option><option value="number">Number Input</option><option value="select">Drop-down Menu</option>
+                        </select>
+                        <button class="std-btn blue" style="width: auto; padding: 0 25px;" onclick="GodCtrl.addField()">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="app.js?v=4.0"></script>
+</body>
+</html>

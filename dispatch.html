@@ -3,88 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VanGuard | Dispatch Terminal v3.23</title>
+    <title>VanGuard | Dispatch Terminal</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.23" />
-    <style>
-        /* Specific overrides for Dispatch modular views */
-        #right-sidebar { position:fixed; top:0; right:-320px; width:300px; height:100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index:5000; transition: right 0.3s ease; padding:20px; box-sizing:border-box; color:var(--text-dark); box-shadow: -2px 0 15px rgba(0,0,0,0.2); overflow-y: auto; padding-bottom: 40px; }
-        #right-sidebar.open { right:0; }
-        .jobbank-trigger { position:fixed; top:15px; right:15px; z-index:4000; background:var(--b); padding:12px; border-radius:10px; border:2px solid #000; cursor:pointer; color: white; font-weight: 900; font-size: 16px; box-shadow:0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;}
-    </style>
+    <link rel="stylesheet" href="styles.css?v=4.0" />
 </head>
-<body style="margin: 0; padding: 0; overflow: hidden;">
-    
-    <!-- Left Menu Trigger -->
-    <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()" style="z-index: 4000;">
-        <span></span><span></span><span></span>
-    </div>
-
-    <!-- Right Job Bank Trigger -->
-    <div id="jobbank-trigger" class="jobbank-trigger" onclick="openRightSidebar()">
-        📋 BANK
-    </div>
+<body data-role="dispatch" style="margin:0; padding:0; overflow:hidden;">
+    <div class="menu-trigger" onclick="UI.openLeftSidebar()"><span></span><span></span><span></span></div>
+    <div class="jobbank-trigger" onclick="UI.openRightSidebar()">📋 BANK</div>
 
     <!-- Left Sidebar (Tools & Layers) -->
-    <div id="sidebar" style="z-index: 5000;">
-        <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
-        <div class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.23 | DISPATCH</div>
+    <div id="left-sidebar" class="sidebar">
+        <div class="sidebar-close" onclick="UI.closeLeftSidebar()">✕</div>
+        <div class="sidebar-header">VanGuard</div>
+        <div class="sidebar-version">Version 4.0 | DISPATCH</div>
         
         <div style="margin-top: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1);">
             <label style="font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px;">Address & Geo-Search</label>
             <div style="display:flex; gap:5px;">
                 <input type="text" id="dispatch-search" class="std-input" placeholder="Search address..." style="margin-bottom:0; padding:10px; font-size: 13px;">
-                <button class="std-btn blue" style="width: auto; padding: 0 15px;" onclick="searchDispatchAddress()">🔍</button>
+                <button class="std-btn blue" style="width: auto; padding: 0 15px;" onclick="DispatchCtrl.searchAddress()">🔍</button>
             </div>
         </div>
 
-        <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
+        <div class="nav-item" onclick="UI.toggleLayerList()">🗺️ Map Layers</div>
         <div id="layer-container" class="layer-list" style="display:none;"></div>
-        
         <div class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
     </div>
 
     <!-- Right Sidebar (Job Bank) -->
-    <div id="right-sidebar">
-        <div class="sidebar-close" onclick="closeRightSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:left;">✕</div>
+    <div id="right-sidebar" class="sidebar-right">
+        <div class="sidebar-close" onclick="UI.closeRightSidebar()" style="float:left;">✕</div>
         <div class="sidebar-header" style="text-align:right;">Job Bank</div>
         <div class="sidebar-version" style="text-align:right;">Global Queue</div>
-
         <div style="display: flex; gap: 5px; margin: 15px 0;">
-            <button class="std-btn blue" style="padding: 10px; font-size: 12px;" onclick="renderDispatchBank('PENDING')">Active / Pending</button>
-            <button class="std-btn gray" style="padding: 10px; font-size: 12px;" onclick="renderDispatchBank('COMPLETED')">Completed</button>
+            <button class="std-btn blue" style="padding: 10px; font-size: 12px;" onclick="DispatchCtrl.renderBank('PENDING')">Pending</button>
+            <button class="std-btn gray" style="padding: 10px; font-size: 12px;" onclick="DispatchCtrl.renderBank('COMPLETED')">Completed</button>
         </div>
         <div id="dispatch-bank-list"></div>
     </div>
 
-    <!-- Full Screen Map -->
-    <div id="dispatch-map" style="width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1;"></div>
-
-    <!-- Agent-Style Site Info Popup -->
-    <div id="site-info">
-        <div class="info-header">
-            <span id="s-name">Select Site</span>
-            <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
-        </div>
+    <!-- Dispatch Site Info Popup -->
+    <div id="site-info" class="popup-box">
+        <div class="info-header"><span id="s-name">Select Site</span><button onclick="UI.closePopup('site-info')">✕</button></div>
         <div class="info-body">
-            <div class="site-meta">
+            <div class="site-meta" style="flex:1;">
                 <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
                 <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" class="inline-input" readonly></div>
             </div>
         </div>
         <div class="action-grid" style="grid-template-columns: 1fr 1fr;">
-            <button class="std-btn gray" onclick="openHistoryOverlay()">History / Notes</button>
-            <button class="std-btn green" onclick="openDispatchForm()">Dispatch Job</button>
+            <button class="std-btn gray" onclick="DispatchCtrl.openHistory()">History / Notes</button>
+            <button class="std-btn green" onclick="DispatchCtrl.openDispatchForm()">Dispatch Job</button>
         </div>
     </div>
 
     <!-- Dispatch Job Creation Overlay -->
     <div id="dispatch-overlay" class="full-overlay">
-        <div class="form-header"><span>DISPATCH JOB</span><button onclick="closeOverlay('dispatch')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-header"><span>DISPATCH JOB</span><button onclick="UI.closeOverlay('dispatch')">✕</button></div>
         <div class="form-content">
             <p>Target Site: <strong id="dispatch-target-name" style="color: var(--b);">--</strong></p>
-            
             <div class="section-label">Job Details</div>
             <input type="text" id="dispatch-srn" class="std-input" placeholder="Service Request Number (SRN)">
             <textarea id="dispatch-notes" class="std-input textarea" placeholder="Job details, constraints, reporting party info..."></textarea>
@@ -95,17 +72,15 @@
                     Request Admin approval to log this location as a permanent mapped asset.
                 </label>
             </div>
-
             <div class="footer-btns" style="grid-template-columns: 1fr 2fr;">
-                <button class="std-btn red" onclick="closeOverlay('dispatch')">Cancel</button>
-                <button class="std-btn yellow" onclick="submitDispatchJob()">Push to Job Bank</button>
+                <button class="std-btn red" onclick="UI.closeOverlay('dispatch')">Cancel</button>
+                <button class="std-btn yellow" onclick="DispatchCtrl.submitJob()">Push to Job Bank</button>
             </div>
         </div>
     </div>
 
-    <!-- History Overlay Stub -->
     <div id="history-overlay" class="full-overlay">
-        <div class="form-header"><span>SITE HISTORY</span><button onclick="closeOverlay('history')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-header"><span>SITE HISTORY</span><button onclick="UI.closeOverlay('history')">✕</button></div>
         <div class="form-content">
             <p>Target Site: <strong id="history-target-name" style="color: var(--b);">--</strong></p>
             <div style="background: #eee; padding: 20px; border-radius: 8px; text-align: center; color: #666; font-style: italic;">
@@ -114,200 +89,10 @@
         </div>
     </div>
 
+    <div id="map" class="full-map"></div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script>
-        // State
-        let activeDispatchSite = { name: "", type: "", isOneOff: false };
-
-        // Sidebars
-        function openSidebar() { document.getElementById('sidebar').classList.add('open'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); }
-        function openRightSidebar() { document.getElementById('right-sidebar').classList.add('open'); }
-        function closeRightSidebar() { document.getElementById('right-sidebar').classList.remove('open'); }
-        function toggleLayerList() {
-            const el = document.getElementById('layer-container');
-            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-        }
-        function closeOverlay(id) { document.getElementById(id + '-overlay').style.display = 'none'; }
-
-        // Map Init
-        const dispatchMap = L.map('dispatch-map', { zoomControl: false }).setView([-41.135, 174.84], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(dispatchMap);
-        let searchMarker = null;
-        let layers = {};
-
-        // Layers
-        const config = [
-            { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
-            { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
-            { file: 'PCC Underpasses.kml', label: 'Underpass', color: '#e74c3c', icon: '🌉' }
-        ];
-
-        const container = document.getElementById('layer-container');
-        config.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'layer-item';
-            div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
-            container.appendChild(div);
-            const group = L.featureGroup();
-            layers[item.label] = group;
-
-            const customLayer = L.geoJson(null, {
-                style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
-                pointToLayer: function(feature, latlng) {
-                    const marker = L.marker(latlng, {
-                        icon: L.divIcon({
-                            className: '',
-                            html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
-                            iconSize: [38, 38],
-                            iconAnchor: [19, 19]
-                        })
-                    });
-                    marker.on('click', function(e) { triggerSiteInfo(e, feature.properties?.name || "Unknown Site", item.label, feature.properties?.address || feature.properties?.description || "", false); });
-                    return marker;
-                }
-            });
-
-            const runLayer = omnivore.kml(item.file, null, customLayer);
-            runLayer.on('ready', function() {
-                runLayer.eachLayer(function(layer) {
-                    if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                        const center = layer.getBounds().getCenter();
-                        const centerMarker = L.marker(center, {
-                            icon: L.divIcon({
-                                className: '',
-                                html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`,
-                                iconSize: [38, 38],
-                                iconAnchor: [19, 19]
-                            })
-                        });
-                        centerMarker.on('click', function(e) { triggerSiteInfo(e, layer.feature?.properties?.name || "Unknown Area", item.label, layer.feature?.properties?.address || layer.feature?.properties?.description || "", false); });
-                        group.addLayer(centerMarker);
-                    }
-                });
-                dispatchMap.addLayer(group);
-            });
-            group.addLayer(runLayer);
-        });
-
-        window.toggleLayer = function(name, show) { if(show) { dispatchMap.addLayer(layers[name]); } else { dispatchMap.removeLayer(layers[name]); } };
-
-        // Core Interaction Workflow
-        function triggerSiteInfo(event, name, type, address, isOneOff) {
-            L.DomEvent.stopPropagation(event);
-            activeDispatchSite = { name: name, type: type, address: address, isOneOff: isOneOff };
-            
-            document.getElementById('s-name').innerText = name;
-            document.getElementById('s-type').innerText = type;
-            document.getElementById('s-address').value = address || 'No address data';
-            document.getElementById('site-info').style.display = 'block';
-        }
-
-        async function searchDispatchAddress() {
-            const query = document.getElementById('dispatch-search').value;
-            if(!query) return;
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=nz`);
-                const data = await res.json();
-                if(data.length > 0) {
-                    const lat = parseFloat(data[0].lat);
-                    const lon = parseFloat(data[0].lon);
-                    dispatchMap.setView([lat, lon], 17);
-                    
-                    if(searchMarker) dispatchMap.removeLayer(searchMarker);
-                    
-                    searchMarker = L.marker([lat, lon], {
-                        icon: L.divIcon({
-                            className: '',
-                            html: `<div class="marker-inner" style="background-color: #34495e; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">📍</div>`,
-                            iconSize: [38, 38],
-                            iconAnchor: [19, 19]
-                        })
-                    }).addTo(dispatchMap);
-                    
-                    const cleanAddr = data[0].display_name.split(',')[0];
-                    closeSidebar(); // hide menu to see result
-                    
-                    searchMarker.on('click', function(e) {
-                        triggerSiteInfo(e, cleanAddr, "One-Off Location", data[0].display_name, true);
-                    });
-                    
-                    // Auto-trigger info box on search success
-                    searchMarker.fire('click');
-
-                } else { alert("Location not found."); }
-            } catch(e) { console.error("Geocoding failed", e); }
-        }
-
-        function openDispatchForm() {
-            document.getElementById('site-info').style.display = 'none';
-            document.getElementById('dispatch-target-name').innerText = activeDispatchSite.name;
-            
-            // Toggle the permanent asset checkbox visibility based on whether it's a one-off
-            document.getElementById('permanent-asset-request').style.display = activeDispatchSite.isOneOff ? 'block' : 'none';
-            document.getElementById('dispatch-make-permanent').checked = false;
-            
-            document.getElementById('dispatch-srn').value = '';
-            document.getElementById('dispatch-notes').value = '';
-            document.getElementById('dispatch-overlay').style.display = 'flex';
-        }
-
-        function openHistoryOverlay() {
-            document.getElementById('site-info').style.display = 'none';
-            document.getElementById('history-target-name').innerText = activeDispatchSite.name;
-            document.getElementById('history-overlay').style.display = 'flex';
-        }
-
-        function submitDispatchJob() {
-            const srn = document.getElementById('dispatch-srn').value.trim();
-            const notes = document.getElementById('dispatch-notes').value.trim();
-            const reqPerm = document.getElementById('dispatch-make-permanent').checked;
-
-            let finalNotes = notes;
-            if(reqPerm && activeDispatchSite.isOneOff) {
-                finalNotes = "[ADMIN ACTION REQUIRED: Make site permanent] - " + notes;
-            }
-
-            let bank = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-            const newJob = { 
-                site: activeDispatchSite.name, 
-                srn: srn || 'N/A', 
-                type: 'PENDING', 
-                notes: finalNotes, 
-                accumulated: 0, 
-                pausedAt: new Date().toLocaleString('en-NZ'), 
-                dispatchId: 'D-' + Math.floor(Math.random() * 90000 + 10000) 
-            };
-            bank.unshift(newJob);
-            localStorage.setItem('tt_jobbank', JSON.stringify(bank));
-            
-            closeOverlay('dispatch');
-            openRightSidebar(); // Automatically show them the updated bank
-            renderDispatchBank('PENDING');
-        }
-
-        function renderDispatchBank(filterType = 'PENDING') {
-            const listEl = document.getElementById('dispatch-bank-list');
-            const data = JSON.parse(localStorage.getItem('tt_jobbank') || '[]');
-            const filtered = data.filter(job => (filterType === 'PENDING' && job.type !== 'COMPLETED') || (filterType === 'COMPLETED' && job.type === 'COMPLETED') );
-            
-            if (filtered.length === 0) { listEl.innerHTML = `<p style="text-align:center; color:#888; font-size:13px; margin-top:20px;">No ${filterType.toLowerCase()} jobs in queue.</p>`; return; }
-            
-            listEl.innerHTML = filtered.map((job) => `
-                <div style="background:var(--bg-light); border: 1px solid #ddd; margin-bottom:10px; padding:15px; border-radius:8px; font-size:13px; border-left: 4px solid ${job.type==='WORK'?'#f1c40f':(job.type==='INSPECTION'?'#3498db':(job.type==='PENDING'?'#9b59b6':'#e74c3c'))};">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                        <strong style="color:var(--text-dark);">${job.site}</strong>
-                        <span class="badge blue" style="background:#333;">${job.srn !== 'N/A' && job.srn ? job.srn : 'No SRN'}</span>
-                    </div>
-                    <div style="color:#666; margin-bottom: 5px;">Status: <span style="font-weight:bold; color:var(--b);">${job.type}</span></div>
-                    <div style="color:#888; font-size: 11px;">Timestamp: ${job.pausedAt}</div>
-                    ${job.notes ? `<div style="margin-top:8px; padding:8px; background:#fff; border-radius:4px; color:#555; border:1px dashed #ccc;"><i>"${job.notes}"</i></div>` : ''}
-                </div>
-            `).join('');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => renderDispatchBank('PENDING'));
-    </script>
+    <script src="app.js?v=4.0"></script>
 </body>
 </html>

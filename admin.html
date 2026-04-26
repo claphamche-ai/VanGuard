@@ -1,1 +1,44 @@
-<!-- Admin V3.22 Keep intact -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Tenant Admin</title>
+    <link rel="stylesheet" href="styles.css?v=4.0" />
+</head>
+<body data-role="admin" class="admin-bg">
+    <nav class="admin-topbar">
+        <div class="admin-nav-group">
+            <div class="admin-nav-item logout-item" onclick="location.href='index.html'"><span class="icon">🚪</span><span class="label">Log Out</span></div>
+            <div class="admin-nav-item active-nav" onclick="AdminCtrl.switchTab('welcome')"><span class="icon">🏠</span><span class="label">Home</span></div>
+            <div class="admin-nav-item" onclick="location.href='accounts.html'"><span class="icon">👥</span><span class="label">Accounts</span></div>
+            <div class="admin-nav-item" onclick="location.href='dispatch.html'"><span class="icon">📡</span><span class="label">Dispatch</span></div>
+            <div class="admin-nav-item" onclick="location.href='reporter.html'"><span class="icon">📝</span><span class="label">Reporter</span></div>
+            <div class="admin-nav-item" onclick="AdminCtrl.switchTab('settings')"><span class="icon">⚙️</span><span class="label">Settings</span></div>
+            <div class="admin-nav-item" onclick="location.href='help.html'"><span class="icon">❓</span><span class="label">Help</span></div>
+        </div>
+    </nav>
+    <main class="admin-content">
+        <div id="tab-welcome" class="admin-tab-content admin-welcome-box">
+            <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Admin</h1>
+            <p style="font-size: 14px; font-weight: bold; color: #888;">Version 4.0 | Regional Console</p>
+        </div>
+        <div id="tab-settings" class="admin-tab-content" style="display:none; width: 100%; max-width: 900px;">
+            <div id="settings-overview">
+                <h2 style="margin-top:0; font-weight: 900; text-transform: uppercase;">System Configuration</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="tenant-panel">
+                        <h3 style="margin-top:0; color: var(--b);">Data Fields</h3>
+                        <button class="std-btn blue" onclick="AdminCtrl.openSubPanel('fields')">Manage Fields</button>
+                    </div>
+                </div>
+            </div>
+            <div id="panel-fields" style="display:none;">
+                <button class="std-btn gray" onclick="AdminCtrl.closeSubPanel()" style="max-width: 150px; margin-bottom: 20px;">⬅ Back</button>
+                <div class="tenant-panel" style="padding-top: 20px;"><div id="admin-schema-render"></div></div>
+            </div>
+        </div>
+    </main>
+    <script src="app.js?v=4.0"></script>
+</body>
+</html>

@@ -3,141 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">VanGuard | Agent v3.22</title>
+    <title>VanGuard | Agent Terminal</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=3.22" />
+    <link rel="stylesheet" href="styles.css?v=4.0" />
 </head>
-<body>
+<body data-role="agent" style="margin:0; padding:0; overflow:hidden;">
     <div id="live-timer-widget">00:00</div>
-    <div id="menu-trigger" class="menu-trigger" onclick="openSidebar()">
-        <span></span><span></span><span></span>
-    </div>
-    <button id="fs-btn" class="map-control-btn fs-btn" onclick="toggleFS()">⛶</button>
-    <button id="gps-btn" class="map-control-btn gps-btn" onclick="centerGPS()">📍</button>
+    <div class="menu-trigger" onclick="UI.openLeftSidebar()"><span></span><span></span><span></span></div>
+    <button class="map-control-btn fs-btn" onclick="UI.toggleFS()">⛶</button>
+    <button class="map-control-btn gps-btn" onclick="AgentCtrl.centerGPS()">📍</button>
 
-    <div id="sidebar">
-        <div class="sidebar-close" onclick="closeSidebar()" style="cursor:pointer; font-size:24px; font-weight:bold; float:right;">✕</div>
-        <div id="brand-name" class="sidebar-header" style="clear:both;">VanGuard</div>
-        <div class="sidebar-version">Version 3.22 | AGENT</div>
+    <div id="left-sidebar" class="sidebar">
+        <div class="sidebar-close" onclick="UI.closeLeftSidebar()">✕</div>
+        <div class="sidebar-header">VanGuard</div>
+        <div class="sidebar-version">Version 4.0 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
-        
-        <div class="nav-item" onclick="toggleLayerList()">🗺️ Map Layers</div>
+        <div class="nav-item" onclick="UI.toggleLayerList()">🗺️ Map Layers</div>
         <div id="layer-container" class="layer-list" style="display:none;"></div>
-        <div class="nav-item" onclick="openOverlay('jobbank')">📋 Job Bank</div>
+        <div class="nav-item" onclick="AgentCtrl.openJobBank()">📋 Job Bank</div>
         <div class="nav-item" onclick="alert('Add Site Mode Active')">➕ Add Site</div>
-        
-        <div class="nav-item logout-item" style="margin-top:20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
-
-        <div style="margin-top: 15px; padding-top: 10px;">
-            <label style="font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px;">Menu Opacity</label>
-            <input type="range" id="menu-opacity-slider" min="0" max="1" step="0.05" value="0.95" style="width: 100%; accent-color: var(--b);" oninput="document.getElementById('sidebar').style.backgroundColor = `rgba(255, 255, 255, ${this.value})`">
-        </div>
+        <div class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
     </div>
 
-    <div id="site-info">
-        <div class="info-header">
-            <span id="s-name">Select Site</span>
-            <button onclick="document.getElementById('site-info').style.display='none'" style="cursor:pointer; background:none; border:none; color:white; font-size:18px;">✕</button>
-        </div>
+    <!-- Agent Site Info Popup -->
+    <div id="site-info" class="popup-box">
+        <div class="info-header"><span id="s-name">Select Site</span><button onclick="UI.closePopup('site-info')">✕</button></div>
         <div class="info-body">
-            <div class="site-photo-frame" id="cover-photo-frame">
-                <div class="add-photo-icon" onclick="document.getElementById('cover-photo-upload').click()">
-                    <span style="font-size: 24px;">📷</span><br><small>ADD</small>
-                </div>
-            </div>
-            <input type="file" id="cover-photo-upload" accept="image/*" capture="environment" style="display:none;" onchange="handleCoverPhoto(this)">
-
+            <div class="site-photo-frame" id="cover-photo-frame"><div class="add-photo-icon" onclick="document.getElementById('cover-photo-upload').click()"><span>📷</span><br><small>ADD</small></div></div>
+            <input type="file" id="cover-photo-upload" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handleCoverPhoto(this)">
             <div class="site-meta">
                 <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
-                <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" placeholder="Tap to add..." class="inline-input"></div>
-                <div class="meta-row"><span class="meta-label">Owner:</span> <input type="text" id="s-owner" placeholder="Tap to add..." class="inline-input"></div>
-                <div class="meta-row"><span class="meta-label">Contact:</span> <input type="text" id="s-contact" placeholder="Tap to add..." class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Owner:</span> <input type="text" id="s-owner" class="inline-input"></div>
+                <div class="meta-row"><span class="meta-label">Contact:</span> <input type="text" id="s-contact" class="inline-input"></div>
             </div>
         </div>
         <div class="action-grid">
-            <button class="std-btn blue" onclick="openOverlay('inspection')">Inspection</button>
-            <button class="std-btn blue" onclick="openOverlay('work')">Log Work</button>
+            <button class="std-btn blue" onclick="AgentCtrl.openOverlay('inspection')">Inspection</button>
+            <button class="std-btn blue" onclick="AgentCtrl.openOverlay('work')">Log Work</button>
             <button class="std-btn gray" onclick="alert('History View Coming Soon')">History</button>
         </div>
     </div>
 
+    <!-- Work Overlay -->
     <div id="work-overlay" class="full-overlay">
-        <div class="form-header"><span>LOG WORK</span><button onclick="closeOverlay('work')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-header"><span>LOG WORK</span><button onclick="UI.closeOverlay('work')">✕</button></div>
         <div class="form-content">
-            <p>Site: <strong class="site-display">--</strong></p>
-            
+            <p>Site: <strong class="target-site-name">--</strong></p>
             <div class="photo-grid">
-                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before" style="font-weight:normal;">Take photo to start</small></div>
-                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after" style="font-weight:normal;">(Complete work)</small></div>
+                <div id="btn-before" class="photo-box" onclick="document.getElementById('photo-before').click()">📸 BEFORE<br><small id="time-before">Take photo to start</small></div>
+                <div id="btn-after" class="photo-box" onclick="document.getElementById('photo-after').click()">📷 AFTER<br><small id="time-after">(Complete work)</small></div>
             </div>
-            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('before')">
-            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="handleWorkPhoto('after')">
-            
-            <button class="std-btn light-blue" style="margin-bottom:10px;" onclick="document.getElementById('photo-work-extra').click()">➕ Add Mid-Job Photo</button>
-            <div id="work-extra-count" class="extra-label">0 extra photos</div>
-            <input type="file" id="photo-work-extra" multiple style="display:none;" onchange="updateExtraCount('work')">
-
-            <div id="ai-analysis-section" style="display:none; margin-top: 15px;">
-                <button id="ai-analyze-btn" class="std-btn purple" onclick="runAIAnalysis()">🤖 Extract Tags & Size (AI)</button>
-                <div id="ai-results" style="display:none; background:#f4ebf9; padding:15px; border-radius:8px; border-left:4px solid #9b59b6; font-size:13px; color:#333; margin-top: 10px;">
-                    <strong style="color:#8e44ad; font-size:14px;">Vision Analysis Data</strong><br>
-                    <span style="color:#7f8c8d; font-size:11px;">(Requires backend API connection for live data)</span><br><br>
-                    <strong>Deciphered Tags:</strong> <span id="ai-tag">--</span><br>
-                    <strong>Estimated Area:</strong> <span id="ai-size">--</span>
-                </div>
-            </div>
-
-            <div class="section-label">Logistics & Problem Data</div>
+            <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('before')">
+            <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('after')">
+            <div class="section-label">Logistics Data</div>
             <div id="dynamic-work-fields"></div>
             <div class="section-label">Notes</div>
-            <textarea id="work-desc" class="std-input textarea" placeholder="Work Description & Details..."></textarea>
-            <textarea id="work-materials" class="std-input textarea" placeholder="Other Materials Used..."></textarea>
-
+            <textarea id="work-desc" class="std-input textarea" placeholder="Details..."></textarea>
             <div class="footer-btns">
-                <button id="cancel-work-btn" class="std-btn red" onclick="cancelJob()">Cancel</button>
-                <button id="pause-work-btn" class="std-btn gray" disabled onclick="pauseJob()">Pause</button>
-                <button id="submit-work-btn" class="std-btn yellow" disabled onclick="submitWork()">Submit</button>
+                <button class="std-btn red" onclick="AgentCtrl.cancelJob()">Cancel</button>
+                <button id="pause-work-btn" class="std-btn gray" disabled onclick="AgentCtrl.pauseJob()">Pause</button>
+                <button id="submit-work-btn" class="std-btn yellow" disabled onclick="AgentCtrl.submitWork()">Submit</button>
             </div>
         </div>
     </div>
 
+    <!-- Inspection Overlay -->
     <div id="inspection-overlay" class="full-overlay">
-        <div class="form-header"><span>INSPECTION</span><button onclick="closeOverlay('inspection')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
+        <div class="form-header"><span>INSPECTION</span><button onclick="UI.closeOverlay('inspection')">✕</button></div>
         <div class="form-content">
-            <p>Site: <strong class="site-display">--</strong></p>
+            <p>Site: <strong class="target-site-name">--</strong></p>
             <div class="photo-grid">
-                <div id="btn-insp-start" class="photo-box" onclick="document.getElementById('photo-insp-start').click()">📸 START<br><small id="time-insp-start" style="font-weight:normal;">Take photo to start</small></div>
-                <div id="btn-insp-end" class="photo-box" onclick="document.getElementById('photo-insp-end').click()">📷 END<br><small id="time-insp-end" style="font-weight:normal;">(Walk length)</small></div>
+                <div id="btn-start" class="photo-box" onclick="document.getElementById('photo-start').click()">📸 START<br><small id="time-start">Take photo to start</small></div>
+                <div id="btn-end" class="photo-box" onclick="document.getElementById('photo-end').click()">📷 END<br><small id="time-end">(Walk length)</small></div>
             </div>
-            <input type="file" id="photo-insp-start" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('start')">
-            <input type="file" id="photo-insp-end" accept="image/*" capture="environment" style="display:none;" onchange="handleInspPhoto('end')">
-            <button class="std-btn light-blue" style="margin-bottom:10px;" onclick="document.getElementById('photo-insp-extra').click()">➕ Add Mid-Job Photo</button>
-            <div id="insp-extra-count" class="extra-label">0 extra photos</div>
-            <input type="file" id="photo-insp-extra" multiple style="display:none;" onchange="updateExtraCount('insp')">
-
-            <div class="section-label" style="margin-top:0;">Details</div>
-            <input type="text" id="insp-srn" class="std-input" placeholder="Service Request Number (SRN) - Optional" style="margin-bottom: 10px;">
+            <input type="file" id="photo-start" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('start')">
+            <input type="file" id="photo-end" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('end')">
+            <div class="section-label">Details</div>
+            <input type="text" id="insp-srn" class="std-input" placeholder="SRN - Optional">
             <textarea id="insp-notes" class="std-input textarea" placeholder="Inspection Notes..."></textarea>
-            
             <div class="footer-btns">
-                <button id="cancel-insp-btn" class="std-btn red" onclick="cancelInsp()">Cancel</button>
-                <button id="pause-insp-btn" class="std-btn gray" disabled onclick="pauseInsp()">Pause</button>
-                <button id="submit-insp-btn" class="std-btn yellow" disabled onclick="submitInsp()">Submit</button>
+                <button class="std-btn red" onclick="AgentCtrl.cancelInsp()">Cancel</button>
+                <button id="pause-insp-btn" class="std-btn gray" disabled onclick="AgentCtrl.pauseInsp()">Pause</button>
+                <button id="submit-insp-btn" class="std-btn yellow" disabled onclick="AgentCtrl.submitInsp()">Submit</button>
             </div>
         </div>
     </div>
 
     <div id="jobbank-overlay" class="full-overlay">
-        <div class="form-header"><span>JOB BANK</span><button onclick="closeOverlay('jobbank')" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">✕</button></div>
-        <div class="form-content" id="job-bank-list"></div>
+        <div class="form-header"><span>JOB BANK</span><button onclick="UI.closeOverlay('jobbank')">✕</button></div>
+        <div class="form-content" id="agent-bank-list"></div>
     </div>
 
-    <div id="map-wrapper">
-        <div id="map"></div>
-    </div>
+    <div id="map" class="full-map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=3.22"></script>
+    <script src="app.js?v=4.0"></script>
 </body>
 </html>
