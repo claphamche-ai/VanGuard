@@ -1,6 +1,6 @@
 
 // ==========================================
-// VANGUARD V4.0 - MODULAR CORE FRAMEWORK
+// VANGUARD V4.1 - MODULAR CORE FRAMEWORK
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
@@ -18,6 +18,9 @@ const CoreDB = {
         { "id": "color", "label": "Paint Color Used", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "White", "visible": true }, { "name": "Black", "visible": true }, { "name": "Grey", "visible": true }, { "name": "Brown", "visible": true }, { "name": "Colour Match", "visible": true }, { "name": "yellow", "visible": true } ] },
         { "id": "chemicals", "label": "Chemicals Used (ml/L)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null }
     ],
+    defaultTenants: [
+        { "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "active": true }
+    ],
     kmlConfig: [
         { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
         { file: 'Wellington Electricity substation sites.kml', label: 'Substation', color: '#f1c40f', icon: '⚡' },
@@ -29,6 +32,12 @@ const CoreDB = {
         return JSON.parse(mem);
     },
     saveSchema: function(data) { localStorage.setItem('vg_schema', JSON.stringify(data)); },
+    getTenants: function() {
+        let mem = localStorage.getItem('tt_tenants');
+        if(!mem) { localStorage.setItem('tt_tenants', JSON.stringify(this.defaultTenants)); mem = localStorage.getItem('tt_tenants'); }
+        return JSON.parse(mem);
+    },
+    saveTenants: function(data) { localStorage.setItem('tt_tenants', JSON.stringify(data)); },
     getJobBank: function() { return JSON.parse(localStorage.getItem('tt_jobbank') || '[]'); },
     saveJobBank: function(data) { localStorage.setItem('tt_jobbank', JSON.stringify(data)); },
     pushJob: function(jobObj) { let b = this.getJobBank(); b.unshift(jobObj); this.saveJobBank(b); }
@@ -51,21 +60,34 @@ const UI = {
         if(!r) return;
         if(r.style.display === 'none' || r.style.display === '') { r.style.display = 'table-row'; i.innerText = '▼'; } 
         else { r.style.display = 'none'; i.innerText = '▶'; }
+    },
+    downloadTextFile: function(filename, text) {
+        let el = document.createElement('a');
+        el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        el.setAttribute('download', filename);
+        el.style.display = 'none';
+        document.body.appendChild(el);
+        el.click();
+        document.body.removeChild(el);
     }
 };
 
 // --- 3. MAP ENGINE (Shared Component) ---
 class MapEngine {
     constructor(mapId, role) {
-        this.map = L.map(mapId, { zoomControl: false }).setView([-41.135, 174.84], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-        this.layers = {};
-        this.role = role; // 'agent' or 'dispatch'
-        this.userMarker = null;
-        this.searchMarker = null;
-        this.loadKML();
-        
-        if(this.role === 'agent') this.initGPS();
+        this.mapId = mapId;
+        // Fix for blank map: explicitly invalidate size after init
+        setTimeout(() => {
+            this.map = L.map(this.mapId, { zoomControl: false }).setView([-41.135, 174.84], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
+            this.layers = {};
+            this.role = role; 
+            this.userMarker = null;
+            this.searchMarker = null;
+            this.loadKML();
+            if(this.role === 'agent') this.initGPS();
+            this.map.invalidateSize();
+        }, 100);
     }
 
     loadKML() {
@@ -155,6 +177,7 @@ const AgentCtrl = {
     timerInterval: null,
     
     init: function() {
+        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.1`;
         new MapEngine('map', 'agent');
         this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
@@ -277,6 +300,11 @@ const DispatchCtrl = {
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     
     init: function() {
+        // If loaded inside iframe, hide log out button to prevent confusion
+        if(window.location.search.includes('iframe=true')) {
+            const lo = document.getElementById('standalone-logout');
+            if(lo) lo.style.display = 'none';
+        }
         new MapEngine('dispatch-map', 'dispatch');
         this.renderBank('PENDING');
     },
@@ -351,15 +379,20 @@ const DispatchCtrl = {
     }
 };
 
-// --- 6. ADMIN & GOD CONTROLLERS ---
+// --- 6. ADMIN CONTROLLER ---
 const AdminCtrl = {
     init: function() { this.renderSchema(); },
     switchTab: function(id) {
         document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
         document.getElementById('tab-' + id).style.display = 'block';
-        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
-        event.currentTarget.classList.add('active-nav');
         if(id === 'settings') this.closeSubPanel();
+    },
+    loadModule: function(url, navElement) {
+        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
+        if(navElement) navElement.classList.add('active-nav');
+        
+        this.switchTab('iframe');
+        document.getElementById('admin-module-frame').src = url;
     },
     openSubPanel: function(id) { document.getElementById('settings-overview').style.display = 'none'; document.getElementById('panel-' + id).style.display = 'block'; },
     closeSubPanel: function() { document.getElementById('panel-fields').style.display = 'none'; document.getElementById('settings-overview').style.display = 'block'; },
@@ -386,15 +419,54 @@ const AdminCtrl = {
     toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} }
 };
 
+// --- 7. GOD CONTROLLER ---
 const GodCtrl = {
-    init: function() { this.renderSchema(); },
+    init: function() { this.renderSchema(); this.renderTenants(); },
     switchTab: function(id) {
         document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
         document.getElementById('tab-' + id).style.display = 'block';
         document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
         event.currentTarget.classList.add('active-nav');
     },
-    exportDB: function() { const b = document.getElementById('db-export-box'); b.value = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`; b.select(); },
+    
+    // Export Functions 
+    exportDBText: function() {
+        const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`;
+        UI.downloadTextFile('VanGuard_Live_Schema.txt', data);
+    },
+    exportBlankTemplate: function() {
+        const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }];
+        const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`;
+        UI.downloadTextFile('VanGuard_Blank_Template.txt', data);
+    },
+
+    // Tenant Functions
+    renderTenants: function() {
+        const c = document.getElementById('god-tenant-list');
+        if(!c) return;
+        const tenants = CoreDB.getTenants();
+        c.innerHTML = tenants.map(t => `
+            <div style="background:var(--bg-light); border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h4 style="margin:0; color:var(--text-dark);">${t.name}</h4>
+                    <span style="font-size:12px; color:#666;">ID: ${t.id} | Tier: ${t.tier} | Licenses: ${t.licenses}</span>
+                </div>
+                <div>
+                    <span class="badge blue" style="background:${t.active?'#2ecc71':'#e74c3c'};">${t.active?'ACTIVE':'INACTIVE'}</span>
+                </div>
+            </div>
+        `).join('');
+    },
+    addTenant: function() {
+        const name = prompt("Enter Council Name:");
+        if(!name) return;
+        const tenants = CoreDB.getTenants();
+        tenants.push({ id: 'T'+Math.floor(Math.random()*900+100), name: name, tier: "City A", licenses: 4, active: true });
+        CoreDB.saveTenants(tenants);
+        this.renderTenants();
+    },
+
+    // Schema Functions
     renderSchema: function() {
         const c = document.getElementById('god-schema-render');
         if(!c) return;

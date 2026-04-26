@@ -4,26 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Core Admin</title>
-    <link rel="stylesheet" href="styles.css?v=4.0" />
+    <link rel="stylesheet" href="styles.css?v=4.1" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
         <div class="admin-nav-group">
             <div class="admin-nav-item logout-item" onclick="location.href='index.html'"><span class="icon">🚪</span><span class="label">Log Out</span></div>
             <div class="admin-nav-item active-nav" onclick="GodCtrl.switchTab('welcome')"><span class="icon">🌍</span><span class="label">Core</span></div>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenants')"><span class="icon">🏛️</span><span class="label">Tenants</span></div>
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('database')"><span class="icon">🗄️</span><span class="label">Database</span></div>
         </div>
     </nav>
     <main class="admin-content">
+        <!-- God Welcome Restored -->
         <div id="tab-welcome" class="admin-tab-content admin-welcome-box">
-            <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Core</h1>
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; text-align: left;">
-                <h3>Export Code Pipeline</h3>
-                <textarea id="db-export-box" class="std-input textarea" readonly style="font-family: monospace; font-size: 11px; height: 100px; background: #fafafa; cursor: text;"></textarea>
-                <button class="std-btn blue" onclick="GodCtrl.exportDB()">Generate Export Code</button>
+            <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
+            <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 4.1 | System Configuration Node</p>
+            <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
+                Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
+            </p>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #f1c40f; margin-top: 30px; font-size: 13px; text-align: left;">
+                <strong>LOCAL STORAGE MOCKING ACTIVE</strong><br>
+                Changes made in the Database tab will cascade automatically.
             </div>
         </div>
+
+        <!-- Tenant Management Tab -->
+        <div id="tab-tenants" class="admin-tab-content" style="display:none; width: 100%; max-width: 800px;">
+            <h2 style="margin-top:0; font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">Tenant Provisioning</h2>
+            <div class="tenant-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                    <h3 style="margin:0; color: var(--b);">Active Councils</h3>
+                    <button class="std-btn blue" style="width: auto; padding: 10px 20px;" onclick="GodCtrl.addTenant()">➕ New Tenant</button>
+                </div>
+                <div id="god-tenant-list"></div>
+            </div>
+        </div>
+
+        <!-- Database Tab w/ Export tools moved here -->
         <div id="tab-database" class="admin-tab-content" style="display:none; width: 100%; max-width: 800px;">
+            <div class="tenant-panel" style="padding-bottom: 20px; margin-bottom: 20px; background: #fafafa;">
+                <h3 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Export Code Pipeline</h3>
+                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Download database definitions to sync cross-platform states.</p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="std-btn blue" onclick="GodCtrl.exportDBText()">Download Live Schema (.txt)</button>
+                    <button class="std-btn gray" onclick="GodCtrl.exportBlankTemplate()">Download Blank Template (.txt)</button>
+                </div>
+            </div>
+
+            <h2 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">Master Schema Dictionary</h2>
             <div class="tenant-panel" style="padding-top: 20px;">
                 <div id="god-schema-render" style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden;"></div>
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee;">
@@ -39,6 +69,6 @@
             </div>
         </div>
     </main>
-    <script src="app.js?v=4.0"></script>
+    <script src="app.js?v=4.1"></script>
 </body>
 </html>
