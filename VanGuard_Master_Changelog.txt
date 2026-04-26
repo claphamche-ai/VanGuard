@@ -1,0 +1,27 @@
+VANGUARD MASTER CHANGELOG
+-------------------------
+v4.0 - Stable Modular Architecture
+- Rewrote entire codebase to implement strict role-based modularity in app.js
+- Embedded Spoofed_Database.txt dynamically as the default schema.
+
+v4.1 - Fixes & Core Alignment
+- Repaired map initialization bug causing blank rendering on load.
+- Locked standalone views into Admin iframe wrapper.
+
+v4.2 - Database Tool Relocation & Target Mapping
+- Confirmed "ACTIVE", "SUSPENDED", and "DEACTIVATED" flags successfully lock out.
+
+v4.3 - God Dashboard Tenant Expansion
+- Added live data polling inside God dashboard.
+- Added "Enter Admin Dashboard" Impersonation button.
+
+v4.4 - Client Data Controls & Metadata Restoration
+- Added "Tenant Logo (URL or Image Link)" upload field to God Dashboard.
+- Restored the v3.22 processAndWatermarkImage canvas processing engine.
+
+v4.5 - Multi-Tenant Segregation
+- Implemented Multi-Tenant Data Partitioning in app.js (CoreDB).
+- Job Bank (tt_jobbank) now attaches a tenantId and unique jobId to every dispatched/paused job.
+- Agent and Dispatch UI now filter job banks specifically to the active user's assigned Tenant ID.
+- God Dashboard live polling updated to query jobs individually by tenant ID across the global database.
+- Upgraded index.html login router to include dummy accounts for City B (T002) for testing isolation.

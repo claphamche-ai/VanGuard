@@ -1,11 +1,10 @@
 
 // ==========================================
-// VANGUARD V4.2 - MODULAR CORE FRAMEWORK
+// VANGUARD V4.5 - MULTI-TENANT SEGREGATION
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
 
-// --- 1. CORE DATABASE ---
 const CoreDB = {
     defaultSchema: [
         { "id": "srn", "label": "Service Request Number (SRN)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null },
@@ -19,7 +18,18 @@ const CoreDB = {
         { "id": "chemicals", "label": "Chemicals Used (ml/L)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null }
     ],
     defaultTenants: [
-        { "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "status": "ACTIVE", "motto": "Mo Te Katoa Nga Iwi | All The People" }
+        { 
+            "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, 
+            "status": "ACTIVE", "motto": "Mo Te Katoa Nga Iwi | All The People",
+            "contactName": "Admin Contact", "contactEmail": "admin@poriruacity.govt.nz", "contactPhone": "04 237 5089",
+            "billingCycle": "Annually", "logo": ""
+        },
+        { 
+            "id": "T002", "name": "Wellington City Council", "tier": "City B", "licenses": 50, 
+            "status": "ACTIVE", "motto": "Absolutely Positively Wellington",
+            "contactName": "WCC Dispatch", "contactEmail": "graffiti@wcc.govt.nz", "contactPhone": "04 499 4444",
+            "billingCycle": "Monthly", "logo": ""
+        }
     ],
     kmlConfig: [
         { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
@@ -38,12 +48,33 @@ const CoreDB = {
         return JSON.parse(mem);
     },
     saveTenants: function(data) { localStorage.setItem('tt_tenants', JSON.stringify(data)); },
+    
     getJobBank: function() { return JSON.parse(localStorage.getItem('tt_jobbank') || '[]'); },
     saveJobBank: function(data) { localStorage.setItem('tt_jobbank', JSON.stringify(data)); },
-    pushJob: function(jobObj) { let b = this.getJobBank(); b.unshift(jobObj); this.saveJobBank(b); }
+    getActiveTenantId: function() { return localStorage.getItem('vg_active_tenant') || "T001"; },
+    setActiveTenantId: function(id) { localStorage.setItem('vg_active_tenant', id); },
+    
+    getTenantJobs: function() { 
+        const activeId = this.getActiveTenantId();
+        return this.getJobBank().filter(j => j.tenantId === activeId); 
+    },
+    getJob: function(jobId) {
+        return this.getJobBank().find(j => j.jobId === jobId);
+    },
+    pushJob: function(jobObj) { 
+        let b = this.getJobBank(); 
+        jobObj.tenantId = this.getActiveTenantId(); 
+        jobObj.jobId = 'J-' + Date.now() + '-' + Math.floor(Math.random() * 1000); 
+        b.unshift(jobObj); 
+        this.saveJobBank(b); 
+    },
+    removeJob: function(jobId) {
+        let b = this.getJobBank();
+        b = b.filter(j => j.jobId !== jobId);
+        this.saveJobBank(b);
+    }
 };
 
-// --- 2. GLOBAL UI UTILITIES ---
 const UI = {
     openLeftSidebar: () => document.getElementById('left-sidebar').classList.add('open'),
     closeLeftSidebar: () => document.getElementById('left-sidebar').classList.remove('open'),
@@ -76,10 +107,42 @@ const UI = {
         } else if (role === 'dispatch') {
             document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">💳</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">ACCOUNT ${tenantStatus}</h2><p style="color:#555; font-weight:bold; line-height:1.5;">Please contact Accounts Payable to restore VanGuard dispatch services for ${tenantName}.</p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`;
         }
+    },
+    processAndWatermarkImage: function(file, callback) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const MAX_DIM = 1920;
+                let width = img.width;
+                let height = img.height;
+                if(width > height) { if(width > MAX_DIM) { height *= MAX_DIM / width; width = MAX_DIM; } }
+                else { if(height > MAX_DIM) { width *= MAX_DIM / height; height = MAX_DIM; } }
+                canvas.width = width; canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const latlng = typeof window._mapEngine !== 'undefined' && window._mapEngine.userMarker ? window._mapEngine.userMarker.getLatLng() : {lat: 0, lng: 0};
+                const srnInput = document.getElementById('work-srn') || document.getElementById('insp-srn');
+                const srnVal = srnInput && srnInput.value ? srnInput.value : 'N/A';
+                const dateStr = new Date().toLocaleString('en-NZ');
+                const watermarkText = `SRN: ${srnVal} | LAT: ${latlng.lat.toFixed(5)} LON: ${latlng.lng.toFixed(5)} | DATE: ${dateStr} | VAN: 04`;
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, height - 50, width, 50);
+                ctx.font = 'bold 18px monospace';
+                ctx.fillStyle = '#ffea00';
+                ctx.fillText(watermarkText, 20, height - 20);
+
+                callback(canvas.toDataURL('image/jpeg', 0.8));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
 };
 
-// --- 3. MAP ENGINE (Shared Component) ---
 class MapEngine {
     constructor(mapId, role) {
         this.mapId = mapId;
@@ -140,7 +203,7 @@ class MapEngine {
             });
             group.addLayer(runLayer);
         });
-        window._mapEngine = this; // global ref for toggles
+        window._mapEngine = this; 
     }
 
     toggleLayer(name, show) { if(show) this.map.addLayer(this.layers[name]); else this.map.removeLayer(this.layers[name]); }
@@ -176,18 +239,17 @@ class MapEngine {
     }
 }
 
-// --- 4. AGENT CONTROLLER ---
 const AgentCtrl = {
     activeSite: { name: "", type: "" },
     workState: { startTime: null, accumulated: 0, photo1: null, photo2: null },
     timerInterval: null,
     
     init: function() {
-        // Enforce Tenant Status Lockout
-        const t = CoreDB.getTenants()[0];
+        const activeId = CoreDB.getActiveTenantId();
+        const t = CoreDB.getTenants().find(x => x.id === activeId);
         if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('agent', t.status, t.name); return; }
 
-        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.2`;
+        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.5`;
         new MapEngine('map', 'agent');
         this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
@@ -221,17 +283,16 @@ const AgentCtrl = {
     },
 
     handlePhoto: function(step) {
-        const input = document.getElementById('photo-' + step) || document.getElementById('photo-insp-' + step); // stub
+        const input = document.getElementById('photo-' + step) || document.getElementById('photo-insp-' + step); 
         const btn = document.getElementById('btn-' + step);
         if(!input || !input.files || !input.files[0]) return;
         
         btn.innerHTML = `<div style="padding:10px;">⏳ Processing...</div>`;
         const now = new Date();
         
-        const reader = new FileReader();
-        reader.onload = (e) => {
+        UI.processAndWatermarkImage(input.files[0], (dataUrl) => {
             btn.classList.add('done');
-            btn.style.backgroundImage = `url(${e.target.result})`;
+            btn.style.backgroundImage = `url(${dataUrl})`;
             btn.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ ${step.toUpperCase()}<br><small>${now.toLocaleTimeString('en-NZ')}</small></div>`;
             
             if(step === 'before' || step === 'start') {
@@ -243,8 +304,7 @@ const AgentCtrl = {
                 if(document.getElementById('submit-work-btn')) document.getElementById('submit-work-btn').disabled = false;
                 if(document.getElementById('submit-insp-btn')) document.getElementById('submit-insp-btn').disabled = false;
             }
-        };
-        reader.readAsDataURL(input.files[0]);
+        });
     },
 
     startTimer: function() {
@@ -285,33 +345,33 @@ const AgentCtrl = {
     
     openJobBank: function() {
         const list = document.getElementById('agent-bank-list');
-        const data = CoreDB.getJobBank();
+        const data = CoreDB.getTenantJobs();
         if (data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666;">No paused jobs.</p>'; }
         else {
-            list.innerHTML = data.map((j, i) => `<div style="background:#f1f2f6; margin-bottom:10px; padding:15px; border-radius:10px; cursor:pointer;" onclick="AgentCtrl.resumeJob(${i})"><strong>${j.type}</strong>: ${j.site}<br><small>${j.pausedAt}</small></div>`).join('');
+            list.innerHTML = data.map((j) => `<div style="background:#f1f2f6; margin-bottom:10px; padding:15px; border-radius:10px; cursor:pointer;" onclick="AgentCtrl.resumeJob('${j.jobId}')"><strong>${j.type}</strong>: ${j.site}<br><small>${j.pausedAt}</small></div>`).join('');
         }
         UI.openOverlay('jobbank');
     },
-    resumeJob: function(i) {
-        let b = CoreDB.getJobBank();
-        this.activeSite.name = b[i].site;
-        this.workState.accumulated = b[i].accumulated;
+    resumeJob: function(jobId) {
+        let job = CoreDB.getJob(jobId);
+        if(!job) return;
+        this.activeSite.name = job.site;
+        this.workState.accumulated = job.accumulated;
         this.workState.startTime = new Date();
-        b.splice(i, 1); CoreDB.saveJobBank(b);
+        CoreDB.removeJob(jobId);
         UI.closeOverlay('jobbank');
-        this.openOverlay(b[i]?.type === 'INSPECTION' ? 'inspection' : 'work');
+        this.openOverlay(job.type === 'INSPECTION' ? 'inspection' : 'work');
         this.startTimer();
     },
     centerGPS: function() { if(window._mapEngine) window._mapEngine.map.panTo(window._mapEngine.userMarker.getLatLng()); }
 };
 
-// --- 5. DISPATCH CONTROLLER ---
 const DispatchCtrl = {
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     
     init: function() {
-        // Enforce Tenant Status Lockout
-        const t = CoreDB.getTenants()[0];
+        const activeId = CoreDB.getActiveTenantId();
+        const t = CoreDB.getTenants().find(x => x.id === activeId);
         if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; }
 
         if(window.location.search.includes('iframe=true')) {
@@ -377,7 +437,7 @@ const DispatchCtrl = {
 
     renderBank: function(filterType) {
         const listEl = document.getElementById('dispatch-bank-list');
-        const data = CoreDB.getJobBank();
+        const data = CoreDB.getTenantJobs();
         const filtered = data.filter(j => (filterType === 'PENDING' && j.type !== 'COMPLETED') || (filterType === 'COMPLETED' && j.type === 'COMPLETED') );
         
         if(filtered.length === 0) { listEl.innerHTML = `<p style="text-align:center; color:#888; font-size:13px; margin-top:20px;">No ${filterType} jobs.</p>`; return; }
@@ -392,14 +452,19 @@ const DispatchCtrl = {
     }
 };
 
-// --- 6. ADMIN CONTROLLER ---
 const AdminCtrl = {
     init: function() { 
         this.renderSchema(); 
-        const t = CoreDB.getTenants()[0];
+        const activeId = CoreDB.getActiveTenantId();
+        const t = CoreDB.getTenants().find(x => x.id === activeId);
         if(t) {
             if(document.getElementById('admin-tenant-name')) document.getElementById('admin-tenant-name').innerText = t.name;
             if(document.getElementById('admin-tenant-motto')) document.getElementById('admin-tenant-motto').innerText = t.motto || '';
+            const logoEl = document.getElementById('admin-tenant-logo');
+            if(logoEl) {
+                if(t.logo) logoEl.innerHTML = `<img src="${t.logo}" style="max-height:80px; max-width:200px;">`;
+                else logoEl.innerHTML = `⚓`; 
+            }
         }
     },
     switchTab: function(id) {
@@ -439,7 +504,6 @@ const AdminCtrl = {
     toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} }
 };
 
-// --- 7. GOD CONTROLLER ---
 const GodCtrl = {
     init: function() { this.renderSchema(); this.renderTenants(); },
     switchTab: function(id) {
@@ -449,7 +513,6 @@ const GodCtrl = {
         event.currentTarget.classList.add('active-nav');
     },
     
-    // Export Functions 
     exportDBText: function() {
         const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`;
         UI.downloadTextFile('Spoof_Database.txt', data);
@@ -460,12 +523,16 @@ const GodCtrl = {
         UI.downloadTextFile('Blank_Database_Template.txt', data);
     },
 
-    // Tenant Functions
     renderTenants: function() {
         const c = document.getElementById('god-tenant-list');
         if(!c) return;
         const tenants = CoreDB.getTenants();
+        const bank = CoreDB.getJobBank();
+        
         c.innerHTML = tenants.map(t => {
+            const tenantJobs = bank.filter(j => j.tenantId === t.id); 
+            const pendingCount = tenantJobs.filter(j => j.type !== 'COMPLETED').length;
+            const completedCount = tenantJobs.filter(j => j.type === 'COMPLETED').length;
             const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c');
             return `
             <div style="background:var(--bg-light); border:1px solid #ddd; border-radius:8px; margin-bottom:10px; overflow:hidden;">
@@ -478,23 +545,50 @@ const GodCtrl = {
                     <div><span class="badge blue" style="background:${statColor};">${t.status}</span></div>
                 </div>
                 <div id="t-exp-${t.id}" style="display:none; padding:20px; border-top:1px solid #ddd; background:#fff;">
-                    <div class="form-grid">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; background:#f4f6f8; padding:10px; border-radius:8px; align-items:center;">
+                        <div style="font-size:12px; color:#555;"><strong>Live Metrics:</strong> <span style="margin-left:10px; color:#e74c3c;">${pendingCount} Pending</span> | <span style="margin-left:10px; color:#2ecc71;">${completedCount} Completed</span></div>
+                        <button class="std-btn gray" style="width:auto; padding:8px 15px; font-size:11px;" onclick="GodCtrl.impersonateTenant('${t.id}')">Enter Admin Dashboard</button>
+                    </div>
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr;">
                         <div><label class="input-label">Council Name</label><input type="text" id="t-name-${t.id}" class="std-input" value="${t.name}"></div>
-                        <div><label class="input-label">Tier</label><input type="text" id="t-tier-${t.id}" class="std-input" value="${t.tier}"></div>
+                        <div>
+                            <label class="input-label">Subscription Tier</label>
+                            <select id="t-tier-${t.id}" class="std-input">
+                                <option value="City A" ${t.tier==='City A'?'selected':''}>City A (Test)</option>
+                                <option value="City B" ${t.tier==='City B'?'selected':''}>City B (Test)</option>
+                                <option value="Municipal - Small" ${t.tier==='Municipal - Small'?'selected':''}>Municipal - Small</option>
+                                <option value="Municipal - Large" ${t.tier==='Municipal - Large'?'selected':''}>Municipal - Large</option>
+                                <option value="State Police" ${t.tier==='State Police'?'selected':''}>State Police</option>
+                            </select>
+                        </div>
                         <div><label class="input-label">Licenses</label><input type="number" id="t-lic-${t.id}" class="std-input" value="${t.licenses}"></div>
+                        
+                        <div><label class="input-label">Primary Contact</label><input type="text" id="t-cname-${t.id}" class="std-input" value="${t.contactName || ''}" placeholder="Name"></div>
+                        <div><label class="input-label">Contact Email</label><input type="email" id="t-cemail-${t.id}" class="std-input" value="${t.contactEmail || ''}" placeholder="Email"></div>
+                        <div><label class="input-label">Contact Phone</label><input type="text" id="t-cphone-${t.id}" class="std-input" value="${t.contactPhone || ''}" placeholder="Phone"></div>
+                        
+                        <div style="grid-column: span 3;"><label class="input-label">Tenant Logo (URL or Image Link)</label><input type="text" id="t-logo-${t.id}" class="std-input" placeholder="https://..." value="${t.logo || ''}"></div>
+                        
+                        <div style="grid-column: span 2;"><label class="input-label">Motto / Slogan</label><input type="text" id="t-motto-${t.id}" class="std-input" value="${t.motto || ''}"></div>
+                        <div>
+                            <label class="input-label">Billing Cycle</label>
+                            <select id="t-bill-${t.id}" class="std-input">
+                                <option value="Monthly" ${t.billingCycle==='Monthly'?'selected':''}>Monthly</option>
+                                <option value="Annually" ${t.billingCycle==='Annually'?'selected':''}>Annually</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="input-label">Account Status</label>
-                            <select id="t-stat-${t.id}" class="std-input">
+                            <select id="t-stat-${t.id}" class="std-input" style="border:2px solid ${statColor};">
                                 <option value="ACTIVE" ${t.status==='ACTIVE'?'selected':''}>Active</option>
                                 <option value="SUSPENDED" ${t.status==='SUSPENDED'?'selected':''}>Suspended (Arrears)</option>
                                 <option value="DEACTIVATED" ${t.status==='DEACTIVATED'?'selected':''}>Deactivated</option>
                             </select>
                         </div>
-                        <div style="grid-column: span 2;"><label class="input-label">Motto / Slogan</label><input type="text" id="t-motto-${t.id}" class="std-input" value="${t.motto || ''}"></div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                    <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px dashed #eee; padding-top:15px;">
                         <button class="std-btn red" style="width:auto; padding:10px 20px;" onclick="GodCtrl.deleteTenant('${t.id}')">Delete Tenant</button>
-                        <button class="std-btn blue" style="width:auto; padding:10px 20px;" onclick="GodCtrl.saveTenant('${t.id}')">Save Changes</button>
+                        <button class="std-btn blue" style="width:auto; padding:10px 40px; font-size:16px;" onclick="GodCtrl.saveTenant('${t.id}')">Confirm Changes</button>
                     </div>
                 </div>
             </div>`;
@@ -504,7 +598,10 @@ const GodCtrl = {
         const name = prompt("Enter Council Name:");
         if(!name) return;
         const tenants = CoreDB.getTenants();
-        tenants.push({ id: 'T'+Math.floor(Math.random()*900+100), name: name, tier: "City A", licenses: 4, status: "ACTIVE", motto: "" });
+        tenants.push({ 
+            id: 'T'+Math.floor(Math.random()*900+100), name: name, tier: "Municipal - Small", licenses: 4, status: "ACTIVE", motto: "",
+            contactName: "", contactEmail: "", contactPhone: "", billingCycle: "Monthly", logo: ""
+        });
         CoreDB.saveTenants(tenants);
         this.renderTenants();
     },
@@ -517,9 +614,14 @@ const GodCtrl = {
             t.licenses = parseInt(document.getElementById(`t-lic-${id}`).value) || 0;
             t.status = document.getElementById(`t-stat-${id}`).value;
             t.motto = document.getElementById(`t-motto-${id}`).value;
+            t.contactName = document.getElementById(`t-cname-${id}`).value;
+            t.contactEmail = document.getElementById(`t-cemail-${id}`).value;
+            t.contactPhone = document.getElementById(`t-cphone-${id}`).value;
+            t.billingCycle = document.getElementById(`t-bill-${id}`).value;
+            t.logo = document.getElementById(`t-logo-${id}`).value;
             CoreDB.saveTenants(tenants);
             this.renderTenants();
-            alert("Tenant details saved.");
+            alert("Tenant details confirmed and updated.");
         }
     },
     deleteTenant: function(id) {
@@ -529,8 +631,11 @@ const GodCtrl = {
             this.renderTenants();
         }
     },
+    impersonateTenant: function(id) {
+        CoreDB.setActiveTenantId(id);
+        window.location.href = 'admin.html';
+    },
 
-    // Schema Functions
     renderSchema: function() {
         const c = document.getElementById('god-schema-render');
         if(!c) return;
@@ -554,7 +659,6 @@ const GodCtrl = {
     addField: function() { let l = document.getElementById('new-global-field-name').value.trim(); let t = document.getElementById('new-global-field-type').value; if(!l) return; let id=l.toLowerCase().replace(/[^a-z0-9]/g, '_'); let db=CoreDB.getSchema(); if(db.find(f=>f.id===id)) return; db.push({id:id, label:l, type:t, tenantVisible:true, tenantMandatory:false, options: t==='select'?[]:null}); CoreDB.saveSchema(db); this.renderSchema(); document.getElementById('new-global-field-name').value=''; }
 };
 
-// --- BOOTSTRAP ---
 document.addEventListener('DOMContentLoaded', () => {
     const role = document.body.dataset.role;
     if(role === 'agent') AgentCtrl.init();

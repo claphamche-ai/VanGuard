@@ -1,0 +1,17 @@
+VANGUARD FEATURE ROADMAP & MASTER LIST
+--------------------------------------
+
+[ACTIVE]
+- Modular MVC Architecture (Agent, Dispatch, Admin, God).
+- Live Job Bank (Pending/Completed filtering).
+- Offline Data Persistence (Local Storage Mock Engine).
+- Metadata Geolocation Verification: Agent photos are client-side compressed and watermarked.
+- Dynamic Tenant Suspension: Immediate lockout screens based on account standing.
+- God-Mode Tenant Impersonation: Seamless warping into client admin dashboards.
+- Multi-Tenant Segregation: Database queries partitioned by tenantId to prevent City A from viewing City B data.
+
+[PENDING / FUTURE INSTALLMENTS]
+- Cross-Tenant Law Enforcement View: Allow LE accounts to bypass standard tenant isolation and view data globally.
+- Agent Site Approval Workflow: Dedicated queue for Admins/Dispatch to approve one-off sites logged by field workers.
+- GIS Parsing Tool: KML/Excel/CSV ingestion scripts for importing raw council mapping data into the database.
+- Geo-Fencing (Premium Add-on): Active radius enforcement locking UI if agent is outside 50m of map coordinate.

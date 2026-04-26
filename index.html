@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Login</title>
-    <link rel="stylesheet" href="styles.css?v=4.2" />
+    <link rel="stylesheet" href="styles.css?v=4.5" />
 </head>
 <body class="login-wrapper">
     <div class="login-frame">🚐</div>
@@ -13,9 +13,16 @@
         <input type="password" id="password" class="std-input" placeholder="Password" required>
         <button type="submit" class="std-btn yellow">Log In</button>
         <div id="login-error" style="color:#e74c3c; text-align:center; margin-top:5px; font-size:13px; font-weight:bold; display:none;">Invalid credentials</div>
+        
+        <div style="margin-top:20px; padding:15px; background:#f4f6f8; border-radius:8px; font-size:11px; color:#666;">
+            <strong>Test Accounts:</strong><br>
+            City A (T001): <i>worker, dispatch, admin</i><br>
+            City B (T002): <i>worker2, dispatch2, admin2</i><br>
+            System Node: <i>god</i>
+        </div>
     </form>
     <div class="login-brand">
-        <h1>VanGuard <span class="version">v4.2</span></h1>
+        <h1>VanGuard <span class="version">v4.5</span></h1>
     </div>
     <script>
         function handleLogin(e) {
@@ -24,11 +31,15 @@
             const p = document.getElementById('password').value.toLowerCase().trim();
             const err = document.getElementById('login-error');
             err.style.display = 'none';
-            if (u === 'worker' && p === 'worker') { window.location.href = 'agent.html'; } 
-            else if (u === 'dispatch' && p === 'dispatch') { window.location.href = 'dispatch.html'; } 
-            else if (u === 'reporter' && p === 'reporter') { window.location.href = 'reporter.html'; }
-            else if (u === 'admin' && p === 'admin') { window.location.href = 'admin.html'; } 
+            
+            if (u === 'worker' && p === 'worker') { localStorage.setItem('vg_active_tenant', 'T001'); window.location.href = 'agent.html'; } 
+            else if (u === 'worker2' && p === 'worker2') { localStorage.setItem('vg_active_tenant', 'T002'); window.location.href = 'agent.html'; } 
+            else if (u === 'dispatch' && p === 'dispatch') { localStorage.setItem('vg_active_tenant', 'T001'); window.location.href = 'dispatch.html'; } 
+            else if (u === 'dispatch2' && p === 'dispatch2') { localStorage.setItem('vg_active_tenant', 'T002'); window.location.href = 'dispatch.html'; } 
+            else if (u === 'admin' && p === 'admin') { localStorage.setItem('vg_active_tenant', 'T001'); window.location.href = 'admin.html'; } 
+            else if (u === 'admin2' && p === 'admin2') { localStorage.setItem('vg_active_tenant', 'T002'); window.location.href = 'admin.html'; } 
             else if (u === 'god' && p === 'god') { window.location.href = 'god.html'; } 
+            else if (u === 'reporter' && p === 'reporter') { window.location.href = 'reporter.html'; }
             else { err.style.display = 'block'; }
         }
     </script>

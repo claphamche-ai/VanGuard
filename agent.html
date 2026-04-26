@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Agent Terminal</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=4.2" />
+    <link rel="stylesheet" href="styles.css?v=4.5" />
 </head>
 <body data-role="agent" style="margin:0; padding:0; overflow:hidden;">
     <div id="live-timer-widget">00:00</div>
@@ -16,7 +16,7 @@
     <div id="left-sidebar" class="sidebar">
         <div class="sidebar-close" onclick="UI.closeLeftSidebar()">✕</div>
         <div class="sidebar-header">VanGuard</div>
-        <div class="sidebar-version">Version 4.2 | AGENT</div>
+        <div class="sidebar-version">Version 4.5 | AGENT</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         <div class="nav-item" onclick="UI.toggleLayerList()">🗺️ Map Layers</div>
         <div id="layer-container" class="layer-list" style="display:none;"></div>
@@ -25,7 +25,6 @@
         <div class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
     </div>
 
-    <!-- Agent Site Info Popup -->
     <div id="site-info" class="popup-box">
         <div class="info-header"><span id="s-name">Select Site</span><button onclick="UI.closePopup('site-info')">✕</button></div>
         <div class="info-body">
@@ -45,7 +44,6 @@
         </div>
     </div>
 
-    <!-- Work Overlay -->
     <div id="work-overlay" class="full-overlay">
         <div class="form-header"><span>LOG WORK</span><button onclick="UI.closeOverlay('work')">✕</button></div>
         <div class="form-content">
@@ -68,7 +66,6 @@
         </div>
     </div>
 
-    <!-- Inspection Overlay -->
     <div id="inspection-overlay" class="full-overlay">
         <div class="form-header"><span>INSPECTION</span><button onclick="UI.closeOverlay('inspection')">✕</button></div>
         <div class="form-content">
@@ -99,6 +96,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=4.2"></script>
+    <script src="app.js?v=4.5"></script>
 </body>
 </html>
