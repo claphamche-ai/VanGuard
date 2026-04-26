@@ -1,128 +1,20 @@
 
 const BRAND_NAME = "VanGuard";
 
-if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.21`; }
+if(document.getElementById('page-title')) { document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v3.22`; }
 if(document.getElementById('brand-name')) { document.getElementById('brand-name').innerText = BRAND_NAME; }
 
+// --- DATABASE MOCK ENGINE ---
 const defaultSchema = [
-    {
-        "id": "srn",
-        "label": "Service Request Number (SRN)",
-        "type": "text",
-        "tenantVisible": true,
-        "tenantMandatory": false,
-        "options": null
-    },
-    {
-        "id": "workers",
-        "label": "Number of Workers",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "1 Worker (Default)", "visible": true },
-            { "name": "2 Workers", "visible": true },
-            { "name": "3 Workers", "visible": true },
-            { "name": "4 Workers", "visible": true },
-            { "name": "5+ Workers", "visible": true }
-        ]
-    },
-    {
-        "id": "area",
-        "label": "Repaired Area (m²)",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "0.5", "visible": true },
-            { "name": "1", "visible": true },
-            { "name": "2", "visible": true },
-            { "name": "5", "visible": true },
-            { "name": "10", "visible": true },
-            { "name": "20", "visible": true }
-        ]
-    },
-    {
-        "id": "property",
-        "label": "Property Type",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "Commercial Building", "visible": true },
-            { "name": "Private Residence", "visible": true },
-            { "name": "Public Fence", "visible": true },
-            { "name": "Utility Box", "visible": true },
-            { "name": "Underpass", "visible": true },
-            { "name": "Private Fence.", "visible": true }
-        ]
-    },
-    {
-        "id": "surface",
-        "label": "Surface Type",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "Brick", "visible": true },
-            { "name": "Raw Wood", "visible": true },
-            { "name": "Painted (Smooth)", "visible": true },
-            { "name": "Metal", "visible": true },
-            { "name": "Concrete / Stone", "visible": true },
-            { "name": "Glass", "visible": true }
-        ]
-    },
-    {
-        "id": "medium",
-        "label": "Graffiti Medium",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "Spray Paint", "visible": true },
-            { "name": "Paint (Brush/Roller)", "visible": true },
-            { "name": "Felt Pen / Marker", "visible": true },
-            { "name": "Etched / Scratched", "visible": true },
-            { "name": "Sticker / Poster", "visible": true }
-        ]
-    },
-    {
-        "id": "method",
-        "label": "Removal Method",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "Painted over", "visible": true },
-            { "name": "Chemical removal", "visible": true },
-            { "name": "Pressure wash", "visible": true },
-            { "name": "Sand blasting", "visible": true },
-            { "name": "Mechanical sanding", "visible": true }
-        ]
-    },
-    {
-        "id": "color",
-        "label": "Paint Color Used",
-        "type": "select",
-        "tenantVisible": true,
-        "tenantMandatory": true,
-        "options": [
-            { "name": "White", "visible": true },
-            { "name": "Black", "visible": true },
-            { "name": "Grey", "visible": true },
-            { "name": "Brown", "visible": true },
-            { "name": "Colour Match", "visible": true },
-            { "name": "yellow", "visible": true }
-        ]
-    },
-    {
-        "id": "chemicals",
-        "label": "Chemicals Used (ml/L)",
-        "type": "text",
-        "tenantVisible": true,
-        "tenantMandatory": false,
-        "options": null
-    }
+    { "id": "srn", "label": "Service Request Number (SRN)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null },
+    { "id": "workers", "label": "Number of Workers", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "1 Worker (Default)", "visible": true }, { "name": "2 Workers", "visible": true }, { "name": "3 Workers", "visible": true }, { "name": "4 Workers", "visible": true }, { "name": "5+ Workers", "visible": true } ] },
+    { "id": "area", "label": "Repaired Area (m²)", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "0.5", "visible": true }, { "name": "1", "visible": true }, { "name": "2", "visible": true }, { "name": "5", "visible": true }, { "name": "10", "visible": true }, { "name": "20", "visible": true } ] },
+    { "id": "property", "label": "Property Type", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Commercial Building", "visible": true }, { "name": "Private Residence", "visible": true }, { "name": "Public Fence", "visible": true }, { "name": "Utility Box", "visible": true }, { "name": "Underpass", "visible": true }, { "name": "Private Fence.", "visible": true } ] },
+    { "id": "surface", "label": "Surface Type", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Brick", "visible": true }, { "name": "Raw Wood", "visible": true }, { "name": "Painted (Smooth)", "visible": true }, { "name": "Metal", "visible": true }, { "name": "Concrete / Stone", "visible": true }, { "name": "Glass", "visible": true } ] },
+    { "id": "medium", "label": "Graffiti Medium", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Spray Paint", "visible": true }, { "name": "Paint (Brush/Roller)", "visible": true }, { "name": "Felt Pen / Marker", "visible": true }, { "name": "Etched / Scratched", "visible": true }, { "name": "Sticker / Poster", "visible": true } ] },
+    { "id": "method", "label": "Removal Method", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Painted over", "visible": true }, { "name": "Chemical removal", "visible": true }, { "name": "Pressure wash", "visible": true }, { "name": "Sand blasting", "visible": true }, { "name": "Mechanical sanding", "visible": true } ] },
+    { "id": "color", "label": "Paint Color Used", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "White", "visible": true }, { "name": "Black", "visible": true }, { "name": "Grey", "visible": true }, { "name": "Brown", "visible": true }, { "name": "Colour Match", "visible": true }, { "name": "yellow", "visible": true } ] },
+    { "id": "chemicals", "label": "Chemicals Used (ml/L)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null }
 ];
 
 function getDB() {
@@ -142,62 +34,6 @@ function toggleSubRow(rowId, iconId) {
         row.style.display = 'none';
         icon.innerText = '▶';
     }
-}
-
-// GOD DASHBOARD RENDERER
-function renderGodSchema() {
-    const container = document.getElementById('god-schema-render');
-    if(!container) return;
-    let db = getDB();
-    let html = '<table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;"><tr style="background: var(--nav-dark); color: white;"><th style="padding: 12px 15px;">Global Data Field</th><th style="padding: 12px 15px; width: 100px;">Type</th><th style="padding: 12px 15px; text-align: right; width: 100px;">Action</th></tr>';
-    db.forEach(f => {
-        html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-        if(f.type === 'select') {
-            html += `<td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('god-sub-${f.id}', 'god-icon-${f.id}')"><span id="god-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`;
-        } else {
-            html += `<td style="padding: 15px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`;
-        }
-        html += `<td style="padding: 15px; color: #666;">${f.type==='select'?'Drop-down':'Input'}</td>`;
-        html += `<td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="deleteGodField('${f.id}')">Delete</button></td></tr>`;
-        
-        if(f.type === 'select') {
-            html += `<tr id="god-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 20px 20px 25px 45px;"><div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Manage Drop-down Options</div><div class="sub-options-list">`;
-            f.options.forEach(opt => {
-                html += `<div class="sub-option-row"><span>${opt.name}</span><button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="deleteGodOption('${f.id}', '${opt.name}')">✕</button></div>`;
-            });
-            html += `<div style="display: flex; gap: 10px; margin-top: 10px;"><input type="text" id="god-new-opt-${f.id}" class="std-input" placeholder="New Option..." style="margin-bottom: 0; padding: 10px;"><button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="addGodOption('${f.id}')">➕ Add</button></div></div></td></tr>`;
-        }
-    });
-    html += '</table>';
-    container.innerHTML = html;
-}
-
-// TENANT ADMIN RENDERER
-function renderAdminSchema() {
-    const container = document.getElementById('admin-schema-render');
-    if(!container) return;
-    let db = getDB();
-    let html = '<table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;"><tr style="border-bottom: 2px solid #ddd; color: #666;"><th style="padding: 10px 5px;">Data Field / Drop-Down Options</th><th style="padding: 10px 5px; text-align: center; width: 120px;">Visible in App</th><th style="padding: 10px 5px; text-align: center; width: 120px;">Mandatory</th></tr>';
-    db.forEach(f => {
-        html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-        if(f.type === 'select') {
-            html += `<td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="toggleSubRow('adm-sub-${f.id}', 'adm-icon-${f.id}')"><span id="adm-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`;
-        } else {
-            html += `<td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`;
-        }
-        html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantVisible?'checked':''} onchange="toggleFieldVis('${f.id}')"><span class="slider"></span></label></td>`;
-        html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantMandatory?'checked':''} onchange="toggleFieldMan('${f.id}')"><span class="slider"></span></label></td></tr>`;
-        
-        if(f.type === 'select') {
-            html += `<tr id="adm-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 15px 15px 20px 35px;"><div style="font-size: 11px; font-weight: 900; margin-bottom: 10px; color: #888; text-transform: uppercase;">Option Visibility Toggles</div><div class="sub-options-list">`;
-            f.options.forEach(opt => {
-                html += `<div class="sub-option-row"><span>${opt.name}</span><label class="toggle-switch small"><input type="checkbox" ${opt.visible?'checked':''} onchange="toggleOptVis('${f.id}', '${opt.name}')"><span class="slider"></span></label></div>`;
-            });
-            html += `</div></td></tr>`;
-        }
-    });
-    html += '</table>';
-    container.innerHTML = html;
 }
 
 // AGENT FORM RENDERER
@@ -220,42 +56,12 @@ function renderAgentFields() {
     });
     container.innerHTML = html;
 
-    // Map Inspection SRN visibility dynamically
     let srnField = db.find(f => f.id === 'srn');
     let inspSrn = document.getElementById('insp-srn');
     if(inspSrn && srnField) { inspSrn.style.display = srnField.tenantVisible ? 'block' : 'none'; }
 }
 
-// DATABASE MUTATION FUNCTIONS
-function toggleFieldVis(id) { let db = getDB(); let f = db.find(x => x.id === id); if(f) { f.tenantVisible = !f.tenantVisible; saveDB(db); renderAdminSchema(); } }
-function toggleFieldMan(id) { let db = getDB(); let f = db.find(x => x.id === id); if(f) { f.tenantMandatory = !f.tenantMandatory; saveDB(db); renderAdminSchema(); } }
-function toggleOptVis(fieldId, optName) { let db = getDB(); let f = db.find(x => x.id === fieldId); if(f) { let o = f.options.find(y => y.name === optName); if(o) { o.visible = !o.visible; saveDB(db); renderAdminSchema(); } } }
-
-function deleteGodField(id) { if(!confirm("WARNING: Deleting a root field affects all global tenants. Proceed?")) return; let db = getDB(); db = db.filter(f => f.id !== id); saveDB(db); renderGodSchema(); }
-function deleteGodOption(fieldId, optName) { if(!confirm("WARNING: Deleting an option affects all global tenants. Proceed?")) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f) { f.options = f.options.filter(y => y.name !== optName); saveDB(db); renderGodSchema(); } }
-function addGodOption(fieldId) { let val = document.getElementById(`god-new-opt-${fieldId}`).value.trim(); if(!val) return; let db = getDB(); let f = db.find(x => x.id === fieldId); if(f && !f.options.find(o=>o.name === val)) { f.options.push({name: val, visible: true}); saveDB(db); renderGodSchema(); } document.getElementById(`god-new-opt-${fieldId}`).value = ''; }
-function addNewGodField() {
-    let label = document.getElementById('new-global-field-name').value.trim();
-    let type = document.getElementById('new-global-field-type').value;
-    if(!label) return;
-    let id = label.toLowerCase().replace(/[^a-z0-9]/g, '_');
-    let db = getDB();
-    if(db.find(f => f.id === id)) { alert("Field already exists!"); return; }
-    db.push({ id: id, label: label, type: type, tenantVisible: true, tenantMandatory: false, options: type === 'select' ? [] : null });
-    saveDB(db); renderGodSchema();
-    document.getElementById('new-global-field-name').value = '';
-}
-
-// DOM INITIALIZATION
 document.addEventListener('DOMContentLoaded', () => {
-    // Sync spoof database
-    const currentMemory = localStorage.getItem('vg_schema');
-    if(!currentMemory || currentMemory !== JSON.stringify(defaultSchema)) {
-        localStorage.setItem('vg_schema', JSON.stringify(defaultSchema));
-    }
-    
-    if(document.getElementById('god-schema-render')) renderGodSchema();
-    if(document.getElementById('admin-schema-render')) renderAdminSchema();
     if(document.getElementById('dynamic-work-fields')) renderAgentFields();
 });
 
@@ -263,8 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
 let timerInterval;
 let activeSite = { name: "", type: "" };
 let layers = {};
-let workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
-let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
+let workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false, beforePhoto: null, afterPhoto: null };
+let inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false, startPhoto: null, endPhoto: null };
+let userMarker; 
 
 function updateClock() {
     const now = new Date();
@@ -280,7 +87,7 @@ if(document.getElementById('map')) {
     baseMap.addTo(map);
 
     let trail = L.polyline([], {color: '#ff4757', weight: 4, dashArray: '10, 10', opacity: 0.7}).addTo(map);
-    let userMarker = L.marker([0,0], { 
+    userMarker = L.marker([0,0], { 
         icon: L.divIcon({ 
             className: '', 
             html: '<div class="van-inner" style="font-size: 40px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.7)); display: flex; align-items: center; justify-content: center; transition: transform 0.3s linear; transform: rotate(90deg);">🚐</div>', 
@@ -469,15 +276,57 @@ function openOverlay(type) {
 
 function closeOverlay(type) { document.getElementById(type + '-overlay').style.display = 'none'; }
 
+// --- WATERMARK & COMPRESSION ENGINE ---
+function processAndWatermarkImage(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const MAX_DIM = 1920;
+            let width = img.width;
+            let height = img.height;
+            
+            if(width > height) {
+                if(width > MAX_DIM) { height *= MAX_DIM / width; width = MAX_DIM; }
+            } else {
+                if(height > MAX_DIM) { width *= MAX_DIM / height; height = MAX_DIM; }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const latlng = typeof userMarker !== 'undefined' && userMarker ? userMarker.getLatLng() : {lat: 0, lng: 0};
+            const srnInput = document.getElementById('work-srn') || document.getElementById('insp-srn');
+            const srnVal = srnInput && srnInput.value ? srnInput.value : 'N/A';
+            const dateStr = new Date().toLocaleString('en-NZ');
+            
+            const watermarkText = `SRN: ${srnVal} | LAT: ${latlng.lat.toFixed(5)} LON: ${latlng.lng.toFixed(5)} | DATE: ${dateStr} | VAN: 04`;
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, height - 50, width, 50);
+            ctx.font = 'bold 18px monospace';
+            ctx.fillStyle = '#ffea00';
+            ctx.fillText(watermarkText, 20, height - 20);
+
+            // Export compressed JPEG
+            callback(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 function handleCoverPhoto(input) {
     if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
+        processAndWatermarkImage(input.files[0], function(dataUrl) {
             const frame = document.getElementById('cover-photo-frame');
-            frame.style.backgroundImage = `url(${e.target.result})`;
+            frame.style.backgroundImage = `url(${dataUrl})`;
             frame.classList.add('has-photo');
-        };
-        reader.readAsDataURL(input.files[0]);
+        });
     }
 }
 
@@ -498,20 +347,36 @@ function stopLiveTimer() {
 }
 
 function handleWorkPhoto(step) {
-    const now = new Date();
-    document.getElementById('btn-' + step).classList.add('done');
-    document.getElementById('time-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
+    const input = document.getElementById('photo-' + step);
+    if(!input.files || !input.files[0]) return;
     
-    if(step === 'before') {
-        workState.startTime = now;
-        workState.hasBefore = true;
-        document.getElementById('pause-work-btn').disabled = false;
-        startLiveTimer(now, workState.accumulated);
-        document.getElementById('ai-analysis-section').style.display = 'block';
-    } else {
-        workState.hasAfter = true;
-        document.getElementById('submit-work-btn').disabled = false;
-    }
+    // Change UI state to loading momentarily
+    const btn = document.getElementById('btn-' + step);
+    btn.innerHTML = `<div style="padding:10px;">⏳ Processing...</div>`;
+    
+    processAndWatermarkImage(input.files[0], function(dataUrl) {
+        const now = new Date();
+        btn.classList.add('done');
+        
+        // Visual Preview
+        btn.style.backgroundImage = `url(${dataUrl})`;
+        btn.style.backgroundSize = 'cover';
+        btn.style.backgroundPosition = 'center';
+        btn.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ ${step.toUpperCase()}<br><small>${now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'})}</small></div>`;
+        
+        if(step === 'before') {
+            workState.startTime = now;
+            workState.hasBefore = true;
+            workState.beforePhoto = dataUrl;
+            document.getElementById('pause-work-btn').disabled = false;
+            startLiveTimer(now, workState.accumulated);
+            document.getElementById('ai-analysis-section').style.display = 'block';
+        } else {
+            workState.hasAfter = true;
+            workState.afterPhoto = dataUrl;
+            document.getElementById('submit-work-btn').disabled = false;
+        }
+    });
 }
 
 function runAIAnalysis() {
@@ -533,19 +398,34 @@ function runAIAnalysis() {
 }
 
 function handleInspPhoto(step) {
-    const now = new Date();
-    document.getElementById('btn-insp-' + step).classList.add('done');
-    document.getElementById('time-insp-' + step).innerText = now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'});
+    const input = document.getElementById('photo-insp-' + step);
+    if(!input.files || !input.files[0]) return;
     
-    if(step === 'start') {
-        inspState.startTime = now;
-        inspState.hasStart = true;
-        document.getElementById('pause-insp-btn').disabled = false;
-        startLiveTimer(now, inspState.accumulated);
-    } else {
-        inspState.hasEnd = true;
-        document.getElementById('submit-insp-btn').disabled = false;
-    }
+    const btn = document.getElementById('btn-insp-' + step);
+    btn.innerHTML = `<div style="padding:10px;">⏳ Processing...</div>`;
+    
+    processAndWatermarkImage(input.files[0], function(dataUrl) {
+        const now = new Date();
+        btn.classList.add('done');
+        
+        // Visual Preview
+        btn.style.backgroundImage = `url(${dataUrl})`;
+        btn.style.backgroundSize = 'cover';
+        btn.style.backgroundPosition = 'center';
+        btn.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ ${step.toUpperCase()}<br><small>${now.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'})}</small></div>`;
+        
+        if(step === 'start') {
+            inspState.startTime = now;
+            inspState.hasStart = true;
+            inspState.startPhoto = dataUrl;
+            document.getElementById('pause-insp-btn').disabled = false;
+            startLiveTimer(now, inspState.accumulated);
+        } else {
+            inspState.hasEnd = true;
+            inspState.endPhoto = dataUrl;
+            document.getElementById('submit-insp-btn').disabled = false;
+        }
+    });
 }
 
 function handleDropdown(el) {
@@ -560,19 +440,24 @@ function handleDropdown(el) {
 
 function updateExtraCount(type) {
     const input = document.getElementById('photo-'+type+'-extra');
-    document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos added";
+    document.getElementById(type+'-extra-count').innerText = input.files.length + " extra photos compressed & attached";
     document.getElementById(type+'-extra-count').style.color = '#2ecc71';
 }
+
+const resetPhotoBtn = (id, text, subtext) => {
+    const btn = document.getElementById(id);
+    btn.classList.remove('done');
+    btn.style.backgroundImage = 'none';
+    btn.innerHTML = `📸 ${text}<br><small id="${id.replace('btn-','time-')}" style="font-weight:normal;">${subtext}</small>`;
+};
 
 function cancelJob() {
     if(confirm("Cancel this job? All unsaved progress will be discarded.")) {
         stopLiveTimer();
-        workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false };
+        workState = { startTime: null, accumulated: 0, hasBefore: false, hasAfter: false, beforePhoto: null, afterPhoto: null };
         
-        document.getElementById('btn-before').classList.remove('done');
-        document.getElementById('time-before').innerText = "Take photo to start";
-        document.getElementById('btn-after').classList.remove('done');
-        document.getElementById('time-after').innerText = "(Complete work)";
+        resetPhotoBtn('btn-before', 'BEFORE', 'Take photo to start');
+        resetPhotoBtn('btn-after', 'AFTER', '(Complete work)');
         
         document.getElementById('photo-before').value = "";
         document.getElementById('photo-after').value = "";
@@ -600,12 +485,10 @@ function cancelJob() {
 function cancelInsp() {
     if(confirm("Cancel this inspection? All unsaved progress will be discarded.")) {
         stopLiveTimer();
-        inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false };
+        inspState = { startTime: null, accumulated: 0, hasStart: false, hasEnd: false, startPhoto: null, endPhoto: null };
         
-        document.getElementById('btn-insp-start').classList.remove('done');
-        document.getElementById('time-insp-start').innerText = "Take photo to start";
-        document.getElementById('btn-insp-end').classList.remove('done');
-        document.getElementById('time-insp-end').innerText = "(Walk length)";
+        resetPhotoBtn('btn-insp-start', 'START', 'Take photo to start');
+        resetPhotoBtn('btn-insp-end', 'END', '(Walk length)');
         
         document.getElementById('photo-insp-start').value = "";
         document.getElementById('photo-insp-end').value = "";
@@ -714,16 +597,30 @@ function resumeAny(index) {
         inspState.startTime = new Date();
         inspState.accumulated = job.accumulated;
         inspState.hasStart = true;
-        document.getElementById('btn-insp-start').classList.add('done');
-        document.getElementById('time-insp-start').innerText = "RESUMED";
+        
+        // Reset Visuals
+        const btnStart = document.getElementById('btn-insp-start');
+        btnStart.classList.add('done');
+        btnStart.style.backgroundImage = job.startPhoto ? `url(${job.startPhoto})` : 'none';
+        btnStart.style.backgroundSize = 'cover';
+        btnStart.style.backgroundPosition = 'center';
+        btnStart.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ START<br><small>RESUMED</small></div>`;
+        
         openOverlay('inspection');
         startLiveTimer(inspState.startTime, inspState.accumulated);
     } else {
         workState.startTime = new Date();
         workState.accumulated = job.accumulated;
         workState.hasBefore = true;
-        document.getElementById('btn-before').classList.add('done');
-        document.getElementById('time-before').innerText = "RESUMED";
+        
+        // Reset Visuals
+        const btnBefore = document.getElementById('btn-before');
+        btnBefore.classList.add('done');
+        btnBefore.style.backgroundImage = job.beforePhoto ? `url(${job.beforePhoto})` : 'none';
+        btnBefore.style.backgroundSize = 'cover';
+        btnBefore.style.backgroundPosition = 'center';
+        btnBefore.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ BEFORE<br><small>RESUMED</small></div>`;
+        
         openOverlay('work');
         startLiveTimer(workState.startTime, workState.accumulated);
     }
