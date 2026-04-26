@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tenant Admin</title>
-    <link rel="stylesheet" href="styles.css?v=4.1" />
+    <link rel="stylesheet" href="styles.css?v=4.2" />
 </head>
 <body data-role="admin" class="admin-bg">
     <nav class="admin-topbar">
@@ -20,13 +20,13 @@
     <main class="admin-content" style="padding: 0; margin-top: 80px; height: calc(100vh - 80px); display: flex; flex-direction: column;">
         <div id="tab-welcome" class="admin-tab-content admin-welcome-box" style="margin: 40px auto;">
             <div style="text-align: center; margin-bottom: 20px;">
-                <!-- Porirua Branding Restored -->
+                <!-- Porirua Branding Dynamic Target -->
                 <div style="font-size: 60px;">⚓</div>
-                <h2 style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 10px 0; text-transform: uppercase;">Porirua City Council</h2>
-                <h3 style="font-size: 12px; font-weight: bold; color: #888; margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h3>
+                <h2 id="admin-tenant-name" style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 10px 0; text-transform: uppercase;">Porirua City Council</h2>
+                <h3 id="admin-tenant-motto" style="font-size: 12px; font-weight: bold; color: #888; margin: 0 0 20px 0; text-transform: uppercase;">Mo Te Katoa Nga Iwi | All The People</h3>
             </div>
             <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Admin</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888;">Version 4.1 | Regional Console</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888;">Version 4.2 | Regional Console</p>
         </div>
 
         <div id="tab-settings" class="admin-tab-content" style="display:none; width: 100%; max-width: 900px; margin: 40px auto;">
@@ -51,6 +51,6 @@
         </div>
 
     </main>
-    <script src="app.js?v=4.1"></script>
+    <script src="app.js?v=4.2"></script>
 </body>
 </html>

@@ -89,4 +89,4 @@ input:checked + .toggle-switch.small .slider:before { transform: translateX(16px
 .fs-btn { bottom:90px; right:20px; }
 .gps-btn { bottom:20px; right:20px; }
 #live-timer-widget { position:fixed; top:15px; left:50%; transform:translateX(-50%); background:#ff4757; color:white; padding:12px 15px; border-radius:8px; font-weight:900; font-family:monospace; font-size:18px; z-index:9000; display:none; }
-.badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 900; color: white; }
+.badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 900; color: white; text-transform: uppercase;}

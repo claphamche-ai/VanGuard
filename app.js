@@ -1,6 +1,6 @@
 
 // ==========================================
-// VANGUARD V4.1 - MODULAR CORE FRAMEWORK
+// VANGUARD V4.2 - MODULAR CORE FRAMEWORK
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
@@ -19,7 +19,7 @@ const CoreDB = {
         { "id": "chemicals", "label": "Chemicals Used (ml/L)", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": null }
     ],
     defaultTenants: [
-        { "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "active": true }
+        { "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "status": "ACTIVE", "motto": "Mo Te Katoa Nga Iwi | All The People" }
     ],
     kmlConfig: [
         { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' },
@@ -69,6 +69,13 @@ const UI = {
         document.body.appendChild(el);
         el.click();
         document.body.removeChild(el);
+    },
+    lockoutScreen: function(role, tenantStatus, tenantName) {
+        if (role === 'agent') {
+            document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">🛑</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">SERVICE UNAVAILABLE</h2><p style="color:#555; font-weight:bold;">Report to dispatch error code: <br><span style="color:#000; font-size:18px; display:inline-block; margin-top:10px; padding:5px 10px; background:#eee; border-radius:5px;">ERR-${tenantStatus}</span></p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`;
+        } else if (role === 'dispatch') {
+            document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">💳</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">ACCOUNT ${tenantStatus}</h2><p style="color:#555; font-weight:bold; line-height:1.5;">Please contact Accounts Payable to restore VanGuard dispatch services for ${tenantName}.</p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`;
+        }
     }
 };
 
@@ -76,7 +83,6 @@ const UI = {
 class MapEngine {
     constructor(mapId, role) {
         this.mapId = mapId;
-        // Fix for blank map: explicitly invalidate size after init
         setTimeout(() => {
             this.map = L.map(this.mapId, { zoomControl: false }).setView([-41.135, 174.84], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
@@ -177,7 +183,11 @@ const AgentCtrl = {
     timerInterval: null,
     
     init: function() {
-        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.1`;
+        // Enforce Tenant Status Lockout
+        const t = CoreDB.getTenants()[0];
+        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('agent', t.status, t.name); return; }
+
+        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.2`;
         new MapEngine('map', 'agent');
         this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
@@ -300,7 +310,10 @@ const DispatchCtrl = {
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     
     init: function() {
-        // If loaded inside iframe, hide log out button to prevent confusion
+        // Enforce Tenant Status Lockout
+        const t = CoreDB.getTenants()[0];
+        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; }
+
         if(window.location.search.includes('iframe=true')) {
             const lo = document.getElementById('standalone-logout');
             if(lo) lo.style.display = 'none';
@@ -381,7 +394,14 @@ const DispatchCtrl = {
 
 // --- 6. ADMIN CONTROLLER ---
 const AdminCtrl = {
-    init: function() { this.renderSchema(); },
+    init: function() { 
+        this.renderSchema(); 
+        const t = CoreDB.getTenants()[0];
+        if(t) {
+            if(document.getElementById('admin-tenant-name')) document.getElementById('admin-tenant-name').innerText = t.name;
+            if(document.getElementById('admin-tenant-motto')) document.getElementById('admin-tenant-motto').innerText = t.motto || '';
+        }
+    },
     switchTab: function(id) {
         document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
         document.getElementById('tab-' + id).style.display = 'block';
@@ -432,12 +452,12 @@ const GodCtrl = {
     // Export Functions 
     exportDBText: function() {
         const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`;
-        UI.downloadTextFile('VanGuard_Live_Schema.txt', data);
+        UI.downloadTextFile('Spoof_Database.txt', data);
     },
     exportBlankTemplate: function() {
         const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }];
         const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`;
-        UI.downloadTextFile('VanGuard_Blank_Template.txt', data);
+        UI.downloadTextFile('Blank_Database_Template.txt', data);
     },
 
     // Tenant Functions
@@ -445,25 +465,69 @@ const GodCtrl = {
         const c = document.getElementById('god-tenant-list');
         if(!c) return;
         const tenants = CoreDB.getTenants();
-        c.innerHTML = tenants.map(t => `
-            <div style="background:var(--bg-light); border:1px solid #ddd; padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h4 style="margin:0; color:var(--text-dark);">${t.name}</h4>
-                    <span style="font-size:12px; color:#666;">ID: ${t.id} | Tier: ${t.tier} | Licenses: ${t.licenses}</span>
+        c.innerHTML = tenants.map(t => {
+            const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c');
+            return `
+            <div style="background:var(--bg-light); border:1px solid #ddd; border-radius:8px; margin-bottom:10px; overflow:hidden;">
+                <div style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="UI.toggleSubRow('t-exp-${t.id}', 't-icon-${t.id}')">
+                    <div>
+                        <span id="t-icon-${t.id}" style="display:inline-block; width:15px; font-size:12px;">▶</span>
+                        <h4 style="margin:0; display:inline-block; color:var(--text-dark);">${t.name}</h4>
+                        <span style="font-size:12px; color:#666; margin-left:10px;">ID: ${t.id} | Tier: ${t.tier}</span>
+                    </div>
+                    <div><span class="badge blue" style="background:${statColor};">${t.status}</span></div>
                 </div>
-                <div>
-                    <span class="badge blue" style="background:${t.active?'#2ecc71':'#e74c3c'};">${t.active?'ACTIVE':'INACTIVE'}</span>
+                <div id="t-exp-${t.id}" style="display:none; padding:20px; border-top:1px solid #ddd; background:#fff;">
+                    <div class="form-grid">
+                        <div><label class="input-label">Council Name</label><input type="text" id="t-name-${t.id}" class="std-input" value="${t.name}"></div>
+                        <div><label class="input-label">Tier</label><input type="text" id="t-tier-${t.id}" class="std-input" value="${t.tier}"></div>
+                        <div><label class="input-label">Licenses</label><input type="number" id="t-lic-${t.id}" class="std-input" value="${t.licenses}"></div>
+                        <div>
+                            <label class="input-label">Account Status</label>
+                            <select id="t-stat-${t.id}" class="std-input">
+                                <option value="ACTIVE" ${t.status==='ACTIVE'?'selected':''}>Active</option>
+                                <option value="SUSPENDED" ${t.status==='SUSPENDED'?'selected':''}>Suspended (Arrears)</option>
+                                <option value="DEACTIVATED" ${t.status==='DEACTIVATED'?'selected':''}>Deactivated</option>
+                            </select>
+                        </div>
+                        <div style="grid-column: span 2;"><label class="input-label">Motto / Slogan</label><input type="text" id="t-motto-${t.id}" class="std-input" value="${t.motto || ''}"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                        <button class="std-btn red" style="width:auto; padding:10px 20px;" onclick="GodCtrl.deleteTenant('${t.id}')">Delete Tenant</button>
+                        <button class="std-btn blue" style="width:auto; padding:10px 20px;" onclick="GodCtrl.saveTenant('${t.id}')">Save Changes</button>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
     },
     addTenant: function() {
         const name = prompt("Enter Council Name:");
         if(!name) return;
         const tenants = CoreDB.getTenants();
-        tenants.push({ id: 'T'+Math.floor(Math.random()*900+100), name: name, tier: "City A", licenses: 4, active: true });
+        tenants.push({ id: 'T'+Math.floor(Math.random()*900+100), name: name, tier: "City A", licenses: 4, status: "ACTIVE", motto: "" });
         CoreDB.saveTenants(tenants);
         this.renderTenants();
+    },
+    saveTenant: function(id) {
+        const tenants = CoreDB.getTenants();
+        const t = tenants.find(x => x.id === id);
+        if(t) {
+            t.name = document.getElementById(`t-name-${id}`).value;
+            t.tier = document.getElementById(`t-tier-${id}`).value;
+            t.licenses = parseInt(document.getElementById(`t-lic-${id}`).value) || 0;
+            t.status = document.getElementById(`t-stat-${id}`).value;
+            t.motto = document.getElementById(`t-motto-${id}`).value;
+            CoreDB.saveTenants(tenants);
+            this.renderTenants();
+            alert("Tenant details saved.");
+        }
+    },
+    deleteTenant: function(id) {
+        if(confirm("Are you sure you want to completely delete this tenant? This action cannot be undone.")) {
+            let tenants = CoreDB.getTenants().filter(x => x.id !== id);
+            CoreDB.saveTenants(tenants);
+            this.renderTenants();
+        }
     },
 
     // Schema Functions
