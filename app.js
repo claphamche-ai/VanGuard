@@ -1,6 +1,6 @@
 
 // ==========================================
-// VANGUARD V4.5 - MULTI-TENANT SEGREGATION
+// VANGUARD V4.6 - AUTO-HEALER & RESET
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
@@ -44,8 +44,27 @@ const CoreDB = {
     saveSchema: function(data) { localStorage.setItem('vg_schema', JSON.stringify(data)); },
     getTenants: function() {
         let mem = localStorage.getItem('tt_tenants');
-        if(!mem) { localStorage.setItem('tt_tenants', JSON.stringify(this.defaultTenants)); mem = localStorage.getItem('tt_tenants'); }
-        return JSON.parse(mem);
+        if(!mem) { 
+            localStorage.setItem('tt_tenants', JSON.stringify(this.defaultTenants)); 
+            return this.defaultTenants; 
+        }
+        let parsed = JSON.parse(mem);
+        let needsPatch = false;
+        
+        // Auto-Healer Logic
+        this.defaultTenants.forEach(dt => {
+            let existing = parsed.find(pt => pt.id === dt.id);
+            if (!existing) {
+                parsed.push(dt);
+                needsPatch = true;
+            } else if (typeof existing.status === 'undefined') {
+                existing.status = dt.status; // Patch legacy data
+                needsPatch = true;
+            }
+        });
+        if(needsPatch) { this.saveTenants(parsed); }
+        
+        return parsed;
     },
     saveTenants: function(data) { localStorage.setItem('tt_tenants', JSON.stringify(data)); },
     
@@ -249,7 +268,7 @@ const AgentCtrl = {
         const t = CoreDB.getTenants().find(x => x.id === activeId);
         if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('agent', t.status, t.name); return; }
 
-        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.5`;
+        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.6`;
         new MapEngine('map', 'agent');
         this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
@@ -522,7 +541,13 @@ const GodCtrl = {
         const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`;
         UI.downloadTextFile('Blank_Database_Template.txt', data);
     },
-
+    nukeDatabase: function() {
+        if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) {
+            localStorage.clear();
+            alert("System Reset Complete. Reloading interface.");
+            window.location.href = 'index.html';
+        }
+    },
     renderTenants: function() {
         const c = document.getElementById('god-tenant-list');
         if(!c) return;
