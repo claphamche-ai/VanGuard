@@ -4,30 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Accounts</title>
-    <link rel="stylesheet" href="styles.css?v=4.7" />
+    <link rel="stylesheet" href="styles.css?v=4.8" />
+    <style>
+        body { background: transparent; overflow-y: auto; }
+        .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start;}
+    </style>
 </head>
-<body data-role="accounts" class="admin-bg" style="background: transparent;">
-    <div class="admin-content" style="padding: 20px; margin-top: 0; min-height: auto;">
+<body data-role="accounts">
+    <div class="admin-content" style="padding: 20px;">
         <div style="width: 100%; max-width: 900px; margin: 0 auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Fleet Accounts</h2>
+                <div>
+                    <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Fleet Accounts</h2>
+                    <div id="license-counter" style="font-size: 13px; font-weight: bold; color: var(--b); margin-top: 5px;">Licenses: -- / --</div>
+                </div>
                 <button class="std-btn green" style="width: auto; padding: 10px 20px;" onclick="AccountsCtrl.openCreateForm()">➕ Add User</button>
             </div>
             
             <div id="accounts-create-form" class="tenant-panel" style="display: none; background: #e3f2fd; border-color: var(--b); margin-bottom: 20px; padding: 20px;">
                 <h3 style="margin-top:0; color: var(--b); font-size: 14px; text-transform: uppercase;">Create New Account</h3>
-                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr auto;">
-                    <input type="text" id="new-acc-username" class="std-input" placeholder="Username" style="margin-bottom:0;">
-                    <input type="password" id="new-acc-password" class="std-input" placeholder="Password" style="margin-bottom:0;">
-                    <select id="new-acc-role" class="std-input" style="margin-bottom:0;">
-                        <option value="agent">Field Agent / Worker</option>
-                        <option value="dispatch">Dispatcher</option>
-                        <option value="reporter">Reporter</option>
-                        <option value="admin">Tenant Admin</option>
-                    </select>
-                    <div style="display: flex; gap: 5px;">
-                        <button class="std-btn blue" style="padding: 0 15px;" onclick="AccountsCtrl.createUser()">Save</button>
-                        <button class="std-btn red" style="padding: 0 15px;" onclick="AccountsCtrl.closeCreateForm()">✕</button>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div><label class="section-label" style="margin-top:0;">Username</label><input type="text" id="new-acc-username" class="std-input" placeholder="Login ID"></div>
+                    <div><label class="section-label" style="margin-top:0;">Password</label><input type="password" id="new-acc-password" class="std-input" placeholder="Password"></div>
+                    <div><label class="section-label" style="margin-top:0;">Role</label>
+                        <select id="new-acc-role" class="std-input">
+                            <option value="agent">Field Agent / Worker</option>
+                            <option value="dispatch">Dispatcher</option>
+                            <option value="reporter">Reporter</option>
+                            <option value="admin">Tenant Admin</option>
+                        </select>
+                    </div>
+                    <div><label class="section-label" style="margin-top:0;">Full Name</label><input type="text" id="new-acc-name" class="std-input" placeholder="e.g. John Doe"></div>
+                    <div><label class="section-label" style="margin-top:0;">Contact</label><input type="text" id="new-acc-contact" class="std-input" placeholder="Phone / Email"></div>
+                    <div><label class="section-label" style="margin-top:0;">Status</label>
+                        <select id="new-acc-status" class="std-input">
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="std-btn blue" style="width: auto; padding: 10px 30px;" onclick="AccountsCtrl.createUser()">Save User</button>
+                    <button class="std-btn red" style="width: auto; padding: 10px 30px;" onclick="AccountsCtrl.closeCreateForm()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="accounts-edit-form" class="tenant-panel" style="display: none; background: #fff3cd; border-color: #f1c40f; margin-bottom: 20px; padding: 20px;">
+                <h3 style="margin-top:0; color: #d35400; font-size: 14px; text-transform: uppercase;">Edit Account</h3>
+                <input type="hidden" id="edit-acc-id">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div><label class="section-label" style="margin-top:0;">Username</label><input type="text" id="edit-acc-username" class="std-input"></div>
+                    <div><label class="section-label" style="margin-top:0;">Password</label><input type="text" id="edit-acc-password" class="std-input"></div>
+                    <div><label class="section-label" style="margin-top:0;">Role</label>
+                        <select id="edit-acc-role" class="std-input">
+                            <option value="agent">Field Agent / Worker</option>
+                            <option value="dispatch">Dispatcher</option>
+                            <option value="reporter">Reporter</option>
+                            <option value="admin">Tenant Admin</option>
+                        </select>
+                    </div>
+                    <div><label class="section-label" style="margin-top:0;">Full Name</label><input type="text" id="edit-acc-name" class="std-input"></div>
+                    <div><label class="section-label" style="margin-top:0;">Contact</label><input type="text" id="edit-acc-contact" class="std-input"></div>
+                    <div><label class="section-label" style="margin-top:0;">Status</label>
+                        <select id="edit-acc-status" class="std-input">
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                    <button class="std-btn red" style="width: auto; padding: 10px 30px;" onclick="AccountsCtrl.deleteUserFromEdit()">Delete User</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="std-btn gray" style="width: auto; padding: 10px 30px;" onclick="AccountsCtrl.closeEditForm()">Cancel</button>
+                        <button class="std-btn blue" style="width: auto; padding: 10px 30px;" onclick="AccountsCtrl.saveUser()">Update User</button>
                     </div>
                 </div>
             </div>
@@ -35,15 +84,15 @@
             <div class="tenant-panel" style="padding: 0; overflow: hidden;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
                     <tr style="background: var(--nav-dark); color: white;">
-                        <th style="padding: 15px;">Username</th>
+                        <th style="padding: 15px;">User</th>
                         <th style="padding: 15px;">Role</th>
-                        <th style="padding: 15px; width: 100px;">Action</th>
+                        <th style="padding: 15px;">Status</th>
                     </tr>
                     <tbody id="accounts-list-render"></tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script src="app.js?v=4.7"></script>
+    <script src="app.js?v=4.8"></script>
 </body>
 </html>

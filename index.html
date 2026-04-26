@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Login</title>
-    <link rel="stylesheet" href="styles.css?v=4.7" />
+    <link rel="stylesheet" href="styles.css?v=4.8" />
 </head>
 <body class="login-wrapper">
     <div class="login-frame">🚐</div>
@@ -15,10 +15,10 @@
         <div id="login-error" style="color:#e74c3c; text-align:center; margin-top:5px; font-size:13px; font-weight:bold; display:none;">Invalid credentials</div>
     </form>
     <div class="login-brand">
-        <h1>VanGuard <span class="version">v4.7</span></h1>
+        <h1>VanGuard <span class="version">v4.8</span></h1>
     </div>
     
-    <script src="app.js?v=4.7"></script>
+    <script src="app.js?v=4.8"></script>
     <script>
         function handleLogin(e) {
             e.preventDefault();
@@ -33,12 +33,18 @@
             const userMatch = users.find(user => user.username.toLowerCase() === u && user.password === p);
             
             if (userMatch) {
+                if (userMatch.status === 'INACTIVE') {
+                    err.innerText = "Account is inactive. Contact Administrator.";
+                    err.style.display = 'block';
+                    return;
+                }
                 CoreDB.setActiveTenantId(userMatch.tenantId);
                 if (userMatch.role === 'admin') window.location.href = 'admin.html';
                 else if (userMatch.role === 'dispatch') window.location.href = 'dispatch.html';
                 else if (userMatch.role === 'agent') window.location.href = 'agent.html';
                 else if (userMatch.role === 'reporter') window.location.href = 'reporter.html';
             } else {
+                err.innerText = "Invalid credentials";
                 err.style.display = 'block';
             }
         }

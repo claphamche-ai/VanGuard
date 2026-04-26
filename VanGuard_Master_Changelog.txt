@@ -1,6 +1,8 @@
 VANGUARD MASTER CHANGELOG
 -------------------------
-v4.6 - Auto-Healer & Reset Mechanics (Current Build)
-- Built `CoreDB.getTenants()` Auto-Healer logic. The system now inspects local storage on load; if legacy arrays are missing new tenant default profiles (e.g., City B), it automatically injects them to prevent ghost desyncs.
-- Built a patch protocol to repair `undefined` status fields in legacy tenant data memory, preventing lockout errors on older machines.
-- Added a "Factory Reset System" (nukeDatabase) button to the God Dashboard -> Database tab. Wipes local memory and reinstalls factory code.
+v4.8 - Accounts UI Refinement (Current Build)
+- Cleared background inheritance (.admin-bg) from accounts.html to stop nested iframe box effects.
+- Added dynamic click-to-edit row logic in the Accounts list.
+- Expanded the User Schema to include `name`, `contact`, and `status` (Active/Inactive).
+- Wired `status` flag into the login router (`index.html`) to physically block disabled accounts.
+- Added a License Enforcement counter. The system calculates Active users against the Tenant's maximum allowed license limit, restricting the creation or activation of users if the limit is hit.

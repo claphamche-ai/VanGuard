@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V4.7 - DYNAMIC ACCOUNT ACCESS
+// VANGUARD V4.8 - REFINED ACCOUNTS UI
 // ==========================================
 
 const BRAND_NAME = "VanGuard";
@@ -11,20 +11,16 @@ const CoreDB = {
         { "id": "area", "label": "Repaired Area (m²)", "type": "select", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "0.5", "visible": true }, { "name": "1", "visible": true } ] }
     ],
     defaultTenants: [
-        { 
-            "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "status": "ACTIVE", "motto": "Mo Te Katoa Nga Iwi", "logo": ""
-        },
-        { 
-            "id": "T002", "name": "Wellington City Council", "tier": "City B", "licenses": 50, "status": "ACTIVE", "motto": "Absolutely Positively Wellington", "logo": ""
-        }
+        { "id": "T001", "name": "Porirua City Council", "tier": "City A", "licenses": 15, "status": "ACTIVE", "motto": "Mo Te Katoa Nga Iwi", "logo": "" },
+        { "id": "T002", "name": "Wellington City Council", "tier": "City B", "licenses": 50, "status": "ACTIVE", "motto": "Absolutely Positively Wellington", "logo": "" }
     ],
     defaultUsers: [
-        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001" },
-        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001" },
-        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001" },
-        { id: "U004", username: "admin2", password: "123", role: "admin", tenantId: "T002" },
-        { id: "U005", username: "worker2", password: "123", role: "agent", tenantId: "T002" },
-        { id: "U006", username: "dispatch2", password: "123", role: "dispatch", tenantId: "T002" }
+        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001", name: "Porirua Admin", contact: "04 237 5089", status: "ACTIVE" },
+        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001", name: "John Doe", contact: "021 555 1234", status: "ACTIVE" },
+        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE" },
+        { id: "U004", username: "admin2", password: "123", role: "admin", tenantId: "T002", name: "Wellington Admin", contact: "04 499 4444", status: "ACTIVE" },
+        { id: "U005", username: "worker2", password: "123", role: "agent", tenantId: "T002", name: "Bob Builder", contact: "027 555 0000", status: "ACTIVE" },
+        { id: "U006", username: "dispatch2", password: "123", role: "dispatch", tenantId: "T002", name: "Alice Dispatch", contact: "027 555 1111", status: "ACTIVE" }
     ],
     kmlConfig: [
         { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
@@ -54,7 +50,15 @@ const CoreDB = {
     getUsers: function() {
         let mem = localStorage.getItem('tt_users');
         if(!mem) { localStorage.setItem('tt_users', JSON.stringify(this.defaultUsers)); return this.defaultUsers; }
-        return JSON.parse(mem);
+        let parsed = JSON.parse(mem);
+        let patched = false;
+        parsed.forEach(u => {
+            if(typeof u.name === 'undefined') { u.name = ''; patched = true; }
+            if(typeof u.contact === 'undefined') { u.contact = ''; patched = true; }
+            if(typeof u.status === 'undefined') { u.status = 'ACTIVE'; patched = true; }
+        });
+        if(patched) this.saveUsers(parsed);
+        return parsed;
     },
     saveUsers: function(data) { localStorage.setItem('tt_users', JSON.stringify(data)); },
 
@@ -175,7 +179,7 @@ const AgentCtrl = {
     init: function() {
         const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
         if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('agent', t.status, t.name); return; }
-        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.7`;
+        if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent v4.8`;
         new MapEngine('map', 'agent'); this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
     },
@@ -286,13 +290,52 @@ const AdminCtrl = {
 };
 
 const AccountsCtrl = {
-    init: function() { this.renderUsers(); },
+    init: function() { this.renderUsers(); this.updateLicenseCounter(); },
+    updateLicenseCounter: function() {
+        const activeId = CoreDB.getActiveTenantId();
+        const tenant = CoreDB.getTenants().find(t => t.id === activeId);
+        const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE');
+        const el = document.getElementById('license-counter');
+        if(el && tenant) {
+            el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`;
+            if(users.length >= tenant.licenses) el.style.color = '#e74c3c';
+            else el.style.color = 'var(--b)';
+        }
+    },
     openCreateForm: function() { 
+        this.closeEditForm();
+        const activeId = CoreDB.getActiveTenantId();
+        const tenant = CoreDB.getTenants().find(t => t.id === activeId);
+        const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
+        
+        if(activeUsers >= tenant.licenses) {
+            alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`);
+            return;
+        }
+
         document.getElementById('new-acc-username').value = '';
         document.getElementById('new-acc-password').value = '';
+        document.getElementById('new-acc-name').value = '';
+        document.getElementById('new-acc-contact').value = '';
+        document.getElementById('new-acc-role').value = 'agent';
+        document.getElementById('new-acc-status').value = 'ACTIVE';
         document.getElementById('accounts-create-form').style.display = 'block'; 
     },
     closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
+    openEditForm: function(id) {
+        this.closeCreateForm();
+        const user = CoreDB.getUsers().find(u => u.id === id);
+        if(!user) return;
+        document.getElementById('edit-acc-id').value = user.id;
+        document.getElementById('edit-acc-username').value = user.username;
+        document.getElementById('edit-acc-password').value = user.password;
+        document.getElementById('edit-acc-role').value = user.role;
+        document.getElementById('edit-acc-name').value = user.name || '';
+        document.getElementById('edit-acc-contact').value = user.contact || '';
+        document.getElementById('edit-acc-status').value = user.status || 'ACTIVE';
+        document.getElementById('accounts-edit-form').style.display = 'block';
+    },
+    closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
     renderUsers: function() {
         const list = document.getElementById('accounts-list-render'); if(!list) return;
         const activeId = CoreDB.getActiveTenantId();
@@ -300,24 +343,36 @@ const AccountsCtrl = {
         
         if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
         
-        list.innerHTML = users.map(u => `
-            <tr style="border-bottom: 1px solid #eee; background: #fff;">
-                <td style="padding: 15px; font-weight: bold; color: var(--b);">${u.username}</td>
+        list.innerHTML = users.map(u => {
+            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
+            const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2980b9');
+            return `
+            <tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')">
                 <td style="padding: 15px;">
-                    <span class="badge" style="background: ${u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2ecc71')};">
+                    <strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br>
+                    <span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span>
+                </td>
+                <td style="padding: 15px;">
+                    <span class="badge" style="background: ${roleColor};">
                         ${u.role.toUpperCase()}
                     </span>
                 </td>
                 <td style="padding: 15px;">
-                    <button class="std-btn red" style="width: auto; padding: 6px 12px; font-size: 11px;" onclick="AccountsCtrl.deleteUser('${u.id}')">Delete</button>
+                    <span class="badge" style="background: ${statColor};">
+                        ${u.status || 'ACTIVE'}
+                    </span>
                 </td>
             </tr>
-        `).join('');
+        `}).join('');
+        this.updateLicenseCounter();
     },
     createUser: function() {
         const u = document.getElementById('new-acc-username').value.trim().toLowerCase();
         const p = document.getElementById('new-acc-password').value.trim();
         const r = document.getElementById('new-acc-role').value;
+        const n = document.getElementById('new-acc-name').value.trim();
+        const c = document.getElementById('new-acc-contact').value.trim();
+        const s = document.getElementById('new-acc-status').value;
         const activeId = CoreDB.getActiveTenantId();
         
         if(!u || !p) { alert("Username and Password are required."); return; }
@@ -326,16 +381,58 @@ const AccountsCtrl = {
         if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
         
         const newId = 'U' + Date.now().toString().slice(-6);
-        db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId });
+        db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s });
         CoreDB.saveUsers(db);
         
         this.closeCreateForm();
         this.renderUsers();
     },
-    deleteUser: function(id) {
-        if(confirm("Are you sure you want to delete this user account?")) {
+    saveUser: function() {
+        const id = document.getElementById('edit-acc-id').value;
+        const u = document.getElementById('edit-acc-username').value.trim().toLowerCase();
+        const p = document.getElementById('edit-acc-password').value.trim();
+        const r = document.getElementById('edit-acc-role').value;
+        const n = document.getElementById('edit-acc-name').value.trim();
+        const c = document.getElementById('edit-acc-contact').value.trim();
+        const s = document.getElementById('edit-acc-status').value;
+        
+        if(!u || !p) { alert("Username and Password are required."); return; }
+        
+        let db = CoreDB.getUsers();
+        const duplicate = db.find(user => user.username === u && user.id !== id);
+        if(duplicate) { alert("Username already exists in the system."); return; }
+
+        const activeId = CoreDB.getActiveTenantId();
+        const tenant = CoreDB.getTenants().find(t => t.id === activeId);
+        const userIndex = db.findIndex(user => user.id === id);
+        
+        if(userIndex !== -1) {
+            if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') {
+                const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length;
+                if(activeUsers >= tenant.licenses) {
+                    alert(`Cannot activate user. License limit reached (${tenant.licenses}).`);
+                    return;
+                }
+            }
+            
+            db[userIndex].username = u;
+            db[userIndex].password = p;
+            db[userIndex].role = r;
+            db[userIndex].name = n;
+            db[userIndex].contact = c;
+            db[userIndex].status = s;
+            
+            CoreDB.saveUsers(db);
+            this.closeEditForm();
+            this.renderUsers();
+        }
+    },
+    deleteUserFromEdit: function() {
+        const id = document.getElementById('edit-acc-id').value;
+        if(confirm("Are you sure you want to permanently delete this user account?")) {
             let db = CoreDB.getUsers().filter(u => u.id !== id);
             CoreDB.saveUsers(db);
+            this.closeEditForm();
             this.renderUsers();
         }
     }
@@ -343,12 +440,7 @@ const AccountsCtrl = {
 
 const GodCtrl = {
     init: function() { this.renderSchema(); this.renderTenants(); },
-    switchTab: function(id) {
-        document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
-        document.getElementById('tab-' + id).style.display = 'block';
-        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav'));
-        event.currentTarget.classList.add('active-nav');
-    },
+    switchTab: function(id) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); document.getElementById('tab-' + id).style.display = 'block'; document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); event.currentTarget.classList.add('active-nav'); },
     exportDBText: function() { const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`; UI.downloadTextFile('Spoof_Database.txt', data); },
     exportBlankTemplate: function() { const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }]; const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`; UI.downloadTextFile('Blank_Database_Template.txt', data); },
     nukeDatabase: function() { if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) { localStorage.clear(); alert("System Reset Complete. Reloading interface."); window.location.href = 'index.html'; } },
@@ -361,8 +453,6 @@ const GodCtrl = {
             const pendingCount = tenantJobs.filter(j => j.type !== 'COMPLETED').length;
             const completedCount = tenantJobs.filter(j => j.type === 'COMPLETED').length;
             const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c');
-            
-            // Find the primary admin user for this tenant to display their credentials
             const adminUser = allUsers.find(u => u.tenantId === t.id && u.role === 'admin') || { username: '', password: '' };
             
             return `
@@ -448,12 +538,10 @@ const GodCtrl = {
             t.contactEmail = document.getElementById(`t-cemail-${id}`).value; t.contactPhone = document.getElementById(`t-cphone-${id}`).value; t.billingCycle = document.getElementById(`t-bill-${id}`).value; t.logo = document.getElementById(`t-logo-${id}`).value;
             CoreDB.saveTenants(tenants);
             
-            // Handle Master Admin Credentials Update
             const adminU = document.getElementById(`t-admin-user-${id}`).value.trim().toLowerCase();
             const adminP = document.getElementById(`t-admin-pass-${id}`).value.trim();
             if (adminU && adminP) {
-                let users = CoreDB.getUsers();
-                let existingAdmin = users.find(u => u.tenantId === id && u.role === 'admin');
+                let users = CoreDB.getUsers(); let existingAdmin = users.find(u => u.tenantId === id && u.role === 'admin');
                 if (existingAdmin) { existingAdmin.username = adminU; existingAdmin.password = adminP; } 
                 else { users.push({ id: 'U' + Date.now().toString().slice(-6), username: adminU, password: adminP, role: 'admin', tenantId: id }); }
                 CoreDB.saveUsers(users);
