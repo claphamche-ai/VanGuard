@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Core Admin</title>
-    <link rel="stylesheet" href="styles.css?v=4.5" />
+    <link rel="stylesheet" href="styles.css?v=4.6" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -19,7 +19,7 @@
         <div id="tab-welcome" class="admin-tab-content admin-welcome-box">
             <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
             <h1 style="font-size: 36px; font-weight: 900; color: var(--text-dark); margin: 0; text-transform: uppercase; letter-spacing: -1px;">VanGuard Core</h1>
-            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 4.5 | System Configuration Node</p>
+            <p style="font-size: 14px; font-weight: bold; color: #888; margin: 5px 0 30px 0;">Version 4.6 | System Configuration Node</p>
             <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: justify;">
                 Welcome to the VanGuard Master Configuration Node. This interface is strictly restricted to system administrators for provisioning tenant databases, issuing regional licenses to city councils, and managing root-level software architecture.
             </p>
@@ -38,8 +38,13 @@
 
         <div id="tab-database" class="admin-tab-content" style="display:none; width: 100%; max-width: 800px;">
             <div class="tenant-panel" style="padding-bottom: 20px; margin-bottom: 20px; background: #fafafa;">
-                <h3 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase;">Export Code Pipeline</h3>
-                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Download database definitions to sync cross-platform states.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin-top:0; color: var(--text-dark); font-weight: 900; text-transform: uppercase; margin-bottom:0;">Export Code Pipeline</h3>
+                        <p style="font-size: 12px; color: #666; margin: 5px 0 0 0;">Download database definitions to sync cross-platform states.</p>
+                    </div>
+                    <button class="std-btn red" style="width: auto; padding: 10px 20px;" onclick="GodCtrl.nukeDatabase()">Factory Reset System</button>
+                </div>
                 <div style="display: flex; gap: 10px;">
                     <button class="std-btn blue" onclick="GodCtrl.exportDBText()">Download Live Schema (.txt)</button>
                     <button class="std-btn gray" onclick="GodCtrl.exportBlankTemplate()">Download Blank Template (.txt)</button>
@@ -62,6 +67,6 @@
             </div>
         </div>
     </main>
-    <script src="app.js?v=4.5"></script>
+    <script src="app.js?v=4.6"></script>
 </body>
 </html>
