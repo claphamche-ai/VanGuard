@@ -32,9 +32,41 @@ body, html { margin:0; padding:0; height:100%; font-family: 'Segoe UI', Tahoma, 
 .admin-nav-item .icon { font-size: 26px; margin-bottom: 4px; }
 .admin-nav-item .label { font-size: 11px; font-weight: bold; text-transform: uppercase; }
 .logout-item { color: #e74c3c; }
-.admin-content { display: flex; justify-content: center; }
-.admin-welcome-box { background: var(--bg-white); width: 100%; max-width: 600px; padding: 50px; border-radius: 15px; text-align: center; border: 1px solid #eaeaea; }
-.tenant-panel { background: var(--bg-white); padding: 30px; border-radius: 15px; border: 1px solid #eaeaea; text-align: left; }
+
+/* Global Layout Update for Lower Frames */
+.admin-content { 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Keep tabs at the top by default */
+    padding-top: 40px; /* Project-wide header space */
+    margin-top: 80px; /* Clear the topbar */
+    min-height: calc(100vh - 80px); 
+    box-sizing: border-box; 
+    width: 100%;
+}
+
+.admin-welcome-box { 
+    background: var(--bg-white); 
+    width: 100%; 
+    max-width: 600px; 
+    padding: 50px; 
+    border-radius: 15px; 
+    text-align: center; 
+    border: 1px solid #eaeaea; 
+    margin: auto !important; /* Forces perfect vertical and horizontal center */
+}
+
+/* Ensure tab contents layout correctly */
+.admin-tab-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+.tenant-panel { background: var(--bg-white); padding: 30px; border-radius: 15px; border: 1px solid #eaeaea; text-align: left; width: 100%; box-sizing: border-box; }
 
 .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; vertical-align: middle; }
 .toggle-switch input { opacity: 0; width: 0; height: 0; }

@@ -17,8 +17,9 @@
             <div class="admin-nav-item" onclick="AdminCtrl.switchTab('settings')"><span class="icon">⚙️</span><span class="label">Settings</span></div>
         </div>
     </nav>
-    <main class="admin-content" style="padding: 0; margin-top: 80px; height: calc(100vh - 80px); display: flex; flex-direction: column;">
-        <div id="tab-welcome" class="admin-tab-content admin-welcome-box" style="margin: 40px auto;">
+    
+    <main class="admin-content">
+        <div id="tab-welcome" class="admin-tab-content admin-welcome-box">
             <div style="text-align: center; margin-bottom: 20px;">
                 <div id="admin-tenant-logo" style="font-size: 60px;">⚓</div>
                 <h2 id="admin-tenant-name" style="font-size: 16px; font-weight: bold; color: var(--b); margin: 0 0 10px 0; text-transform: uppercase;">City Council</h2>
@@ -28,8 +29,8 @@
             <p style="font-size: 14px; font-weight: bold; color: #888;">Version 4.6 | Regional Console</p>
         </div>
 
-        <div id="tab-settings" class="admin-tab-content" style="display:none; width: 100%; max-width: 900px; margin: 40px auto;">
-            <div id="settings-overview">
+        <div id="tab-settings" class="admin-tab-content" style="display:none; max-width: 900px;">
+            <div id="settings-overview" style="width: 100%;">
                 <h2 style="margin-top:0; font-weight: 900; text-transform: uppercase;">System Configuration</h2>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="tenant-panel">
@@ -38,13 +39,13 @@
                     </div>
                 </div>
             </div>
-            <div id="panel-fields" style="display:none;">
+            <div id="panel-fields" style="display:none; width: 100%;">
                 <button class="std-btn gray" onclick="AdminCtrl.closeSubPanel()" style="max-width: 150px; margin-bottom: 20px;">⬅ Back</button>
                 <div class="tenant-panel" style="padding-top: 20px;"><div id="admin-schema-render"></div></div>
             </div>
         </div>
 
-        <div id="tab-iframe" class="admin-tab-content" style="display:none; flex: 1; width: 100%; height: 100%;">
+        <div id="tab-iframe" class="admin-tab-content" style="display:none; flex: 1; height: calc(100vh - 120px);">
             <iframe id="admin-module-frame" src="" style="width:100%; height:100%; border:none;"></iframe>
         </div>
     </main>
