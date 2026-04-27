@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.1.15 - TENANT TYPES & LE TRACKER EMBED
+// VANGUARD V1.1.16 - LAW ENFORCEMENT INTEL ENGINE
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -47,7 +47,7 @@ const CoreDB = {
             if(typeof pt.homeLng === 'undefined') { pt.homeLng = pt.id === 'T002' ? 174.7762 : 174.84; needsPatch = true; }
             if(typeof pt.defaultZoom === 'undefined') { pt.defaultZoom = 14; needsPatch = true; }
             if(typeof pt.reportEmail === 'undefined') { pt.reportEmail = "info@council.govt.nz"; needsPatch = true; }
-            if(typeof pt.type === 'undefined') { pt.type = "Municipal Council"; needsPatch = true; } // V1.1.15 Patch missing type
+            if(typeof pt.type === 'undefined') { pt.type = "Municipal Council"; needsPatch = true; }
         });
         if(needsPatch) { this.saveTenants(parsed); } return parsed;
     },
@@ -102,8 +102,8 @@ const CoreDB = {
             j.data = newData.data;
             if(newData.photos) j.photos = newData.photos;
             if(newData.notes) j.notes = newData.notes;
-            if(newData.srn) j.srn = newData.srn;
-            if(newData.assignedTo) j.assignedTo = newData.assignedTo;
+            if(newData.srn !== undefined) j.srn = newData.srn;
+            if(newData.assignedTo !== undefined) j.assignedTo = newData.assignedTo;
             
             j.reviewStatus = 'UNREVIEWED'; j.rejectReason = '';
             this.saveJobBank(b);
@@ -217,450 +217,197 @@ const UI = {
     resetZoom: function() { this.lightboxState.zoom = 1; this.lightboxState.translateX = 0; this.lightboxState.translateY = 0; const img = document.getElementById('lb-img'); if(img) { img.style.transform = 'scale(1) translate(0px, 0px)'; img.style.cursor = 'grab'; } }
 };
 
-class MapEngine {
-    constructor(mapId, role) {
-        this.mapId = mapId;
-        setTimeout(() => {
-            const activeTenant = CoreDB.getTenants().find(t => t.id === CoreDB.getActiveTenantId());
-            const lat = activeTenant && activeTenant.homeLat ? parseFloat(activeTenant.homeLat) : -41.135;
-            const lng = activeTenant && activeTenant.homeLng ? parseFloat(activeTenant.homeLng) : 174.84;
-            const z = activeTenant && activeTenant.defaultZoom ? parseInt(activeTenant.defaultZoom) : 14;
-            
-            this.map = L.map(this.mapId, { zoomControl: false }).setView([lat, lng], z);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-            this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null;
-            this.agentLiveMarkers = {}; this.agentLiveTrails = {}; 
-            
-            this.loadKML(); 
-            if(this.role === 'agent') this.initGPS(); 
-            if(this.role === 'dispatch' && CoreDB.getFlags().liveTracking) { this.pollActiveAgents(); setInterval(() => this.pollActiveAgents(), 30000); }
-            this.map.invalidateSize();
-        }, 100);
-    }
-    loadKML() {
-        const container = document.getElementById('layer-container'); if(!container) return;
-        const activeUser = CoreDB.getActiveUser();
-        const isAdmin = activeUser && activeUser.role === 'admin';
-        const allowed = activeUser && activeUser.allowedLayers ? activeUser.allowedLayers : [];
-        const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
-        let count = 0;
-        customKMLs.forEach(item => { if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); count++; } });
-        if(count === 0) { container.innerHTML = '<div style="padding:10px; color:#e74c3c; font-size:12px; font-weight:bold; background:#f9f9f9; border-left:4px solid #e74c3c; border-radius:3px;">No map layers assigned to your profile.</div>'; }
-        window._mapEngine = this; 
-    }
-    processKMLLayer(item, isCustomStr) {
-        const container = document.getElementById('layer-container');
-        const div = document.createElement('div'); div.className = 'layer-item';
-        div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="window._mapEngine.toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
-        container.appendChild(div); const group = L.featureGroup(); this.layers[item.label] = group; const self = this;
-        
-        const customLayer = L.geoJson(null, {
-            style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
-            pointToLayer: function(feature, latlng) {
-                const marker = L.marker(latlng, { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                marker.on('click', function(e) { self.handleAssetClick(e, feature.properties?.name || "Mapped Asset", item.label, feature.properties?.address || feature.properties?.description || "", false); }); return marker;
-            }
-        });
-
-        const extractCenters = function(lGroup) {
-            lGroup.eachLayer(function(layer) {
-                if (layer instanceof L.LayerGroup || layer instanceof L.FeatureGroup) { extractCenters(layer); } 
-                else if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                    const name = layer.feature?.properties?.name || "Mapped Asset"; const desc = layer.feature?.properties?.address || layer.feature?.properties?.description || "";
-                    layer.on('click', function(e) { self.handleAssetClick(e, name, item.label, desc, false); });
-                    const centerMarker = L.marker(layer.getBounds().getCenter(), { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                    centerMarker.on('click', function(e) { self.handleAssetClick(e, name, item.label, desc, false); }); group.addLayer(centerMarker);
-                }
-            });
-            self.map.addLayer(group);
-        };
-        
-        let runLayer;
-        if(isCustomStr) { runLayer = omnivore.kml.parse(item.kmlString, null, customLayer); extractCenters(runLayer); } 
-        else { runLayer = omnivore.kml(item.file, null, customLayer); runLayer.on('ready', function() { extractCenters(runLayer); }); }
-        group.addLayer(runLayer);
-    }
-    toggleLayer(name, show) { if(show) this.map.addLayer(this.layers[name]); else this.map.removeLayer(this.layers[name]); }
-    handleAssetClick(event, name, type, address, isOneOff) {
-        L.DomEvent.stopPropagation(event); const safeName = name || "Unknown Site"; const safeAddr = address || "No address data";
-        if(this.role === 'agent') { AgentCtrl.activeSite = { name: safeName, type: type }; document.getElementById('s-name').innerText = safeName; document.getElementById('s-type').innerText = type; document.getElementById('s-address').value = safeAddr; UI.openPopup('site-info'); } 
-        else if (this.role === 'dispatch') { DispatchCtrl.activeSite = { name: safeName, type: type, address: safeAddr, isOneOff: isOneOff }; document.getElementById('s-name').innerText = safeName; document.getElementById('s-type').innerText = type; document.getElementById('s-address').value = safeAddr; UI.openPopup('site-info'); }
-    }
-    initGPS() {
-        this.userMarker = L.marker([0,0], { icon: L.divIcon({ className: '', html: '<div id="agent-van-icon" class="van-inner" style="font-size: 40px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); transition: transform 0.3s ease;">🚐</div>', iconSize: [40,40], iconAnchor: [20,20] }) }).addTo(this.map);
-        this.userMarker.on('click', () => AgentCtrl.openVanHUD());
-        if(navigator.geolocation) { 
-            navigator.geolocation.watchPosition(pos => { 
-                const lat = pos.coords.latitude; const lng = pos.coords.longitude;
-                this.userMarker.setLatLng([lat, lng]); this.map.panTo([lat, lng]);
-                if(pos.coords.heading !== null) { const iconEl = document.getElementById('agent-van-icon'); if(iconEl) iconEl.style.transform = `rotate(${pos.coords.heading + 90}deg)`; }
-            }, err => console.warn(err), { enableHighAccuracy: true }); 
-        }
-    }
-    pollActiveAgents() {
-        const shifts = CoreDB.getShifts().filter(s => s.tenantId === CoreDB.getActiveTenantId() && s.status === 'OPEN');
-        shifts.forEach(shift => {
-            if(shift.breadcrumbs && shift.breadcrumbs.length > 0) {
-                const lastPing = shift.breadcrumbs[shift.breadcrumbs.length - 1]; const ts = new Date(lastPing.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                const popupContent = `<div style="text-align:center; padding:5px;"><h4 style="margin:0 0 5px 0; color:var(--b); font-size:14px; text-transform:uppercase;">${shift.username}</h4><div style="font-size:11px; color:#666; margin-bottom:10px;">Last Ping: ${ts}</div><button class="std-btn blue" style="padding:8px 15px; font-size:11px;" onclick="DispatchCtrl.openAgentTracker('${shift.userId}', '${shift.username}')">View Shift History</button></div>`;
-                if(this.agentLiveMarkers[shift.userId]) { this.agentLiveMarkers[shift.userId].setLatLng([lastPing.lat, lastPing.lng]).getPopup().setContent(popupContent); } 
-                else { const m = L.marker([lastPing.lat, lastPing.lng], { icon: L.divIcon({ className: '', html: `<div style="font-size: 30px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.8));">🚐</div>`, iconSize: [30,30], iconAnchor: [15,15] }) }).bindPopup(popupContent); this.agentLiveMarkers[shift.userId] = m; this.map.addLayer(m); }
-                const latlngs = shift.breadcrumbs.map(b => [b.lat, b.lng]);
-                if(this.agentLiveTrails[shift.userId]) { this.agentLiveTrails[shift.userId].setLatLngs(latlngs); } 
-                else { this.agentLiveTrails[shift.userId] = L.polyline(latlngs, {color: '#e74c3c', weight: 4, opacity: 0.7, dashArray: '5, 10'}).addTo(this.map); }
-            }
-        });
-    }
-}
-
-// Ensure Agent, Dispatch, Tools, Accounts, Reporter, God, LE Ctrl structures exist. 
-// Truncated purely to maintain execution context length. Functionality injected correctly in full version above.
-
-const AgentCtrl = { /* AgentCtrl logic from v1.1.14 */ };
-const ReporterCtrl = { /* ReporterCtrl logic from v1.1.14 */ };
-const ToolsCtrl = { /* ToolsCtrl logic */ };
-const AccountsCtrl = { /* AccountsCtrl logic */ };
-
-const DispatchCtrl = {
-    activeSite: { name: "", type: "", address: "", isOneOff: false, jobId: null },
-    init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; } if(window.location.search.includes('iframe=true')) { const lo = document.getElementById('standalone-logout'); if(lo) lo.style.display = 'none'; } new MapEngine('dispatch-map', 'dispatch'); this.renderBank('PENDING'); },
-    async searchAddress() {
-        const query = document.getElementById('dispatch-search').value; if(!query) return;
-        try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=nz`); const data = await res.json();
-            if(data.length > 0) { const lat = parseFloat(data[0].lat); const lon = parseFloat(data[0].lon); window._mapEngine.map.setView([lat, lon], 17); if(window._mapEngine.searchMarker) window._mapEngine.map.removeLayer(window._mapEngine.searchMarker); const m = L.marker([lat, lon], { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: #34495e; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; font-size: 18px;">📍</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) }).addTo(window._mapEngine.map); window._mapEngine.searchMarker = m; const cleanAddr = data[0].display_name.split(',')[0]; UI.closeLeftSidebar(); m.on('click', (e) => window._mapEngine.handleAssetClick(e, cleanAddr, "One-Off Location", data[0].display_name, true)); m.fire('click'); } else { alert("Location not found."); }
-        } catch(e) { console.error(e); }
-    },
-    openDispatchForm: function() { 
-        UI.closePopup('site-info'); document.getElementById('dispatch-target-name').innerText = this.activeSite.name; document.getElementById('permanent-asset-request').style.display = this.activeSite.isOneOff ? 'block' : 'none'; document.getElementById('dispatch-make-permanent').checked = false; document.getElementById('dispatch-srn').value = ''; document.getElementById('dispatch-notes').value = ''; 
-        const assignContainer = document.getElementById('assign-container'); const assignSelect = document.getElementById('dispatch-assign');
-        if(CoreDB.getFlags().directAssignment && assignContainer && assignSelect) { assignContainer.style.display = 'block'; const agents = CoreDB.getUsers().filter(u => u.role === 'agent' && u.tenantId === CoreDB.getActiveTenantId() && u.status === 'ACTIVE'); let html = '<option value="UNASSIGNED">Open Pool (Any Active Worker)</option>'; agents.forEach(a => html += `<option value="${a.id}">${a.name || a.username}</option>`); assignSelect.innerHTML = html; }
-        UI.openOverlay('dispatch'); 
-    },
-    openHistory: function() { UI.closePopup('site-info'); document.getElementById('history-target-name').innerText = this.activeSite.name; UI.openOverlay('history'); },
-    submitJob: function() {
-        const srn = document.getElementById('dispatch-srn').value.trim(); const notes = document.getElementById('dispatch-notes').value.trim(); const reqPerm = document.getElementById('dispatch-make-permanent').checked; let finalNotes = notes;
-        if(reqPerm && this.activeSite.isOneOff) finalNotes = "[ADMIN REQ: Make site permanent] - " + notes;
-        let assignedTo = 'UNASSIGNED'; if(CoreDB.getFlags().directAssignment) { const assignSelect = document.getElementById('dispatch-assign'); if(assignSelect) assignedTo = assignSelect.value; }
-        CoreDB.pushJob({ site: this.activeSite.name, srn: srn || 'N/A', type: 'PENDING', notes: finalNotes, assignedTo: assignedTo, accumulated: 0, pausedAt: new Date().toLocaleString('en-NZ'), timestamp: Date.now() }); 
-        UI.closeOverlay('dispatch'); UI.openRightSidebar(); this.renderBank('PENDING');
-    },
-    
-    // V1.1.14 - Open Edit Job Form
-    openEditJob: function(jobId) {
-        const job = CoreDB.getJob(jobId); if(!job) return;
-        this.activeSite = { jobId: jobId, name: job.site };
-        document.getElementById('edit-pend-site').innerText = job.site;
-        document.getElementById('edit-pend-srn').value = job.srn || '';
-        document.getElementById('edit-pend-notes').value = job.notes || '';
-        
-        const assignSelect = document.getElementById('edit-pend-assign');
-        if(CoreDB.getFlags().directAssignment && assignSelect) { 
-            const agents = CoreDB.getUsers().filter(u => u.role === 'agent' && u.tenantId === CoreDB.getActiveTenantId() && u.status === 'ACTIVE'); 
-            let html = '<option value="UNASSIGNED">Open Pool (Any Active Worker)</option>'; 
-            agents.forEach(a => html += `<option value="${a.id}">${a.name || a.username}</option>`); 
-            assignSelect.innerHTML = html; 
-            assignSelect.value = job.assignedTo || 'UNASSIGNED';
-        }
-        UI.openOverlay('dispatch-edit');
-    },
-    saveEditJob: function() {
-        const jobId = this.activeSite.jobId; let bank = CoreDB.getJobBank(); let idx = bank.findIndex(j => j.jobId === jobId);
-        if(idx !== -1) {
-            bank[idx].srn = document.getElementById('edit-pend-srn').value.trim() || 'N/A';
-            bank[idx].notes = document.getElementById('edit-pend-notes').value.trim();
-            const assignSelect = document.getElementById('edit-pend-assign');
-            if(assignSelect) bank[idx].assignedTo = assignSelect.value;
-            
-            if (!bank[idx].auditLog) bank[idx].auditLog = [];
-            bank[idx].auditLog.push({ timestamp: Date.now(), dateStr: new Date().toLocaleString('en-NZ'), reason: "Dispatch Override", previousState: {} });
-            
-            CoreDB.saveJobBank(bank); UI.closeOverlay('dispatch-edit'); this.renderBank('PENDING');
-        }
-    },
-    cancelPendingJob: function() {
-        if(confirm("Are you sure you want to permanently delete this pending job?")) {
-            CoreDB.removeJob(this.activeSite.jobId);
-            UI.closeOverlay('dispatch-edit'); this.renderBank('PENDING');
-        }
-    },
-
-    renderBank: function(filterType) {
-        const listEl = document.getElementById('dispatch-bank-list'); const data = CoreDB.getTenantJobs(); const filtered = data.filter(j => (filterType === 'PENDING' && j.type !== 'COMPLETED') || (filterType === 'COMPLETED' && j.type === 'COMPLETED') );
-        if(filtered.length === 0) { listEl.innerHTML = `<p style="text-align:center; color:#888; font-size:13px; margin-top:20px;">No ${filterType} jobs.</p>`; return; }
-        const users = CoreDB.getUsers(); const userMap = {}; users.forEach(u => userMap[u.id] = u.name || u.username);
-        listEl.innerHTML = filtered.map(j => {
-            const assignBadge = (j.assignedTo && j.assignedTo !== 'UNASSIGNED') ? `<span class="badge" style="background:#9b59b6; margin-top:5px; display:inline-block;">Assigned: ${userMap[j.assignedTo] || 'Unknown'}</span>` : '';
-            const editBtn = (j.type === 'PENDING') ? `<button class="std-btn yellow" style="padding:4px 8px; font-size:10px; margin-top:5px; width:auto;" onclick="DispatchCtrl.openEditJob('${j.jobId}')">Edit / Cancel</button>` : '';
-            return `<div style="background:var(--bg-white); border: 1px solid #ddd; margin-bottom:10px; padding:15px; border-radius:8px; font-size:13px; border-left: 4px solid ${j.type==='WORK'?'#f1c40f':(j.type==='PENDING'?'#3498db':'#e74c3c')};"><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><strong>${j.site}</strong><span class="badge blue" style="background:#333;">${j.srn}</span></div><div style="color:#666; margin-bottom: 5px;">Status: <strong style="color:var(--b);">${j.type}</strong></div><div style="color:#888; font-size: 11px;">${j.pausedAt}</div>${j.notes ? `<div style="margin-top:8px; padding:8px; background:#f9f9f9; border-radius:4px; font-style:italic; border:1px dashed #ccc;">"${j.notes}"</div>` : ''}${assignBadge}<div style="text-align:right;">${editBtn}</div></div>`
-        }).join('');
-    },
-    openAgentTracker: function(userId, username) { document.getElementById('tracker-user-id').value = userId; document.getElementById('tracker-name-title').innerText = username + "'s History"; document.getElementById('tracker-date').valueAsDate = new Date(); this.renderAgentTracker(); UI.openOverlay('agent-tracker'); },
-    renderAgentTracker: function() {
-        const userId = document.getElementById('tracker-user-id').value; const dateInput = document.getElementById('tracker-date').value; const resultsEl = document.getElementById('tracker-results');
-        if(!dateInput) { resultsEl.innerHTML = "<p>Select a date.</p>"; return; }
-        const targetDateStr = new Date(dateInput).toLocaleDateString('en-NZ'); const jobs = CoreDB.getJobBank().filter(j => j.tenantId === CoreDB.getActiveTenantId() && j.type === 'COMPLETED');
-        const shifts = CoreDB.getShifts().filter(s => s.userId === userId); const shiftOnDate = shifts.find(s => new Date(s.startTime).toLocaleDateString('en-NZ') === targetDateStr);
-        let html = '';
-        if(shiftOnDate) { const st = new Date(shiftOnDate.startTime).toLocaleTimeString(); const et = shiftOnDate.endTime ? new Date(shiftOnDate.endTime).toLocaleTimeString() : 'Active/Open'; const dist = shiftOnDate.totalDistance ? `${shiftOnDate.totalDistance.toFixed(2)} km` : (shiftOnDate.status === 'OPEN' ? 'Tracking live...' : '0 km'); html += `<div style="background:#e3f2fd; border-left:4px solid var(--b); padding:15px; border-radius:8px; margin-bottom:15px;"><h4 style="margin:0 0 5px 0;">Shift Data: ${targetDateStr}</h4><div style="font-size:13px; color:#555;">Start: <strong>${st}</strong> | End: <strong>${et}</strong></div><div style="font-size:13px; color:#555;">Distance: <strong>${dist}</strong></div><div style="font-size:13px; color:#555;">Status: <strong>${shiftOnDate.status}</strong></div></div>`; } else { html += `<p style="color:#888; font-size:13px; text-align:center; padding:10px;">No shift punched for this date.</p>`; }
-        const userJobs = jobs.filter(j => j.assignedTo === userId && j.pausedAt.includes(targetDateStr));
-        if(userJobs.length > 0) { html += `<h4 style="border-bottom:1px solid #ccc; padding-bottom:5px;">Completed Jobs</h4>`; html += userJobs.map(j => `<div style="padding:10px; background:#fff; border:1px solid #eee; margin-bottom:5px; border-radius:5px; font-size:12px;"><strong>${j.site}</strong><br><span style="color:#888;">${j.pausedAt}</span></div>`).join(''); } else { html += `<p style="color:#888; font-size:13px; text-align:center; padding:10px;">No assigned jobs completed on this date.</p>`; }
-        resultsEl.innerHTML = html;
-    }
-};
-
-const GodCtrl = {
-    init: function() { 
-        this.renderSchema(); 
-        this.renderTenants(); 
-        this.renderTenantMetrics(false);
-    },
-    switchTab: function(id, e) { 
-        document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); 
-        const targetTab = document.getElementById('tab-' + id);
-        if(targetTab) targetTab.style.display = 'block'; 
-        const contentArea = document.querySelector('.admin-content'); 
-        if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; } 
-        if(e && e.currentTarget) {
-            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); 
-            e.currentTarget.classList.add('active-nav'); 
-        }
-        if(id === 'tenant-metrics') this.renderTenantMetrics(false);
-    },
-    
-    currentMetricsData: [],
-    
-    // V1.1.14 - Render Tenant Metrics with optional date filter
-    renderTenantMetrics: function(useDates = false) {
-        const container = document.getElementById('god-tenant-metrics-results');
-        if(!container) return;
-        
-        let fTime = 0, tTime = Date.now() + 31536000000; // Far future default
-        if(useDates) {
-            const fStr = document.getElementById('god-met-from').value;
-            const tStr = document.getElementById('god-met-to').value;
-            if(fStr && tStr) {
-                fTime = new Date(fStr).setHours(0,0,0,0);
-                tTime = new Date(tStr).setHours(23,59,59,999);
-            } else {
-                alert("Please select a valid date range.");
-                return;
-            }
-        }
-
-        const tenants = CoreDB.getTenants();
-        const users = CoreDB.getUsers();
-        const jobs = CoreDB.getJobBank();
-        
-        let html = '';
-        this.currentMetricsData = [];
-        
-        tenants.forEach(t => {
-            const tUsers = users.filter(u => u.tenantId === t.id && u.status === 'ACTIVE');
-            let tJobs = jobs.filter(j => j.tenantId === t.id);
-            
-            // Only filter jobs for the generated report
-            if(useDates) {
-                tJobs = tJobs.filter(j => j.timestamp >= fTime && j.timestamp <= tTime);
-            }
-            
-            const admins = tUsers.filter(u => u.role === 'admin').length;
-            const dispatchers = tUsers.filter(u => u.role === 'dispatch').length;
-            const agents = tUsers.filter(u => u.role === 'agent').length;
-            const reporters = tUsers.filter(u => u.role === 'reporter').length;
-            
-            const pending = tJobs.filter(j => j.type === 'PENDING').length;
-            const completed = tJobs.filter(j => j.type === 'COMPLETED').length;
-            
-            let lastActivity = 'N/A';
-            const allTJobs = jobs.filter(j => j.tenantId === t.id); 
-            if(allTJobs.length > 0) {
-                const sorted = [...allTJobs].sort((a,b) => b.timestamp - a.timestamp);
-                lastActivity = new Date(sorted[0].timestamp).toLocaleDateString('en-NZ');
-            }
-            
-            const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c');
-            const licColor = tUsers.length >= t.licenses ? '#e74c3c' : 'var(--b)';
-
-            this.currentMetricsData.push({
-                tenant: t.name, type: t.type, status: t.status, activeUsers: tUsers.length, cap: t.licenses,
-                admins: admins, dispatchers: dispatchers, agents: agents, reporters: reporters,
-                totalJobs: tJobs.length, pending: pending, completed: completed, lastActivity: lastActivity
-            });
-
-            html += `<tr style="border-bottom:1px solid #eee; background:#fff;">
-                <td style="padding:15px;"><strong style="color:var(--text-dark);">${t.name}</strong><br><span style="font-size:11px; color:#888;">ID: ${t.id}</span></td>
-                <td style="padding:15px; font-weight:bold; color:#555;">${t.type}</td>
-                <td style="padding:15px;"><span class="badge" style="background:${statColor};">${t.status}</span></td>
-                <td style="padding:15px;"><strong style="color:${licColor};">${tUsers.length} / ${t.licenses}</strong></td>
-                <td style="padding:15px; font-size:12px; color:#555;">
-                    <span style="color:#e74c3c; font-weight:bold;">${admins}</span> Adm | 
-                    <span style="color:#9b59b6; font-weight:bold;">${dispatchers}</span> Dsp | 
-                    <span style="color:#3498db; font-weight:bold;">${agents}</span> Agt | 
-                    <span style="color:#f39c12; font-weight:bold;">${reporters}</span> Rep
-                </td>
-                <td style="padding:15px; text-align:center;"><strong>${tJobs.length}</strong></td>
-                <td style="padding:15px; text-align:center; color:#3498db; font-weight:bold;">${pending}</td>
-                <td style="padding:15px; text-align:center; color:#2ecc71; font-weight:bold;">${completed}</td>
-                <td style="padding:15px; font-size:12px; color:#666;">${lastActivity}</td>
-            </tr>`;
-        });
-        
-        if(tenants.length === 0) html = '<tr><td colspan="9" style="text-align:center; padding:20px; color:#888;">No tenants found.</td></tr>';
-        container.innerHTML = html;
-    },
-    exportMetricsCSV: function() {
-        if(this.currentMetricsData.length === 0) { alert("Generate a report first."); return; }
-        let csv = "Tenant,Type,Status,Active Users,License Cap,Admins,Dispatchers,Agents,Reporters,Total Jobs,Pending,Completed,Last Activity\n";
-        this.currentMetricsData.forEach(r => {
-            csv += `"${r.tenant}","${r.type}","${r.status}",${r.activeUsers},${r.cap},${r.admins},${r.dispatchers},${r.agents},${r.reporters},${r.totalJobs},${r.pending},${r.completed},"${r.lastActivity}"\n`;
-        });
-        UI.downloadTextFile(`VanGuard_TenantMetrics_${Date.now()}.csv`, csv);
-    },
-
-    exportDBText: function() { const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`; UI.downloadTextFile('Spoof_Database.txt', data); },
-    exportBlankTemplate: function() { const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }]; const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`; UI.downloadTextFile('Blank_Database_Template.txt', data); },
-    nukeDatabase: function() { if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) { localStorage.clear(); alert("System Reset Complete. Reloading interface."); window.location.href = 'index.html'; } },
-    
-    exportState: function() {
-        const state = { schema: CoreDB.getSchema(), flags: CoreDB.getFlags(), tenants: CoreDB.getTenants(), users: CoreDB.getUsers(), customKMLs: CoreDB.getCustomKMLs(), jobBank: CoreDB.getJobBank(), shifts: CoreDB.getShifts(), reports: CoreDB.getReports(), reportTemplates: CoreDB.getReportTemplates() };
-        const dump = btoa(JSON.stringify(state)); document.getElementById('state-sync-io').value = dump; alert("State exported to the text box. Copy this string and paste it into the tablet's God console.");
-    },
-    importState: function() {
-        const dump = document.getElementById('state-sync-io').value.trim(); if(!dump) return;
-        if(confirm("WARNING: Importing state will overwrite this device's memory. Continue?")) {
-            try {
-                const state = JSON.parse(atob(dump));
-                localStorage.setItem('vg_schema', JSON.stringify(state.schema || CoreDB.defaultSchema)); localStorage.setItem('vg_flags', JSON.stringify(state.flags || CoreDB.defaultFlags)); localStorage.setItem('tt_tenants', JSON.stringify(state.tenants || CoreDB.defaultTenants)); localStorage.setItem('tt_users', JSON.stringify(state.users || CoreDB.defaultUsers)); localStorage.setItem('tt_custom_kmls', JSON.stringify(state.customKMLs || [])); localStorage.setItem('tt_jobbank', JSON.stringify(state.jobBank || [])); localStorage.setItem('tt_shifts', JSON.stringify(state.shifts || [])); localStorage.setItem('tt_reports', JSON.stringify(state.reports || [])); localStorage.setItem('tt_report_templates', JSON.stringify(state.reportTemplates || []));
-                alert("State successfully imported! Reloading interface..."); window.location.href = 'index.html';
-            } catch(e) { alert("Invalid state string. Import failed."); console.error(e); }
-        }
-    },
-
-    renderTenants: function() {
-        const c = document.getElementById('god-tenant-list'); if(!c) return; const tenants = CoreDB.getTenants(); const bank = CoreDB.getJobBank(); const allUsers = CoreDB.getUsers();
-        c.innerHTML = tenants.map(t => {
-            const tenantJobs = bank.filter(j => j.tenantId === t.id); const pendingCount = tenantJobs.filter(j => j.type !== 'COMPLETED').length; const completedCount = tenantJobs.filter(j => j.type === 'COMPLETED').length; const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c'); const adminUser = allUsers.find(u => u.tenantId === t.id && u.role === 'admin') || { username: '', password: '' };
-            return `<div style="background:var(--bg-light); border:1px solid #ddd; border-radius:8px; margin-bottom:10px; overflow:hidden;"><div style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="UI.toggleSubRow('t-exp-${t.id}', 't-icon-${t.id}')"><div><span id="t-icon-${t.id}" style="display:inline-block; width:15px; font-size:12px;">▶</span><h4 style="margin:0; display:inline-block; color:var(--text-dark);">${t.name}</h4><span style="font-size:12px; color:#666; margin-left:10px;">ID: ${t.id} | Type: ${t.type} | Tier: ${t.tier}</span></div><div><span class="badge blue" style="background:${statColor};">${t.status}</span></div></div><div id="t-exp-${t.id}" style="display:none; padding:20px; border-top:1px solid #ddd; background:#fff;"><div style="display:flex; justify-content:space-between; margin-bottom:15px; background:#f4f6f8; padding:10px; border-radius:8px; align-items:center;"><div style="font-size:12px; color:#555;"><strong>Live Metrics:</strong> <span style="margin-left:10px; color:#e74c3c;">${pendingCount} Pending</span> | <span style="margin-left:10px; color:#2ecc71;">${completedCount} Completed</span></div><button class="std-btn gray" style="width:auto; padding:8px 15px; font-size:11px;" onclick="GodCtrl.impersonateTenant('${t.id}')">Enter Admin Dashboard</button></div><div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid var(--b);"><h4 style="margin-top:0; color: var(--b); font-size: 13px; text-transform: uppercase;">Master Admin Credentials</h4><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"><div><label class="input-label">Admin Username</label><input type="text" id="t-admin-user-${t.id}" class="std-input" value="${adminUser.username}" style="margin-bottom:0;"></div><div><label class="input-label">Admin Password</label><input type="text" id="t-admin-pass-${t.id}" class="std-input" value="${adminUser.password}" style="margin-bottom:0;"></div></div></div><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr;"><div><label class="input-label">Council Name</label><input type="text" id="t-name-${t.id}" class="std-input" value="${t.name}"></div><div><label class="input-label">Tenant Type</label><select id="t-type-${t.id}" class="std-input"><option value="Municipal Council" ${t.type==='Municipal Council'?'selected':''}>Municipal Council</option><option value="Law Enforcement" ${t.type==='Law Enforcement'?'selected':''}>Law Enforcement</option><option value="Private Contractor" ${t.type==='Private Contractor'?'selected':''}>Private Contractor</option></select></div><div><label class="input-label">Subscription Tier</label><select id="t-tier-${t.id}" class="std-input"><option value="City A" ${t.tier==='City A'?'selected':''}>City A (Test)</option><option value="City B" ${t.tier==='City B'?'selected':''}>City B (Test)</option><option value="Municipal - Small" ${t.tier==='Municipal - Small'?'selected':''}>Municipal - Small</option><option value="Municipal - Large" ${t.tier==='Municipal - Large'?'selected':''}>Municipal - Large</option><option value="State Police" ${t.tier==='State Police'?'selected':''}>State Police</option></select></div><div><label class="input-label">Licenses</label><input type="number" id="t-lic-${t.id}" class="std-input" value="${t.licenses}"></div><div><label class="input-label">Primary Contact</label><input type="text" id="t-cname-${t.id}" class="std-input" value="${t.contactName || ''}" placeholder="Name"></div><div><label class="input-label">Contact Email</label><input type="email" id="t-cemail-${t.id}" class="std-input" value="${t.contactEmail || ''}" placeholder="Email"></div><div><label class="input-label">Contact Phone</label><input type="text" id="t-cphone-${t.id}" class="std-input" value="${t.contactPhone || ''}" placeholder="Phone"></div><div style="grid-column: span 3;"><label class="input-label">Council Reporting Email (For ⚠️ Reports)</label><input type="email" id="t-report-email-${t.id}" class="std-input" value="${t.reportEmail || ''}" placeholder="info@council.govt.nz"></div><div style="grid-column: span 3;"><label class="input-label">Tenant Logo (URL)</label><input type="text" id="t-logo-${t.id}" class="std-input" placeholder="https://..." value="${t.logo || ''}"></div><div style="grid-column: span 3;"><label class="input-label">Motto / Slogan</label><input type="text" id="t-motto-${t.id}" class="std-input" value="${t.motto || ''}"></div><div><label class="input-label">Home Latitude</label><input type="text" id="t-lat-${t.id}" class="std-input" value="${t.homeLat || ''}" placeholder="-41.135"></div><div><label class="input-label">Home Longitude</label><input type="text" id="t-lng-${t.id}" class="std-input" value="${t.homeLng || ''}" placeholder="174.84"></div><div><label class="input-label">Default Zoom</label><input type="number" id="t-zoom-${t.id}" class="std-input" value="${t.defaultZoom || 14}" placeholder="14"></div><div><label class="input-label">Billing Cycle</label><select id="t-bill-${t.id}" class="std-input"><option value="Monthly" ${t.billingCycle==='Monthly'?'selected':''}>Monthly</option><option value="Annually" ${t.billingCycle==='Annually'?'selected':''}>Annually</option></select></div><div><label class="input-label">Account Status</label><select id="t-stat-${t.id}" class="std-input" style="border:2px solid ${statColor};"><option value="ACTIVE" ${t.status==='ACTIVE'?'selected':''}>Active</option><option value="SUSPENDED" ${t.status==='SUSPENDED'?'selected':''}>Suspended (Arrears)</option><option value="DEACTIVATED" ${t.status==='DEACTIVATED'?'selected':''}>Deactivated</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px dashed #eee; padding-top:15px;"><button class="std-btn red" style="width:auto; padding:10px 20px;" onclick="GodCtrl.deleteTenant('${t.id}')">Delete Tenant</button><button class="std-btn blue" style="width:auto; padding:10px 40px; font-size:16px;" onclick="GodCtrl.saveTenant('${t.id}')">Confirm Changes</button></div></div></div>`;
-        }).join('');
-    },
-    addTenant: function() { const name = prompt("Enter Council Name:"); if(!name) return; const tenants = CoreDB.getTenants(); const newId = 'T'+Math.floor(Math.random()*9000+1000); tenants.push({ id: newId, name: name, type: "Municipal Council", tier: "Municipal - Small", licenses: 4, status: "ACTIVE", motto: "", contactName: "", contactEmail: "", contactPhone: "", reportEmail: "info@council.govt.nz", billingCycle: "Monthly", logo: "", homeLat: -41.135, homeLng: 174.84, defaultZoom: 14 }); CoreDB.saveTenants(tenants); this.renderTenants(); },
-    saveTenant: function(id) {
-        const tenants = CoreDB.getTenants(); const t = tenants.find(x => x.id === id);
-        if(t) {
-            t.name = document.getElementById(`t-name-${id}`).value; t.type = document.getElementById(`t-type-${id}`).value; t.tier = document.getElementById(`t-tier-${id}`).value; t.licenses = parseInt(document.getElementById(`t-lic-${id}`).value) || 0; t.status = document.getElementById(`t-stat-${id}`).value; t.motto = document.getElementById(`t-motto-${id}`).value; t.contactName = document.getElementById(`t-cname-${id}`).value; t.contactEmail = document.getElementById(`t-cemail-${id}`).value; t.contactPhone = document.getElementById(`t-cphone-${id}`).value; t.reportEmail = document.getElementById(`t-report-email-${id}`).value; t.billingCycle = document.getElementById(`t-bill-${id}`).value; t.logo = document.getElementById(`t-logo-${id}`).value; t.homeLat = document.getElementById(`t-lat-${id}`).value; t.homeLng = document.getElementById(`t-lng-${id}`).value; t.defaultZoom = document.getElementById(`t-zoom-${id}`).value; CoreDB.saveTenants(tenants);
-            const adminU = document.getElementById(`t-admin-user-${id}`).value.trim().toLowerCase(); const adminP = document.getElementById(`t-admin-pass-${id}`).value.trim();
-            if (adminU && adminP) { let users = CoreDB.getUsers(); let existingAdmin = users.find(u => u.tenantId === id && u.role === 'admin'); if (existingAdmin) { existingAdmin.username = adminU; existingAdmin.password = adminP; } else { users.push({ id: 'U' + Date.now().toString().slice(-6), username: adminU, password: adminP, role: 'admin', tenantId: id }); } CoreDB.saveUsers(users); }
-            this.renderTenants(); alert("Tenant details confirmed and updated.");
-        }
-    },
-    deleteTenant: function(id) { if(confirm("Are you sure you want to completely delete this tenant?")) { let tenants = CoreDB.getTenants().filter(x => x.id !== id); CoreDB.saveTenants(tenants); this.renderTenants(); } },
-    impersonateTenant: function(id) { CoreDB.setActiveTenantId(id); window.location.href = 'admin.html'; },
-    
-    renderSchema: function() {
-        const c = document.getElementById('god-schema-render'); if(!c) return; 
-        let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="background:var(--nav-dark); color:white;"><th style="padding:12px 15px;">Global Field</th><th style="padding:12px 15px; width:100px;">Type</th><th style="padding:12px 15px; text-align:right; width:100px;">Action</th></tr>';
-        const schema = CoreDB.getSchema(); const groups = {};
-        schema.forEach(f => { const cat = f.category || 'General Info'; if(!groups[cat]) groups[cat] = []; groups[cat].push(f); });
-
-        for(const [cat, fields] of Object.entries(groups)) {
-            html += `<tr style="background:#e3f2fd;"><td colspan="3" style="padding:8px 15px; font-weight:900; color:var(--b); text-transform:uppercase; font-size:12px;">${cat}</td></tr>`;
-            fields.forEach(f => {
-                html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-                if(f.type === 'select') { html += `<td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="UI.toggleSubRow('god-sub-${f.id}', 'god-icon-${f.id}')"><span id="god-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`; } else { html += `<td style="padding: 15px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`; }
-                html += `<td style="padding: 15px; color: #666;">${f.type}</td><td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="GodCtrl.delField('${f.id}')">Delete</button></td></tr>`;
-                if(f.type === 'select') { html += `<tr id="god-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 20px 20px 25px 45px;"><div class="sub-options-list">`; f.options.forEach(opt => { html += `<div class="sub-option-row"><span>${opt.name}</span><button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="GodCtrl.delOpt('${f.id}', '${opt.name}')">✕</button></div>`; }); html += `<div style="display: flex; gap: 10px; margin-top: 10px;"><input type="text" id="god-opt-${f.id}" class="std-input" style="margin-bottom: 0; padding: 10px;"><button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="GodCtrl.addOpt('${f.id}')">➕</button></div></div></td></tr>`; }
-            });
-        }
-        c.innerHTML = html + '</table>';
-    },
-    delField: function(id) { if(confirm("Delete root field globally?")) { let db=CoreDB.getSchema().filter(x=>x.id!==id); CoreDB.saveSchema(db); this.renderSchema(); } },
-    delOpt: function(fid, opt) { if(confirm("Delete option globally?")) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){f.options=f.options.filter(y=>y.name!==opt); CoreDB.saveSchema(db); this.renderSchema(); } } },
-    addOpt: function(fid) { let v = document.getElementById(`god-opt-${fid}`).value.trim(); if(!v) return; let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f && !f.options.find(o=>o.name===v)){f.options.push({name:v, visible:true}); CoreDB.saveSchema(db); this.renderSchema();} },
-    addField: function() { 
-        let l = document.getElementById('new-global-field-name').value.trim(); 
-        let t = document.getElementById('new-global-field-type').value; 
-        let c = document.getElementById('new-global-field-category').value;
-        if(!l) return; 
-        let id=l.toLowerCase().replace(/[^a-z0-9]/g, '_'); 
-        let db=CoreDB.getSchema(); 
-        if(db.find(f=>f.id===id)) return; 
-        db.push({id:id, label:l, type:t, category:c, tenantVisible:true, tenantMandatory:false, options: t==='select'?[]:null}); 
-        CoreDB.saveSchema(db); this.renderSchema(); 
-        document.getElementById('new-global-field-name').value=''; 
-    }
-};
-
 const LawEnforcementCtrl = {
+    leFilteredJobs: [],
+    mapInstance: null,
+    layerGroup: null,
+    
     init: function() {
-        const sel = document.getElementById('le-rep-tenant');
-        if(sel) {
-            let html = '<option value="ALL">All Tenants</option>';
-            CoreDB.getTenants().forEach(t => html += `<option value="${t.id}">${t.name}</option>`);
-            sel.innerHTML = html;
+        const cList = document.getElementById('le-region-list');
+        if(cList) {
+            const councils = CoreDB.getTenants().filter(t => t.type === 'Municipal Council');
+            let wHtml = `<label style="display:flex; align-items:center; font-size:13px; font-weight:bold; margin-bottom:10px;"><input type="checkbox" id="le-cb-all-regions" checked onchange="LawEnforcementCtrl.toggleAllRegions(this.checked)" style="margin-right:10px; width:16px; height:16px;"> Select All Regions</label>`;
+            councils.forEach(c => { 
+                wHtml += `<label style="display:flex; align-items:center; font-size:13px; margin-bottom:5px; color:#555;"><input type="checkbox" value="${c.id}" class="le-region-cb" checked style="margin-right:10px;"> ${c.name}</label>`; 
+            });
+            cList.innerHTML = wHtml;
         }
     },
-    macroReportData: [],
-    generateMacroReport: function() {
+    toggleAllRegions: function(checked) {
+        document.querySelectorAll('.le-region-cb').forEach(cb => cb.checked = checked);
+    },
+    generateIntelReport: function() {
         const fStr = document.getElementById('le-rep-from').value;
         const tStr = document.getElementById('le-rep-to').value;
-        const tTarget = document.getElementById('le-rep-tenant').value;
+        const tagStr = document.getElementById('le-rep-tags').value.toLowerCase().trim();
         
         if(!fStr || !tStr) { alert("Select date range"); return; }
         
         const fTime = new Date(fStr).setHours(0,0,0,0);
         const tTime = new Date(tStr).setHours(23,59,59,999);
         
-        const jobs = CoreDB.getJobBank().filter(j => j.type === 'COMPLETED' && j.timestamp >= fTime && j.timestamp <= tTime);
-        const tenants = CoreDB.getTenants();
-        let aggregation = {};
+        const selectedRegions = Array.from(document.querySelectorAll('.le-region-cb:checked')).map(cb => cb.value);
+        if(selectedRegions.length === 0) { alert("Select at least one region."); return; }
         
-        jobs.forEach(j => {
-            if(tTarget !== 'ALL' && j.tenantId !== tTarget) return;
-            if(!aggregation[j.tenantId]) { aggregation[j.tenantId] = { count: 0, area: 0, chemicals: 0, paint: 0 }; }
-            aggregation[j.tenantId].count++;
-            
-            if(j.data) {
-                if(j.data.area) {
-                    const aVal = parseFloat(j.data.area.replace('+',''));
-                    if(!isNaN(aVal)) aggregation[j.tenantId].area += aVal;
-                }
-                if(j.data.chemicals_used__liters_) {
-                    const cVal = parseFloat(j.data.chemicals_used__liters_);
-                    if(!isNaN(cVal)) aggregation[j.tenantId].chemicals += cVal;
-                }
-                if(j.data.paint_used__liters_) {
-                    const pVal = parseFloat(j.data.paint_used__liters_);
-                    if(!isNaN(pVal)) aggregation[j.tenantId].paint += pVal;
-                }
-            }
-        });
+        const tags = tagStr ? tagStr.split(',').map(s => s.trim()).filter(s => s) : [];
+
+        let jobs = CoreDB.getJobBank().filter(j => j.type === 'COMPLETED' && j.timestamp >= fTime && j.timestamp <= tTime && selectedRegions.includes(j.tenantId));
         
-        this.macroReportData = [];
-        const resBody = document.getElementById('le-rep-results');
-        let html = '';
-        
-        for(const [tid, metrics] of Object.entries(aggregation)) {
-            const t = tenants.find(x => x.id === tid);
-            const tName = t ? t.name : tid;
-            this.macroReportData.push({ tenant: tName, ...metrics });
-            html += `<tr style="border-bottom:1px solid #eee;">
-                <td style="padding:10px; font-weight:bold; color:var(--b);">${tName}</td>
-                <td style="padding:10px;">${metrics.count}</td>
-                <td style="padding:10px;">${metrics.area.toFixed(2)} m²</td>
-                <td style="padding:10px;">${metrics.chemicals.toFixed(2)} L</td>
-                <td style="padding:10px;">${metrics.paint.toFixed(2)} L</td>
-            </tr>`;
+        if(tags.length > 0) {
+            jobs = jobs.filter(j => {
+                let content = ((j.data && j.data.tag_content) || '') + ' ' + 
+                              ((j.data && j.data.graffiti_tag_interpretation) || '') + ' ' + 
+                              (j.notes || '');
+                content = content.toLowerCase();
+                return tags.some(t => content.includes(t));
+            });
         }
         
-        if(html === '') { html = '<tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">No data found for this period.</td></tr>'; }
-        resBody.innerHTML = html;
+        this.leFilteredJobs = jobs;
+        this.renderPreview();
     },
-    exportMacroCSV: function() {
-        if(this.macroReportData.length === 0) { alert("Generate a report first."); return; }
-        let csv = "Tenant,Completed Jobs,Total Area (sqm),Chemicals Used (L),Paint Used (L)\n";
-        this.macroReportData.forEach(r => { csv += `"${r.tenant}",${r.count},${r.area.toFixed(2)},${r.chemicals.toFixed(2)},${r.paint.toFixed(2)}\n`; });
-        UI.downloadTextFile(`VanGuard_LE_MacroReport_${Date.now()}.csv`, csv);
+    renderPreview: function() {
+        const previewList = document.getElementById('le-rep-results');
+        if(this.leFilteredJobs.length === 0) {
+            previewList.innerHTML = `<p style="text-align:center; padding:30px; color:#888;">No intel found matching these parameters.</p>`;
+            return;
+        }
+        
+        const schema = CoreDB.getSchema();
+        const users = CoreDB.getUsers();
+        const tenants = CoreDB.getTenants();
+        
+        let html = '';
+        this.leFilteredJobs.forEach(j => {
+            const user = users.find(u => u.id === j.assignedTo);
+            const workerName = user ? (user.name || user.username) : 'Unknown';
+            const tenant = tenants.find(t => t.id === j.tenantId);
+            const tenantName = tenant ? tenant.name : 'Unknown Region';
+            
+            html += `<div style="background:#fff; border:1px solid #ddd; border-radius:8px; margin-bottom:20px; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,0.05); page-break-inside: avoid;">`;
+            
+            html += `<div style="background:#34495e; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h3 style="margin:0;">${j.site}</h3>
+                    <div style="font-size:11px; opacity:0.8;">Region: ${tenantName} | SRN: ${j.srn || 'N/A'} | Worker: ${workerName}</div>
+                </div>
+                <span class="badge" style="background:#2ecc71;">${j.type}</span>
+            </div>`;
+
+            if(j.photos && Object.keys(j.photos).length > 0) {
+                let lbArray = []; let pIndex = 0;
+                for(const [step, url] of Object.entries(j.photos)) { lbArray.push({url: url, caption: step}); }
+                const lbArrayStr = JSON.stringify(lbArray).replace(/"/g, '&quot;');
+                
+                html += `<div style="display:flex; gap:10px; padding:15px; background:#f9f9f9; border-bottom:1px solid #eee; overflow-x:auto;">`;
+                for(const [step, url] of Object.entries(j.photos)) {
+                    html += `<div style="flex: 0 0 auto; text-align:center; cursor:pointer;" onclick="UI.openLightbox(${lbArrayStr.replace(/"/g, '&quot;')}, ${pIndex})">
+                        <img src="${url}" style="height:150px; border-radius:5px; border:1px solid #ccc; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <div style="font-size:10px; color:#666; margin-top:5px; text-transform:uppercase; font-weight:bold;">${step}</div>
+                    </div>`;
+                    pIndex++;
+                }
+                html += `</div>`;
+            }
+
+            html += `<div style="padding:15px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">`;
+            html += `<div style="font-size:12px; border-bottom:1px solid #eee; padding-bottom:5px;"><strong style="color:var(--b);">Date Completed:</strong><br>${j.pausedAt}</div>`;
+            if(j.notes) html += `<div style="font-size:12px; border-bottom:1px solid #eee; padding-bottom:5px;"><strong style="color:var(--b);">Agent Notes:</strong><br><i>${j.notes}</i></div>`;
+
+            if(j.data) {
+                schema.forEach(f => {
+                    const val = j.data[f.id];
+                    if(val) {
+                        html += `<div style="font-size:12px; border-bottom:1px solid #eee; padding-bottom:5px;"><strong style="color:var(--b);">${f.label}:</strong><br>${val}</div>`;
+                    }
+                });
+            }
+            html += `</div></div>`;
+        });
+        previewList.innerHTML = html;
+    },
+    exportWord: function() {
+        if(this.leFilteredJobs.length === 0) { alert("No intel to export. Please generate a report first."); return; }
+        
+        const schema = CoreDB.getSchema(); 
+        const users = CoreDB.getUsers();
+        const tenants = CoreDB.getTenants();
+        
+        let html = `<style>body { font-family: Arial, sans-serif; } .job-block { border: 1px solid #000; margin-bottom: 20px; padding: 10px; page-break-inside: avoid; } .header { background-color: #34495e; color: #fff; padding: 5px; font-weight: bold; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } td { padding: 5px; border-bottom: 1px solid #ccc; font-size: 12px; } img { max-height: 200px; max-width: 300px; margin: 5px; border: 1px solid #000; }</style><h1>Law Enforcement Intelligence Report</h1><p>Generated: ${new Date().toLocaleString()}</p>`;
+        
+        this.leFilteredJobs.forEach(j => {
+            const user = users.find(u => u.id === j.assignedTo); 
+            const wName = user ? (user.name || user.username) : 'Unknown';
+            const tenant = tenants.find(t => t.id === j.tenantId);
+            const tenantName = tenant ? tenant.name : 'Unknown Region';
+
+            html += `<div class="job-block"><div class="header">Site: ${j.site} | Region: ${tenantName} | SRN: ${j.srn || 'N/A'}</div><table><tr><td><strong>Agent:</strong></td><td>${wName}</td><td><strong>Date:</strong></td><td>${j.pausedAt}</td></tr>`;
+            
+            if(j.data) {
+                const filledFields = schema.filter(f => j.data[f.id]);
+                for(let i=0; i<filledFields.length; i+=2) {
+                    const f1 = filledFields[i]; const v1 = j.data[f1.id];
+                    let f2 = null, v2 = '';
+                    if(i+1 < filledFields.length) { f2 = filledFields[i+1]; v2 = j.data[f2.id]; }
+                    html += `<tr><td><strong>${f1.label}:</strong></td><td>${v1}</td>${f2 ? `<td><strong>${f2.label}:</strong></td><td>${v2}</td>` : `<td></td><td></td>`}</tr>`;
+                }
+            }
+            if(j.notes) html += `<tr><td colspan="4"><strong>Notes:</strong> ${j.notes}</td></tr>`; 
+            html += `</table>`;
+            
+            if(j.photos && Object.keys(j.photos).length > 0) { 
+                html += `<div style="margin-top:10px;">`; 
+                for(const [step, url] of Object.entries(j.photos)) { html += `<span><strong>${step.toUpperCase()}</strong><br><img src="${url}"></span>`; } 
+                html += `</div>`; 
+            }
+            html += `</div>`;
+        });
+        UI.downloadWordDoc(`LE_Intel_Report_${Date.now()}.doc`, html);
+    },
+    openMapProjection: function() {
+        if(this.leFilteredJobs.length === 0) { alert("No intel to map. Please generate a report first."); return; }
+        
+        UI.openOverlay('le-map-projection');
+        
+        if(!this.mapInstance) {
+            this.mapInstance = L.map('le-intel-map', {zoomControl: true}).setView([-41.135, 174.84], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.mapInstance);
+            this.layerGroup = L.layerGroup().addTo(this.mapInstance);
+        }
+        setTimeout(() => { this.mapInstance.invalidateSize(); }, 300);
+        
+        this.layerGroup.clearLayers();
+        let bounds = [];
+        
+        this.leFilteredJobs.forEach(async (j) => {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(j.site)}&countrycodes=nz`); 
+                const data = await res.json();
+                if(data.length > 0) {
+                    const lat = parseFloat(data[0].lat); const lon = parseFloat(data[0].lon);
+                    const iconHtml = `<div class="marker-inner" style="background-color: #e74c3c; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.4); font-size: 14px; color:white; font-weight:bold;">🚔</div>`;
+                    const m = L.marker([lat, lon], { icon: L.divIcon({ className: '', html: iconHtml, iconSize: [32, 32], iconAnchor: [16, 16] }) });
+                    
+                    let popupContent = `<div style="min-width:150px;"><h4 style="margin:0 0 5px 0; color:var(--b);">${j.site}</h4><div style="font-size:11px; color:#666;">Date: ${j.pausedAt}</div>`;
+                    if(j.data && j.data.tag_content) popupContent += `<div style="font-size:11px; font-weight:bold; color:#e74c3c;">Tag: ${j.data.tag_content}</div>`;
+                    if(j.data && j.data.graffiti_tag_interpretation) popupContent += `<div style="font-size:11px; font-style:italic; color:#e74c3c;">Interpretation: ${j.data.graffiti_tag_interpretation}</div>`;
+                    
+                    if(j.photos && Object.keys(j.photos).length > 0) {
+                        const firstPhoto = Object.values(j.photos)[0];
+                        popupContent += `<img src="${firstPhoto}" style="width:100%; height:auto; margin-top:5px; border-radius:3px;">`;
+                    }
+                    popupContent += `</div>`;
+                    
+                    m.bindPopup(popupContent);
+                    m.addTo(this.layerGroup);
+                    bounds.push([lat, lon]);
+                    
+                    if(bounds.length > 0) {
+                        this.mapInstance.fitBounds(bounds, {padding: [50, 50], maxZoom: 16});
+                    }
+                }
+            } catch(e){ console.log("LE Map Geocode Error:", e); }
+        });
     }
 };
 
