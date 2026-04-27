@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Agent</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
+    <link rel="stylesheet" href="styles.css?v=1.0.2" />
 </head>
 <body data-role="agent" style="margin:0; padding:0; overflow:hidden;">
     <div id="live-timer-widget">00:00</div>
@@ -19,8 +19,10 @@
         <div class="sidebar-version">AGENT HUD</div>
         <div id="menu-clock" class="sidebar-clock">--</div>
         
-        <div class="nav-item" onclick="UI.toggleLayerList()">🗺️ Map Layers</div>
-        <div id="layer-container" class="layer-list" style="display:none;"></div>
+        <div class="nav-item" onclick="UI.toggleLayerList()" style="justify-content:space-between;">
+            <div>🗺️ Map Layers</div><div id="layer-chevron" style="font-size:12px;">▶</div>
+        </div>
+        <div id="layer-container" class="layer-list" style="display:none; padding:10px 0;"></div>
         
         <div class="nav-item" onclick="UI.openOverlay('report-issue')" style="color:#e74c3c;">⚠️ Report Issue</div>
         
@@ -142,6 +144,6 @@
     <div id="map" class="full-map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=1.0.1"></script>
+    <script src="app.js?v=1.0.2"></script>
 </body>
 </html>

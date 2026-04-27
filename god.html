@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Core</title>
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
+    <link rel="stylesheet" href="styles.css?v=1.0.2" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -20,6 +20,9 @@
             </div>
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('database')">
                 <span class="icon">🗄️</span><span class="label">Database</span>
+            </div>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('sync')">
+                <span class="icon">🔄</span><span class="label">Sync</span>
             </div>
         </div>
     </nav>
@@ -63,8 +66,20 @@
                 </div>
             </div>
         </div>
+        <div id="tab-sync" class="admin-tab-content" style="display:none; max-width: 800px; margin: 40px auto; padding: 0 20px;">
+            <div class="tenant-panel" style="background:#e8f4f8; border:2px solid var(--b);">
+                <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Manual State Sync</h2>
+                <p style="font-size:14px; color:#555; line-height:1.5;">Because VanGuard is currently running out of Local Memory (Offline Mode), data is not automatically shared between devices. Use this tool to manually copy your database (Users, Maps, Jobs, Shifts) to another device.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
+                    <button class="std-btn blue" onclick="GodCtrl.exportState()">1. Export Current State</button>
+                    <button class="std-btn green" onclick="GodCtrl.importState()">3. Import New State</button>
+                </div>
+                <label class="section-label">State Memory String</label>
+                <textarea id="state-sync-io" class="std-input textarea" style="height:150px; font-family:monospace; font-size:11px;" placeholder="2. Paste state string from another device here..."></textarea>
+            </div>
+        </div>
     </main>
-    <div class="version-stamp">v1.0.1</div>
-    <script src="app.js?v=1.0.1"></script>
+    <div class="version-stamp">v1.0.2</div>
+    <script src="app.js?v=1.0.2"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Dispatch</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
+    <link rel="stylesheet" href="styles.css?v=1.0.2" />
 </head>
 <body data-role="dispatch" style="margin:0; padding:0; overflow:hidden;">
     <div class="menu-trigger" onclick="UI.openLeftSidebar()"><span></span><span></span><span></span></div>
@@ -21,8 +21,10 @@
             <button class="std-btn blue" onclick="DispatchCtrl.searchAddress()">🔍 Search</button>
         </div>
         
-        <div class="nav-item" onclick="UI.toggleLayerList()">🗺️ Layers</div>
-        <div id="layer-container" class="layer-list" style="display:none;"></div>
+        <div class="nav-item" onclick="UI.toggleLayerList()" style="justify-content:space-between;">
+            <div>🗺️ Layers</div><div id="layer-chevron" style="font-size:12px;">▶</div>
+        </div>
+        <div id="layer-container" class="layer-list" style="display:none; padding:10px 0;"></div>
         
         <div id="standalone-logout" class="nav-item logout-item" style="margin-top:20px;" onclick="location.href='index.html'">🚪 Log Out</div>
     </div>
@@ -92,6 +94,6 @@
     <div id="dispatch-map" class="full-map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=1.0.1"></script>
+    <script src="app.js?v=1.0.2"></script>
 </body>
 </html>

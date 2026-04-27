@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.0.1 - FULL MASTER + PATCHES
+// VANGUARD V1.0.2 - STATE SYNC & UX PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -20,9 +20,7 @@ const CoreDB = {
         { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE", allowedLayers: [] },
         { id: "U007", username: "reporter", password: "123", role: "reporter", tenantId: "T001", name: "Desk Reporter", contact: "021 000 000", status: "ACTIVE", allowedLayers: [] }
     ],
-    kmlConfig: [
-        { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
-    ],
+    kmlConfig: [ { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' } ],
 
     getFlags: function() { let mem = localStorage.getItem('vg_flags'); if(!mem) { localStorage.setItem('vg_flags', JSON.stringify(this.defaultFlags)); mem = localStorage.getItem('vg_flags'); } return JSON.parse(mem); },
     saveFlags: function(data) { localStorage.setItem('vg_flags', JSON.stringify(data)); },
@@ -115,7 +113,20 @@ const CoreDB = {
 const UI = {
     openLeftSidebar: () => document.getElementById('left-sidebar').classList.add('open'), closeLeftSidebar: () => document.getElementById('left-sidebar').classList.remove('open'),
     openRightSidebar: () => document.getElementById('right-sidebar').classList.add('open'), closeRightSidebar: () => document.getElementById('right-sidebar').classList.remove('open'),
-    toggleLayerList: () => { const el = document.getElementById('layer-container'); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; },
+    
+    // UX Patch: Toggle arrow state and layer container visibility
+    toggleLayerList: () => { 
+        const el = document.getElementById('layer-container'); 
+        const chevron = document.getElementById('layer-chevron');
+        if(el.style.display === 'block') {
+            el.style.display = 'none';
+            if(chevron) chevron.innerText = '▶';
+        } else {
+            el.style.display = 'block';
+            if(chevron) chevron.innerText = '▼';
+        }
+    },
+    
     openOverlay: (id) => { document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none'); document.getElementById(id + '-overlay').style.display = 'flex'; },
     closeOverlay: (id) => { document.getElementById(id + '-overlay').style.display = 'none'; },
     openPopup: (id) => document.getElementById(id).style.display = 'block', closePopup: (id) => document.getElementById(id).style.display = 'none',
@@ -175,7 +186,11 @@ class MapEngine {
         customKMLs.forEach(item => { 
             if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); count++; }
         });
-        if(count === 0) { container.innerHTML = '<div style="padding:10px; color:#888; font-size:12px; font-style:italic;">No map layers assigned to your profile.</div>'; }
+        
+        // UX Patch: Clear missing layers text if empty
+        if(count === 0) { 
+            container.innerHTML = '<div style="padding:10px; color:#e74c3c; font-size:12px; font-weight:bold; background:#f9f9f9; border-left:4px solid #e74c3c; border-radius:3px;">No map layers assigned to your profile.</div>'; 
+        }
         window._mapEngine = this; 
     }
     processKMLLayer(item, isCustomStr) {
@@ -288,7 +303,12 @@ const AgentCtrl = {
     },
     startShift: function() { 
         CoreDB.createShift(); UI.closeOverlay('shift'); this.requestWakeLock(); 
-        if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); }
+        
+        // UX Patch: Instantly force the first GPS breadcrumb so Dispatch sees them immediately
+        if(window._mapEngine && window._mapEngine.userMarker) { 
+            const pos = window._mapEngine.userMarker.getLatLng(); 
+            if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); 
+        }
         this.startBreadcrumbs(); 
     },
     endShift: function() { if(confirm("Are you sure you want to end your patrol shift and log out?")) { CoreDB.closeShift(); this.releaseWakeLock(); this.stopBreadcrumbs(); window.location.href = 'index.html'; } },
@@ -343,6 +363,7 @@ const AgentCtrl = {
 };
 
 const DispatchCtrl = {
+    // ... Keeping standard Dispatch functions identical for length ...
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; } if(window.location.search.includes('iframe=true')) { const lo = document.getElementById('standalone-logout'); if(lo) lo.style.display = 'none'; } new MapEngine('dispatch-map', 'dispatch'); this.renderBank('PENDING'); },
     async searchAddress() {
@@ -415,6 +436,34 @@ const AdminCtrl = {
     toggleFlag: function(key) { let flags = CoreDB.getFlags(); flags[key] = !flags[key]; CoreDB.saveFlags(flags); this.renderFlags(); }
 };
 
+const ToolsCtrl = {
+    tempFileObj: null,
+    init: function() { this.renderCustomKMLs(); },
+    switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
+    openUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'block'; document.getElementById('new-kml-label').value = ''; document.getElementById('kml-file-name').innerText = 'No file selected'; this.tempFileObj = null; },
+    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
+    handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
+    processUpload: function() {
+        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
+        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', ''); const color = document.getElementById('new-kml-color').value || '#ff00ff'; const icon = document.getElementById('new-kml-icon').value || '📍';
+        const reader = new FileReader();
+        reader.onload = (e) => { const kmlString = e.target.result; let custom = CoreDB.getCustomKMLs(); custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() }); CoreDB.saveCustomKMLs(custom); this.closeUploadForm(); this.renderCustomKMLs(); };
+        reader.readAsText(this.tempFileObj);
+    },
+    renderCustomKMLs: function() {
+        const list = document.getElementById('kml-list-render'); if(!list) return;
+        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
+        list.innerHTML = custom.map(k => {
+            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
+            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span><strong style="font-size:15px; color:var(--b);">${k.label}</strong></div><span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span></div></div><div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);"><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;"><div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div><div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div><div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div><div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:10px;"><button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button><button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button></div></div>`;
+        }).join('');
+    },
+    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
+    updateKML: function(id) { let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id); if(idx !== -1) { custom[idx].label = document.getElementById(`kml-lbl-${id}`).value; custom[idx].color = document.getElementById(`kml-col-${id}`).value; custom[idx].icon = document.getElementById(`kml-icn-${id}`).value; custom[idx].status = document.getElementById(`kml-stat-${id}`).value; CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } },
+    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
+};
+
 const AccountsCtrl = {
     init: function() { this.renderUsers(); this.updateLicenseCounter(); },
     updateLicenseCounter: function() { const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE'); const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; } },
@@ -464,34 +513,6 @@ const AccountsCtrl = {
     deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
 };
 
-const ToolsCtrl = {
-    tempFileObj: null,
-    init: function() { this.renderCustomKMLs(); },
-    switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
-    openUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'block'; document.getElementById('new-kml-label').value = ''; document.getElementById('kml-file-name').innerText = 'No file selected'; this.tempFileObj = null; },
-    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
-    handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
-    processUpload: function() {
-        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
-        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', ''); const color = document.getElementById('new-kml-color').value || '#ff00ff'; const icon = document.getElementById('new-kml-icon').value || '📍';
-        const reader = new FileReader();
-        reader.onload = (e) => { const kmlString = e.target.result; let custom = CoreDB.getCustomKMLs(); custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() }); CoreDB.saveCustomKMLs(custom); this.closeUploadForm(); this.renderCustomKMLs(); };
-        reader.readAsText(this.tempFileObj);
-    },
-    renderCustomKMLs: function() {
-        const list = document.getElementById('kml-list-render'); if(!list) return;
-        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
-        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
-        list.innerHTML = custom.map(k => {
-            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
-            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span><strong style="font-size:15px; color:var(--b);">${k.label}</strong></div><span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span></div></div><div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);"><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;"><div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div><div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div><div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div><div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:10px;"><button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button><button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button></div></div>`;
-        }).join('');
-    },
-    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
-    updateKML: function(id) { let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id); if(idx !== -1) { custom[idx].label = document.getElementById(`kml-lbl-${id}`).value; custom[idx].color = document.getElementById(`kml-col-${id}`).value; custom[idx].icon = document.getElementById(`kml-icn-${id}`).value; custom[idx].status = document.getElementById(`kml-stat-${id}`).value; CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } },
-    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
-};
-
 const ReporterCtrl = {
     init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } this.renderReports(); },
     renderReports: function() {
@@ -508,7 +529,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=1${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=1$${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}
@@ -523,6 +544,37 @@ const GodCtrl = {
     exportDBText: function() { const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`; UI.downloadTextFile('Spoof_Database.txt', data); },
     exportBlankTemplate: function() { const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }]; const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`; UI.downloadTextFile('Blank_Database_Template.txt', data); },
     nukeDatabase: function() { if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) { localStorage.clear(); alert("System Reset Complete. Reloading interface."); window.location.href = 'index.html'; } },
+    
+    // UX Patch: State Sync Tools
+    exportState: function() {
+        const state = {
+            schema: CoreDB.getSchema(), flags: CoreDB.getFlags(), tenants: CoreDB.getTenants(), users: CoreDB.getUsers(),
+            customKMLs: CoreDB.getCustomKMLs(), jobBank: CoreDB.getJobBank(), shifts: CoreDB.getShifts(), reports: CoreDB.getReports()
+        };
+        const dump = btoa(JSON.stringify(state)); // Base64 encode it so it's a clean string
+        document.getElementById('state-sync-io').value = dump;
+        alert("State exported to the text box. Copy this string and paste it into the tablet's God console.");
+    },
+    importState: function() {
+        const dump = document.getElementById('state-sync-io').value.trim();
+        if(!dump) return;
+        if(confirm("WARNING: Importing state will overwrite this device's memory. Continue?")) {
+            try {
+                const state = JSON.parse(atob(dump));
+                localStorage.setItem('vg_schema', JSON.stringify(state.schema || CoreDB.defaultSchema));
+                localStorage.setItem('vg_flags', JSON.stringify(state.flags || CoreDB.defaultFlags));
+                localStorage.setItem('tt_tenants', JSON.stringify(state.tenants || CoreDB.defaultTenants));
+                localStorage.setItem('tt_users', JSON.stringify(state.users || CoreDB.defaultUsers));
+                localStorage.setItem('tt_custom_kmls', JSON.stringify(state.customKMLs || []));
+                localStorage.setItem('tt_jobbank', JSON.stringify(state.jobBank || []));
+                localStorage.setItem('tt_shifts', JSON.stringify(state.shifts || []));
+                localStorage.setItem('tt_reports', JSON.stringify(state.reports || []));
+                alert("State successfully imported! Reloading interface...");
+                window.location.href = 'index.html';
+            } catch(e) { alert("Invalid state string. Import failed."); console.error(e); }
+        }
+    },
+
     renderTenants: function() {
         const c = document.getElementById('god-tenant-list'); if(!c) return; const tenants = CoreDB.getTenants(); const bank = CoreDB.getJobBank(); const allUsers = CoreDB.getUsers();
         c.innerHTML = tenants.map(t => {
