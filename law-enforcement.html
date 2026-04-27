@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Law Enforcement Tracker</title>
+    <link rel="stylesheet" href="styles.css?v=1.1.13" />
+    <style>
+        body { background: #f4f6f8; overflow-y: auto; overflow-x: hidden; } 
+        .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }
+    </style>
+</head>
+<body data-role="law-enforcement">
+    <div class="module-content" style="padding-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #34495e; color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 30px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; overflow:hidden;">🚔</div>
+                <div>
+                    <h3 style="margin: 0; font-size: 16px; font-weight:900; text-transform:uppercase;">Law Enforcement Tracker</h3>
+                    <div style="font-size: 11px; color: #aaa; margin-top:2px;">Cross-Tenant Intelligence & Macro Reporting</div>
+                </div>
+            </div>
+            <div>
+                <button class="std-btn gray" style="width: auto; padding: 8px 15px; font-size: 12px; margin:0 10px 0 0;" onclick="location.href='god.html'">⬅ Back to God Panel</button>
+                <button class="std-btn red" style="width: auto; padding: 8px 15px; font-size: 12px; margin:0;" onclick="location.href='index.html'">🚪 Log Out</button>
+            </div>
+        </div>
+
+        <div class="tenant-panel" style="margin-bottom:20px;">
+            <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Macro Reporting Engine</h2>
+            <p style="font-size:13px; color:#666;">Aggregate specific metrics across all council borders.</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; align-items:end; margin-top:20px;">
+                <div>
+                    <label class="section-label" style="margin-top:0;">From Date</label>
+                    <input type="date" id="le-rep-from" class="std-input" style="margin-bottom:0;">
+                </div>
+                <div>
+                    <label class="section-label" style="margin-top:0;">To Date</label>
+                    <input type="date" id="le-rep-to" class="std-input" style="margin-bottom:0;">
+                </div>
+                <div>
+                    <label class="section-label" style="margin-top:0;">Target Tenant</label>
+                    <select id="le-rep-tenant" class="std-input" style="margin-bottom:0;"></select>
+                </div>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px; border-top:1px dashed #ccc; padding-top:20px;">
+                <button class="std-btn green" style="width:auto; padding:10px 30px;" onclick="LawEnforcementCtrl.generateMacroReport()">Generate Aggregation</button>
+                <button class="std-btn blue" style="width:auto; padding:10px 30px;" onclick="LawEnforcementCtrl.exportMacroCSV()">Download CSV</button>
+            </div>
+        </div>
+        
+        <div class="tenant-panel" style="padding:0; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;" id="le-rep-table">
+                <thead style="background:var(--nav-dark); color:white;">
+                    <tr><th style="padding:10px;">Tenant</th><th style="padding:10px;">Completed Jobs</th><th style="padding:10px;">Total Area (m²)</th><th style="padding:10px;">Chemicals (L)</th><th style="padding:10px;">Paint (L)</th></tr>
+                </thead>
+                <tbody id="le-rep-results">
+                    <tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">Select parameters and generate to view macro metrics.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <script src="app.js?v=1.1.13"></script>
+</body>
+</html>

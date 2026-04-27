@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Core</title>
-    <link rel="stylesheet" href="styles.css?v=1.1.11" />
+    <link rel="stylesheet" href="styles.css?v=1.1.13" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -18,8 +18,11 @@
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('matrix', event)">
                 <span class="icon">📡</span><span class="label">Live Matrix</span>
             </div>
-            <div class="admin-nav-item" onclick="GodCtrl.switchTab('reports', event)">
-                <span class="icon">📊</span><span class="label">Reports</span>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenant-metrics', event)">
+                <span class="icon">📊</span><span class="label">Tenant Metrics</span>
+            </div>
+            <div class="admin-nav-item" onclick="location.href='law-enforcement.html'">
+                <span class="icon">🚔</span><span class="label">LE Tracker</span>
             </div>
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenants', event)">
                 <span class="icon">🏛️</span><span class="label">Tenants</span>
@@ -48,35 +51,24 @@
             </div>
         </div>
 
-        <div id="tab-reports" class="admin-tab-content" style="display:none; max-width: 1000px; margin: 40px auto; padding: 0 20px;">
-            <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Macro Reporting Engine</h2>
-            <div class="tenant-panel" style="margin-bottom:20px;">
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; align-items:end;">
-                    <div>
-                        <label class="section-label" style="margin-top:0;">From Date</label>
-                        <input type="date" id="god-rep-from" class="std-input" style="margin-bottom:0;">
-                    </div>
-                    <div>
-                        <label class="section-label" style="margin-top:0;">To Date</label>
-                        <input type="date" id="god-rep-to" class="std-input" style="margin-bottom:0;">
-                    </div>
-                    <div>
-                        <label class="section-label" style="margin-top:0;">Target Tenant</label>
-                        <select id="god-rep-tenant" class="std-input" style="margin-bottom:0;"></select>
-                    </div>
-                </div>
-                <div style="margin-top:15px; display:flex; gap:10px;">
-                    <button class="std-btn green" style="width:auto; padding:10px 30px;" onclick="GodCtrl.generateMacroReport()">Generate Aggregation</button>
-                    <button class="std-btn blue" style="width:auto; padding:10px 30px;" onclick="GodCtrl.exportMacroCSV()">Download CSV</button>
-                </div>
-            </div>
+        <div id="tab-tenant-metrics" class="admin-tab-content" style="display:none; max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+            <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Tenant Performance Metrics</h2>
             <div class="tenant-panel" style="padding:0; overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;" id="god-rep-table">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;">
                     <thead style="background:var(--nav-dark); color:white;">
-                        <tr><th style="padding:10px;">Tenant</th><th style="padding:10px;">Completed Jobs</th><th style="padding:10px;">Total Area (m²)</th><th style="padding:10px;">Chemicals (L)</th><th style="padding:10px;">Paint (L)</th></tr>
+                        <tr>
+                            <th style="padding:15px;">Council / Tenant</th>
+                            <th style="padding:15px;">Status</th>
+                            <th style="padding:15px;">Licenses (Active/Cap)</th>
+                            <th style="padding:15px;">Role Breakdown</th>
+                            <th style="padding:15px; text-align:center;">Total Jobs</th>
+                            <th style="padding:15px; text-align:center;">Pending</th>
+                            <th style="padding:15px; text-align:center;">Completed</th>
+                            <th style="padding:15px;">Last Activity</th>
+                        </tr>
                     </thead>
-                    <tbody id="god-rep-results">
-                        <tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">Select parameters and generate to view macro metrics.</td></tr>
+                    <tbody id="god-tenant-metrics-results">
+                        <tr><td colspan="8" style="padding:20px; text-align:center; color:#888;">Loading metrics...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -91,6 +83,7 @@
                 <div id="god-tenant-list"></div>
             </div>
         </div>
+        
         <div id="tab-database" class="admin-tab-content" style="display:none; max-width: 800px; margin: 40px auto; padding: 0 20px;">
             <div class="tenant-panel" style="margin-bottom:20px; background:#fafafa;">
                 <div style="display:flex; justify-content:space-between; margin-bottom: 15px;">
@@ -124,6 +117,7 @@
                 </div>
             </div>
         </div>
+        
         <div id="tab-sync" class="admin-tab-content" style="display:none; max-width: 800px; margin: 40px auto; padding: 0 20px;">
             <div class="tenant-panel" style="background:#e8f4f8; border:2px solid var(--b);">
                 <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Manual State Sync</h2>
@@ -137,7 +131,7 @@
             </div>
         </div>
     </main>
-    <div class="version-stamp">v1.1.11</div>
-    <script src="app.js?v=1.1.11"></script>
+    <div class="version-stamp">v1.1.13</div>
+    <script src="app.js?v=1.1.13"></script>
 </body>
 </html>
