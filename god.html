@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Core</title>
-    <link rel="stylesheet" href="styles.css?v=1.0.2" />
+    <link rel="stylesheet" href="styles.css?v=1.1.4" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -49,6 +49,7 @@
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="std-btn blue" onclick="GodCtrl.exportDBText()">Download Live Schema (.txt)</button>
+                    <button class="std-btn gray" onclick="GodCtrl.exportBlankTemplate()">Download Blank Template</button>
                 </div>
             </div>
             <div class="tenant-panel">
@@ -57,9 +58,16 @@
                     <h3 style="margin-top:0; color: var(--b);">➕ New Global Field</h3>
                     <div style="display:flex; gap:10px;">
                         <input type="text" id="new-global-field-name" class="std-input" placeholder="Title" style="margin:0;">
-                        <select id="new-global-field-type" class="std-input" style="margin:0;">
+                        <select id="new-global-field-type" class="std-input" style="margin:0; width:150px;">
                             <option value="text">Text</option>
                             <option value="select">Drop-down</option>
+                        </select>
+                        <select id="new-global-field-category" class="std-input" style="margin:0; width:200px;">
+                            <option value="General Info">General Info</option>
+                            <option value="Site Conditions">Site Conditions</option>
+                            <option value="Work Details">Work Details</option>
+                            <option value="Metrics">Metrics</option>
+                            <option value="Custom">Custom / Other</option>
                         </select>
                         <button class="std-btn blue" style="width:auto;" onclick="GodCtrl.addField()">Create</button>
                     </div>
@@ -79,7 +87,7 @@
             </div>
         </div>
     </main>
-    <div class="version-stamp">v1.0.2</div>
-    <script src="app.js?v=1.0.2"></script>
+    <div class="version-stamp">v1.1.4</div>
+    <script src="app.js?v=1.1.4"></script>
 </body>
 </html>
