@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Core</title>
-    <link rel="stylesheet" href="styles.css?v=1.1.4" />
+    <link rel="stylesheet" href="styles.css?v=1.1.11" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -12,16 +12,22 @@
             <div class="admin-nav-item logout-item" onclick="location.href='index.html'">
                 <span class="icon">🚪</span><span class="label">Log Out</span>
             </div>
-            <div class="admin-nav-item active-nav" onclick="GodCtrl.switchTab('welcome')">
+            <div class="admin-nav-item active-nav" onclick="GodCtrl.switchTab('welcome', event)">
                 <span class="icon">🌍</span><span class="label">Core</span>
             </div>
-            <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenants')">
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('matrix', event)">
+                <span class="icon">📡</span><span class="label">Live Matrix</span>
+            </div>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('reports', event)">
+                <span class="icon">📊</span><span class="label">Reports</span>
+            </div>
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenants', event)">
                 <span class="icon">🏛️</span><span class="label">Tenants</span>
             </div>
-            <div class="admin-nav-item" onclick="GodCtrl.switchTab('database')">
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('database', event)">
                 <span class="icon">🗄️</span><span class="label">Database</span>
             </div>
-            <div class="admin-nav-item" onclick="GodCtrl.switchTab('sync')">
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('sync', event)">
                 <span class="icon">🔄</span><span class="label">Sync</span>
             </div>
         </div>
@@ -32,6 +38,50 @@
             <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Core</h1>
             <p style="font-size: 14px; font-weight: bold; color: #888;">System Node</p>
         </div>
+
+        <div id="tab-matrix" class="admin-tab-content" style="display:none; max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+            <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Live System Matrix</h2>
+            <div id="god-matrix-kpis" style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:15px; margin-bottom:20px;"></div>
+            <div class="tenant-panel" style="padding:0; overflow:hidden;">
+                <div style="background:var(--nav-dark); color:white; padding:15px;"><h3 style="margin:0;">Global Activity Feed</h3></div>
+                <div id="god-matrix-feed" style="max-height:400px; overflow-y:auto; padding:15px;"></div>
+            </div>
+        </div>
+
+        <div id="tab-reports" class="admin-tab-content" style="display:none; max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+            <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Macro Reporting Engine</h2>
+            <div class="tenant-panel" style="margin-bottom:20px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; align-items:end;">
+                    <div>
+                        <label class="section-label" style="margin-top:0;">From Date</label>
+                        <input type="date" id="god-rep-from" class="std-input" style="margin-bottom:0;">
+                    </div>
+                    <div>
+                        <label class="section-label" style="margin-top:0;">To Date</label>
+                        <input type="date" id="god-rep-to" class="std-input" style="margin-bottom:0;">
+                    </div>
+                    <div>
+                        <label class="section-label" style="margin-top:0;">Target Tenant</label>
+                        <select id="god-rep-tenant" class="std-input" style="margin-bottom:0;"></select>
+                    </div>
+                </div>
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    <button class="std-btn green" style="width:auto; padding:10px 30px;" onclick="GodCtrl.generateMacroReport()">Generate Aggregation</button>
+                    <button class="std-btn blue" style="width:auto; padding:10px 30px;" onclick="GodCtrl.exportMacroCSV()">Download CSV</button>
+                </div>
+            </div>
+            <div class="tenant-panel" style="padding:0; overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;" id="god-rep-table">
+                    <thead style="background:var(--nav-dark); color:white;">
+                        <tr><th style="padding:10px;">Tenant</th><th style="padding:10px;">Completed Jobs</th><th style="padding:10px;">Total Area (m²)</th><th style="padding:10px;">Chemicals (L)</th><th style="padding:10px;">Paint (L)</th></tr>
+                    </thead>
+                    <tbody id="god-rep-results">
+                        <tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">Select parameters and generate to view macro metrics.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div id="tab-tenants" class="admin-tab-content" style="display:none; max-width: 900px; margin: 40px auto; padding: 0 20px;">
             <div class="tenant-panel">
                 <div style="display:flex; justify-content:space-between; border-bottom: 2px dashed #eee; padding-bottom: 15px; margin-bottom: 15px;">
@@ -87,7 +137,7 @@
             </div>
         </div>
     </main>
-    <div class="version-stamp">v1.1.4</div>
-    <script src="app.js?v=1.1.4"></script>
+    <div class="version-stamp">v1.1.11</div>
+    <script src="app.js?v=1.1.11"></script>
 </body>
 </html>
