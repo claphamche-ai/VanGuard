@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V4.9.3 - ADMIN TOOLS (KML & CSV)
+// VANGUARD V4.9.4 - MENU TOOLS & LAYER RBAC
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -14,15 +14,12 @@ const CoreDB = {
         { "id": "T002", "name": "Wellington City Council", "tier": "City B", "licenses": 50, "status": "ACTIVE", "motto": "Absolutely Positively Wellington", "logo": "", "homeLat": -41.2865, "homeLng": 174.7762, "defaultZoom": 14 }
     ],
     defaultUsers: [
-        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001", name: "Porirua Admin", contact: "04 237 5089", status: "ACTIVE" },
-        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001", name: "John Doe", contact: "021 555 1234", status: "ACTIVE" },
-        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE" },
-        { id: "U004", username: "admin2", password: "123", role: "admin", tenantId: "T002", name: "Wellington Admin", contact: "04 499 4444", status: "ACTIVE" },
-        { id: "U005", username: "worker2", password: "123", role: "agent", tenantId: "T002", name: "Bob Builder", contact: "027 555 0000", status: "ACTIVE" },
-        { id: "U006", username: "dispatch2", password: "123", role: "dispatch", tenantId: "T002", name: "Alice Dispatch", contact: "027 555 1111", status: "ACTIVE" }
-    ],
-    kmlConfig: [
-        { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
+        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001", name: "Porirua Admin", contact: "04 237 5089", status: "ACTIVE", allowedLayers: [] },
+        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001", name: "John Doe", contact: "021 555 1234", status: "ACTIVE", allowedLayers: [] },
+        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE", allowedLayers: [] },
+        { id: "U004", username: "admin2", password: "123", role: "admin", tenantId: "T002", name: "Wellington Admin", contact: "04 499 4444", status: "ACTIVE", allowedLayers: [] },
+        { id: "U005", username: "worker2", password: "123", role: "agent", tenantId: "T002", name: "Bob Builder", contact: "027 555 0000", status: "ACTIVE", allowedLayers: [] },
+        { id: "U006", username: "dispatch2", password: "123", role: "dispatch", tenantId: "T002", name: "Alice Dispatch", contact: "027 555 1111", status: "ACTIVE", allowedLayers: [] }
     ],
 
     getSchema: function() { let mem = localStorage.getItem('vg_schema'); if(!mem) { localStorage.setItem('vg_schema', JSON.stringify(this.defaultSchema)); mem = localStorage.getItem('vg_schema'); } return JSON.parse(mem); },
@@ -42,7 +39,12 @@ const CoreDB = {
     getUsers: function() {
         let mem = localStorage.getItem('tt_users'); if(!mem) { localStorage.setItem('tt_users', JSON.stringify(this.defaultUsers)); return this.defaultUsers; }
         let parsed = JSON.parse(mem); let patched = false;
-        parsed.forEach(u => { if(typeof u.name === 'undefined') { u.name = ''; patched = true; } if(typeof u.contact === 'undefined') { u.contact = ''; patched = true; } if(typeof u.status === 'undefined') { u.status = 'ACTIVE'; patched = true; } });
+        parsed.forEach(u => { 
+            if(typeof u.name === 'undefined') { u.name = ''; patched = true; } 
+            if(typeof u.contact === 'undefined') { u.contact = ''; patched = true; } 
+            if(typeof u.status === 'undefined') { u.status = 'ACTIVE'; patched = true; } 
+            if(typeof u.allowedLayers === 'undefined') { u.allowedLayers = []; patched = true; } // New array for RBAC
+        });
         if(patched) this.saveUsers(parsed); return parsed;
     },
     saveUsers: function(data) { localStorage.setItem('tt_users', JSON.stringify(data)); },
@@ -57,7 +59,14 @@ const CoreDB = {
     getTenantJobs: function() { return this.getJobBank().filter(j => j.tenantId === this.getActiveTenantId()); },
     getJob: function(jobId) { return this.getJobBank().find(j => j.jobId === jobId); },
     pushJob: function(jobObj) { let b = this.getJobBank(); jobObj.tenantId = this.getActiveTenantId(); jobObj.jobId = jobObj.jobId || ('J-' + Date.now() + '-' + Math.floor(Math.random() * 1000)); b.unshift(jobObj); this.saveJobBank(b); },
-    removeJob: function(jobId) { let b = this.getJobBank(); b = b.filter(j => j.jobId !== jobId); this.saveJobBank(b); }
+    removeJob: function(jobId) { let b = this.getJobBank(); b = b.filter(j => j.jobId !== jobId); this.saveJobBank(b); },
+    
+    getActiveUser: function() {
+        // Mock session retrieval based on a stored username in localStorage (set during login)
+        const activeUsername = localStorage.getItem('vg_active_user');
+        if(!activeUsername) return null;
+        return this.getUsers().find(u => u.username === activeUsername);
+    }
 };
 
 const UI = {
@@ -107,13 +116,19 @@ class MapEngine {
     }
     loadKML() {
         const container = document.getElementById('layer-container'); if(!container) return;
+        const activeUser = CoreDB.getActiveUser();
         
-        // Load Static defaults
-        CoreDB.kmlConfig.forEach(item => { this.processKMLLayer(item, false); });
-        
-        // Load Custom Tenant KMLs
-        const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
-        customKMLs.forEach(item => { this.processKMLLayer(item, true); });
+        // Admin gets all active layers. Others get RBAC filtered.
+        const isAdmin = activeUser && activeUser.role === 'admin';
+        const allowed = activeUser && activeUser.allowedLayers ? activeUser.allowedLayers : [];
+
+        // Load Custom Tenant KMLs (Only ACTIVE ones)
+        const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
+        customKMLs.forEach(item => { 
+            if(isAdmin || allowed.includes(item.id)) {
+                this.processKMLLayer(item, true); 
+            }
+        });
         
         window._mapEngine = this; 
     }
@@ -133,11 +148,8 @@ class MapEngine {
         });
         
         let runLayer;
-        if(isCustomStr) {
-            runLayer = omnivore.kml.parse(item.kmlString, null, customLayer);
-        } else {
-            runLayer = omnivore.kml(item.file, null, customLayer);
-        }
+        if(isCustomStr) { runLayer = omnivore.kml.parse(item.kmlString, null, customLayer); } 
+        else { runLayer = omnivore.kml(item.file, null, customLayer); }
         
         runLayer.on('ready', function() {
             runLayer.eachLayer(function(layer) {
@@ -231,6 +243,158 @@ const DispatchCtrl = {
     }
 };
 
+const ToolsCtrl = {
+    tempFileObj: null,
+    init: function() { this.renderCustomKMLs(); },
+    switchView: function(viewId) {
+        document.getElementById('tools-main-menu').style.display = 'none';
+        document.getElementById('tools-kml-manager').style.display = 'none';
+        document.getElementById('tools-' + viewId).style.display = 'block';
+    },
+    openUploadForm: function() {
+        document.getElementById('kml-upload-form').style.display = 'block';
+        document.getElementById('new-kml-label').value = '';
+        document.getElementById('kml-file-name').innerText = 'No file selected';
+        this.tempFileObj = null;
+    },
+    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
+    handleFileSelect: function(input) {
+        if(input.files && input.files[0]) {
+            this.tempFileObj = input.files[0];
+            document.getElementById('kml-file-name').innerText = this.tempFileObj.name;
+            if(!document.getElementById('new-kml-label').value) {
+                document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', '');
+            }
+        }
+    },
+    processUpload: function() {
+        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
+        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', '');
+        const color = document.getElementById('new-kml-color').value || '#ff00ff';
+        const icon = document.getElementById('new-kml-icon').value || '📍';
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const kmlString = e.target.result;
+            let custom = CoreDB.getCustomKMLs();
+            custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() });
+            CoreDB.saveCustomKMLs(custom);
+            this.closeUploadForm();
+            this.renderCustomKMLs();
+        };
+        reader.readAsText(this.tempFileObj);
+    },
+    renderCustomKMLs: function() {
+        const list = document.getElementById('kml-list-render');
+        if(!list) return;
+        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
+        
+        list.innerHTML = custom.map(k => {
+            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
+            return `
+            <div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center;">
+                        <span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span>
+                        <strong style="font-size:15px; color:var(--b);">${k.label}</strong>
+                    </div>
+                    <span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span>
+                </div>
+            </div>
+            <div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div>
+                    <div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div>
+                    <div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div>
+                    <div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                    <button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button>
+                    <button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button>
+                </div>
+            </div>`;
+        }).join('');
+    },
+    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
+    updateKML: function(id) {
+        let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id);
+        if(idx !== -1) {
+            custom[idx].label = document.getElementById(`kml-lbl-${id}`).value;
+            custom[idx].color = document.getElementById(`kml-col-${id}`).value;
+            custom[idx].icon = document.getElementById(`kml-icn-${id}`).value;
+            custom[idx].status = document.getElementById(`kml-stat-${id}`).value;
+            CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs();
+        }
+    },
+    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
+};
+
+const AccountsCtrl = {
+    init: function() { this.renderUsers(); this.updateLicenseCounter(); },
+    updateLicenseCounter: function() {
+        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE');
+        const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; }
+    },
+    generateLayerCheckboxes: function(containerId, activeAllowedLayers = []) {
+        const container = document.getElementById(containerId); if(!container) return;
+        const tenantLayers = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
+        if(tenantLayers.length === 0) { container.innerHTML = '<span style="font-size:12px; color:#888;">No active custom layers available.</span>'; return; }
+        
+        container.innerHTML = tenantLayers.map(layer => {
+            const isChecked = activeAllowedLayers.includes(layer.id) ? 'checked' : '';
+            return `<label style="display:flex; align-items:center; cursor:pointer; font-size:13px; color:#333;"><input type="checkbox" value="${layer.id}" class="layer-rbac-cb" style="width:16px; height:16px; margin-right:5px;" ${isChecked}> ${layer.icon} ${layer.label}</label>`;
+        }).join('');
+    },
+    getCheckedLayers: function(containerId) {
+        const container = document.getElementById(containerId); if(!container) return [];
+        const checkboxes = container.querySelectorAll('.layer-rbac-cb:checked');
+        return Array.from(checkboxes).map(cb => cb.value);
+    },
+    openCreateForm: function() { 
+        this.closeEditForm(); const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
+        if(activeUsers >= tenant.licenses) { alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`); return; }
+        document.getElementById('new-acc-username').value = ''; document.getElementById('new-acc-password').value = ''; document.getElementById('new-acc-name').value = ''; document.getElementById('new-acc-contact').value = ''; document.getElementById('new-acc-role').value = 'agent'; document.getElementById('new-acc-status').value = 'ACTIVE'; 
+        this.generateLayerCheckboxes('new-acc-layers', []);
+        document.getElementById('accounts-create-form').style.display = 'block'; 
+    },
+    closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
+    openEditForm: function(id) {
+        this.closeCreateForm(); const user = CoreDB.getUsers().find(u => u.id === id); if(!user) return;
+        document.getElementById('edit-acc-id').value = user.id; document.getElementById('edit-acc-username').value = user.username; document.getElementById('edit-acc-password').value = user.password; document.getElementById('edit-acc-role').value = user.role; document.getElementById('edit-acc-name').value = user.name || ''; document.getElementById('edit-acc-contact').value = user.contact || ''; document.getElementById('edit-acc-status').value = user.status || 'ACTIVE'; 
+        this.generateLayerCheckboxes('edit-acc-layers', user.allowedLayers || []);
+        document.getElementById('accounts-edit-form').style.display = 'block';
+    },
+    closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
+    renderUsers: function() {
+        const list = document.getElementById('accounts-list-render'); if(!list) return; const activeId = CoreDB.getActiveTenantId(); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId);
+        if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
+        list.innerHTML = users.map(u => {
+            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2980b9');
+            return `<tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')"><td style="padding: 15px;"><strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br><span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${roleColor};">${u.role.toUpperCase()}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${statColor};">${u.status || 'ACTIVE'}</span></td></tr>`
+        }).join(''); this.updateLicenseCounter();
+    },
+    createUser: function() {
+        const u = document.getElementById('new-acc-username').value.trim().toLowerCase(); const p = document.getElementById('new-acc-password').value.trim(); const r = document.getElementById('new-acc-role').value; const n = document.getElementById('new-acc-name').value.trim(); const c = document.getElementById('new-acc-contact').value.trim(); const s = document.getElementById('new-acc-status').value; const activeId = CoreDB.getActiveTenantId();
+        const allowedLayers = this.getCheckedLayers('new-acc-layers');
+        if(!u || !p) { alert("Username and Password are required."); return; }
+        let db = CoreDB.getUsers(); if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
+        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s, allowedLayers: allowedLayers }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
+    },
+    saveUser: function() {
+        const id = document.getElementById('edit-acc-id').value; const u = document.getElementById('edit-acc-username').value.trim().toLowerCase(); const p = document.getElementById('edit-acc-password').value.trim(); const r = document.getElementById('edit-acc-role').value; const n = document.getElementById('edit-acc-name').value.trim(); const c = document.getElementById('edit-acc-contact').value.trim(); const s = document.getElementById('edit-acc-status').value;
+        const allowedLayers = this.getCheckedLayers('edit-acc-layers');
+        if(!u || !p) { alert("Username and Password are required."); return; }
+        let db = CoreDB.getUsers(); const duplicate = db.find(user => user.username === u && user.id !== id); if(duplicate) { alert("Username already exists in the system."); return; }
+        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const userIndex = db.findIndex(user => user.id === id);
+        if(userIndex !== -1) {
+            if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') { const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length; if(activeUsers >= tenant.licenses) { alert(`Cannot activate user. License limit reached (${tenant.licenses}).`); return; } }
+            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; db[userIndex].allowedLayers = allowedLayers; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
+        }
+    },
+    deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
+};
+
 const AdminCtrl = {
     init: function() { 
         this.renderSchema(); const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
@@ -264,143 +428,6 @@ const AdminCtrl = {
     toggleVis: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantVisible=!f.tenantVisible; CoreDB.saveSchema(db); this.renderSchema();} },
     toggleMan: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantMandatory=!f.tenantMandatory; CoreDB.saveSchema(db); this.renderSchema();} },
     toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} }
-};
-
-const ToolsCtrl = {
-    init: function() { this.renderCustomKMLs(); },
-    triggerCSV: function() { document.getElementById('csv-upload').click(); },
-    processCSV: function(input) {
-        if(!input.files || !input.files[0]) return;
-        const file = input.files[0];
-        
-        if (typeof Papa === 'undefined') { alert("Parser engine not loaded. Check internet connection."); return; }
-        
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                const data = results.data;
-                let count = 0;
-                const tenantId = CoreDB.getActiveTenantId();
-                let bank = CoreDB.getJobBank();
-                
-                data.forEach(row => {
-                    let siteName = row['Site'] || row['Address'] || row['Location'] || row['Street'] || 'Historical Site';
-                    let srn = row['SRN'] || row['ID'] || row['Job Number'] || 'HISTORICAL';
-                    let notes = JSON.stringify(row); 
-                    
-                    let job = {
-                        jobId: 'H-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
-                        tenantId: tenantId,
-                        site: siteName,
-                        srn: srn,
-                        type: 'COMPLETED',
-                        notes: "[HISTORICAL IMPORT] Data mapping: " + notes,
-                        accumulated: 0,
-                        pausedAt: row['Date'] || new Date().toLocaleString('en-NZ')
-                    };
-                    bank.unshift(job);
-                    count++;
-                });
-                CoreDB.saveJobBank(bank);
-                alert(`Successfully imported ${count} historical records directly into the Job Bank.`);
-                input.value = ''; 
-            }
-        });
-    },
-    triggerKML: function() { document.getElementById('kml-upload').click(); },
-    processKML: function(input) {
-        if(!input.files || !input.files[0]) return;
-        const file = input.files[0];
-        const label = document.getElementById('kml-label').value || file.name.split('.')[0];
-        const color = document.getElementById('kml-color').value || '#ff00ff';
-        const icon = document.getElementById('kml-icon').value || '📍';
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const kmlString = e.target.result;
-            let custom = CoreDB.getCustomKMLs();
-            custom.push({ 
-                id: 'KML'+Date.now(), 
-                label: label, 
-                color: color, 
-                icon: icon, 
-                kmlString: kmlString, 
-                tenantId: CoreDB.getActiveTenantId() 
-            });
-            CoreDB.saveCustomKMLs(custom);
-            alert("KML Map Layer successfully ingested and saved to system memory.");
-            document.getElementById('kml-label').value = '';
-            ToolsCtrl.renderCustomKMLs();
-        };
-        reader.readAsText(file);
-        input.value = '';
-    },
-    renderCustomKMLs: function() {
-        const list = document.getElementById('custom-kml-list');
-        if(!list) return;
-        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
-        
-        if(custom.length === 0) { list.innerHTML = '<p style="font-size:13px; color:#888; font-style:italic;">No custom layers loaded.</p>'; return; }
-        
-        list.innerHTML = custom.map(k => `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f8; padding:10px; margin-top:10px; border-radius:5px; font-size:13px; border-left: 4px solid ${k.color};">
-                <div><strong>${k.icon} ${k.label}</strong></div>
-                <button class="std-btn red" style="width:auto; padding:5px 10px; font-size:11px;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete</button>
-            </div>
-        `).join('');
-    },
-    deleteKML: function(id) {
-        if(confirm("Remove this custom map layer from the system?")) {
-            let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id);
-            CoreDB.saveCustomKMLs(custom);
-            this.renderCustomKMLs();
-        }
-    }
-};
-
-const AccountsCtrl = {
-    init: function() { this.renderUsers(); this.updateLicenseCounter(); },
-    updateLicenseCounter: function() {
-        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE');
-        const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; }
-    },
-    openCreateForm: function() { 
-        this.closeEditForm(); const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
-        if(activeUsers >= tenant.licenses) { alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`); return; }
-        document.getElementById('new-acc-username').value = ''; document.getElementById('new-acc-password').value = ''; document.getElementById('new-acc-name').value = ''; document.getElementById('new-acc-contact').value = ''; document.getElementById('new-acc-role').value = 'agent'; document.getElementById('new-acc-status').value = 'ACTIVE'; document.getElementById('accounts-create-form').style.display = 'block'; 
-    },
-    closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
-    openEditForm: function(id) {
-        this.closeCreateForm(); const user = CoreDB.getUsers().find(u => u.id === id); if(!user) return;
-        document.getElementById('edit-acc-id').value = user.id; document.getElementById('edit-acc-username').value = user.username; document.getElementById('edit-acc-password').value = user.password; document.getElementById('edit-acc-role').value = user.role; document.getElementById('edit-acc-name').value = user.name || ''; document.getElementById('edit-acc-contact').value = user.contact || ''; document.getElementById('edit-acc-status').value = user.status || 'ACTIVE'; document.getElementById('accounts-edit-form').style.display = 'block';
-    },
-    closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
-    renderUsers: function() {
-        const list = document.getElementById('accounts-list-render'); if(!list) return; const activeId = CoreDB.getActiveTenantId(); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId);
-        if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
-        list.innerHTML = users.map(u => {
-            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2980b9');
-            return `<tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')"><td style="padding: 15px;"><strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br><span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${roleColor};">${u.role.toUpperCase()}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${statColor};">${u.status || 'ACTIVE'}</span></td></tr>`
-        }).join(''); this.updateLicenseCounter();
-    },
-    createUser: function() {
-        const u = document.getElementById('new-acc-username').value.trim().toLowerCase(); const p = document.getElementById('new-acc-password').value.trim(); const r = document.getElementById('new-acc-role').value; const n = document.getElementById('new-acc-name').value.trim(); const c = document.getElementById('new-acc-contact').value.trim(); const s = document.getElementById('new-acc-status').value; const activeId = CoreDB.getActiveTenantId();
-        if(!u || !p) { alert("Username and Password are required."); return; }
-        let db = CoreDB.getUsers(); if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
-        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
-    },
-    saveUser: function() {
-        const id = document.getElementById('edit-acc-id').value; const u = document.getElementById('edit-acc-username').value.trim().toLowerCase(); const p = document.getElementById('edit-acc-password').value.trim(); const r = document.getElementById('edit-acc-role').value; const n = document.getElementById('edit-acc-name').value.trim(); const c = document.getElementById('edit-acc-contact').value.trim(); const s = document.getElementById('edit-acc-status').value;
-        if(!u || !p) { alert("Username and Password are required."); return; }
-        let db = CoreDB.getUsers(); const duplicate = db.find(user => user.username === u && user.id !== id); if(duplicate) { alert("Username already exists in the system."); return; }
-        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const userIndex = db.findIndex(user => user.id === id);
-        if(userIndex !== -1) {
-            if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') { const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length; if(activeUsers >= tenant.licenses) { alert(`Cannot activate user. License limit reached (${tenant.licenses}).`); return; } }
-            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
-        }
-    },
-    deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
 };
 
 const GodCtrl = {
@@ -459,3 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(role === 'admin') AdminCtrl.init(); if(role === 'god') GodCtrl.init(); 
     if(role === 'accounts') AccountsCtrl.init(); if(role === 'tools') ToolsCtrl.init();
 });
+
+function storeActiveUser(username) {
+    localStorage.setItem('vg_active_user', username);
+}

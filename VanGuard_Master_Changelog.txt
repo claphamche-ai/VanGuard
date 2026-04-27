@@ -1,8 +1,10 @@
 VANGUARD MASTER CHANGELOG
 -------------------------
-v4.9.2 - Tools UI & Geo-Anchors (Current Build)
-- Added `tools.html` with a stubbed UI for KML Manager and Historical Data Ingestion.
-- Added a "Tools" nav item to the Admin dashboard.
-- Implemented Tenant Geo-Anchoring. Map initialization logic in `MapEngine` now reads `homeLat`, `homeLng`, and `defaultZoom` based on the active session's tenant ID instead of defaulting universally to Porirua.
-- Added Geo-Anchor inputs to the God Dashboard tenant edit form.
-- Built auto-healing patching to inject default coordinates into legacy tenant arrays.
+v4.9.4 - Menu Tools & Layer RBAC (Current Build)
+- Tools Dashboard (`tools.html`) refactored from a stacked list into a grid menu.
+- Historical Data module stubbed and visually deactivated to prevent UI clutter.
+- KML Manager UI refactored to use expandable rows (like God Mode tenants).
+- `CoreDB.getUsers` modified to include an `allowedLayers` array for Role-Based Access Control (RBAC).
+- `AccountsCtrl` modified to dynamically generate KML checkboxes during user creation/editing. The admin can now explicitly assign which layers each user is allowed to load.
+- `index.html` updated to cache the logged-in username into local storage (`vg_active_user`) so the MapEngine knows whose permissions to apply.
+- `MapEngine.loadKML` modified to intercept the active user's permissions. Admins bypass the lock and see everything; Agents and Dispatchers only see the layers checked in their Accounts profile.
