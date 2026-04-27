@@ -1,8 +1,8 @@
 VANGUARD MASTER CHANGELOG
 -------------------------
-v4.8 - Accounts UI Refinement (Current Build)
-- Cleared background inheritance (.admin-bg) from accounts.html to stop nested iframe box effects.
-- Added dynamic click-to-edit row logic in the Accounts list.
-- Expanded the User Schema to include `name`, `contact`, and `status` (Active/Inactive).
-- Wired `status` flag into the login router (`index.html`) to physically block disabled accounts.
-- Added a License Enforcement counter. The system calculates Active users against the Tenant's maximum allowed license limit, restricting the creation or activation of users if the limit is hit.
+v4.9.2 - Tools UI & Geo-Anchors (Current Build)
+- Added `tools.html` with a stubbed UI for KML Manager and Historical Data Ingestion.
+- Added a "Tools" nav item to the Admin dashboard.
+- Implemented Tenant Geo-Anchoring. Map initialization logic in `MapEngine` now reads `homeLat`, `homeLng`, and `defaultZoom` based on the active session's tenant ID instead of defaulting universally to Porirua.
+- Added Geo-Anchor inputs to the God Dashboard tenant edit form.
+- Built auto-healing patching to inject default coordinates into legacy tenant arrays.
