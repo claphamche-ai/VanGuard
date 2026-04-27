@@ -1,9 +1,9 @@
 VANGUARD MASTER CHANGELOG
 -------------------------
-v4.10.0 - Shift Tracking & Wake Lock (Current Build)
-- `tt_shifts` table added to CoreDB. Generates Shift IDs tracking start/end times and GPS breadcrumbs.
-- Agent Dashboard (`agent.html`) now defaults to a locked "PUNCH IN" overlay state on load if no active shift is open.
-- Sidebar updated: "Log Out" replaced with "🛑 End Shift".
-- `AgentCtrl` integrated with native `navigator.wakeLock.request('screen')` to force the tablet/phone screen to stay awake while the shift is active.
-- Automated Background Breadcrumbs: While a shift is open, VanGuard grabs the GPS coordinates directly from Leaflet's marker every 30 seconds and pushes them into the `tt_shifts` array.
-- Job Submission stamping logic updated: Every time `CoreDB.pushJob()` is called, it actively queries for an OPEN shift and permanently binds the `shiftId` to the job payload.
+v4.12.0 - Agent HUD & Embedded Queue (Current Build)
+- Agent Sidebar Job Bank: Replaced the old modal button with a live list embedded directly into the sidebar. Jobs explicitly ASSIGNED to the worker have a green border, OPEN POOL jobs have a yellow border.
+- Map Jumping & Geocoding: Clicking a job in the sidebar parses the text through OpenStreetMap, pans the map instantly to the location, and drops a temporary marker.
+- Accept Job Workflow: Clicking an Open Pool marker offers an "Accept Job" button. Clicking it instantly registers the job to that specific worker and removes it from the global pool.
+- Native Routing Link: Added a "Route 📍" button to the job popup which triggers standard Google/Apple map URIs for driving directions.
+- Agent HUD (Van Click): Added a click listener to the `userMarker` (van icon). It opens a live HUD showing Shift Time, Distance Traveled (Haversine formula applied dynamically to the GPS breadcrumbs array), and Job Counts.
+- Agent Shift History: A new modal overlay attached to the HUD allows the agent to instantly pull up the site name, SRN, and notes of any job they completed during the current shift.
