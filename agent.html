@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Agent</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.0.2" />
+    <link rel="stylesheet" href="styles.css?v=1.1.0" />
 </head>
 <body data-role="agent" style="margin:0; padding:0; overflow:hidden;">
     <div id="live-timer-widget">00:00</div>
@@ -31,7 +31,7 @@
         </div>
         <div id="sidebar-job-bank" style="margin-bottom:20px; max-height:300px; overflow-y:auto; padding-right:5px;"></div>
         
-        <div class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="AgentCtrl.endShift()">🛑 End Shift</div>
+        <div id="agent-logout-btn" class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="AgentCtrl.endShift()">🛑 End Shift</div>
     </div>
     
     <div id="site-info" class="popup-box">
@@ -144,6 +144,6 @@
     <div id="map" class="full-map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=1.0.2"></script>
+    <script src="app.js?v=1.1.0"></script>
 </body>
 </html>

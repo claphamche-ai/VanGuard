@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.1.0 - REPORTER DASHBOARD & MASTER CORE
+// VANGUARD V1.1.1 - PUNCH-IN TOGGLE PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -15,10 +15,10 @@ const CoreDB = {
         { "id": "T002", "name": "Wellington City Council", "tier": "City B", "licenses": 50, "status": "ACTIVE", "motto": "Absolutely Positively Wellington", "logo": "", "homeLat": -41.2865, "homeLng": 174.7762, "defaultZoom": 14, "reportEmail": "info@wcc.govt.nz" }
     ],
     defaultUsers: [
-        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001", name: "Porirua Admin", contact: "04 237 5089", status: "ACTIVE", allowedLayers: [] },
-        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001", name: "John Doe", contact: "021 555 1234", status: "ACTIVE", allowedLayers: [] },
-        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE", allowedLayers: [] },
-        { id: "U007", username: "reporter", password: "123", role: "reporter", tenantId: "T001", name: "Desk Reporter", contact: "021 000 000", status: "ACTIVE", allowedLayers: [] }
+        { id: "U001", username: "admin", password: "123", role: "admin", tenantId: "T001", name: "Porirua Admin", contact: "04 237 5089", status: "ACTIVE", allowedLayers: [], requirePunchIn: true },
+        { id: "U002", username: "worker", password: "123", role: "agent", tenantId: "T001", name: "John Doe", contact: "021 555 1234", status: "ACTIVE", allowedLayers: [], requirePunchIn: true },
+        { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE", allowedLayers: [], requirePunchIn: true },
+        { id: "U007", username: "reporter", password: "123", role: "reporter", tenantId: "T001", name: "Desk Reporter", contact: "021 000 000", status: "ACTIVE", allowedLayers: [], requirePunchIn: true }
     ],
     kmlConfig: [
         { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
@@ -49,6 +49,7 @@ const CoreDB = {
             if(typeof u.contact === 'undefined') { u.contact = ''; patched = true; } 
             if(typeof u.status === 'undefined') { u.status = 'ACTIVE'; patched = true; } 
             if(typeof u.allowedLayers === 'undefined') { u.allowedLayers = []; patched = true; }
+            if(typeof u.requirePunchIn === 'undefined') { u.requirePunchIn = true; patched = true; }
         });
         if(patched) this.saveUsers(parsed); return parsed;
     },
@@ -264,8 +265,28 @@ const AgentCtrl = {
         new MapEngine('map', 'agent'); this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
 
+        const user = CoreDB.getActiveUser();
+        const reqPunch = typeof user.requirePunchIn !== 'undefined' ? user.requirePunchIn : true;
         const openShift = CoreDB.getActiveShift();
-        if(openShift) { UI.closeOverlay('shift'); this.requestWakeLock(); this.startBreadcrumbs(); } else { UI.openOverlay('shift'); }
+
+        if(!reqPunch) {
+            // Auto-start shift silently if manual punch is OFF
+            if(!openShift) { CoreDB.createShift(); }
+            UI.closeOverlay('shift');
+            this.startBreadcrumbs();
+            
+            // Attach a one-time document click to grab the wake lock, as browsers block it without interaction
+            const wlh = () => { this.requestWakeLock(); document.removeEventListener('click', wlh); };
+            document.addEventListener('click', wlh);
+            
+            const loBtn = document.getElementById('agent-logout-btn');
+            if(loBtn) loBtn.innerHTML = '🚪 Log Out';
+        } else {
+            // Standard workflow
+            if(openShift) { UI.closeOverlay('shift'); this.requestWakeLock(); this.startBreadcrumbs(); } 
+            else { UI.openOverlay('shift'); }
+        }
+        
         this.renderSidebarBank();
     },
     renderSidebarBank: function() {
@@ -293,7 +314,7 @@ const AgentCtrl = {
         } catch (e) { console.error("Geocoding failed", e); }
     },
     acceptJob: function(jobId) { let bank = CoreDB.getJobBank(); const idx = bank.findIndex(j => j.jobId === jobId); if(idx !== -1) { bank[idx].assignedTo = CoreDB.getActiveUser().id; CoreDB.saveJobBank(bank); this.renderSidebarBank(); if(window._mapEngine && window._mapEngine.searchMarker) { window._mapEngine.searchMarker.closePopup(); } alert("Job accepted and assigned to your queue."); } },
-    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=1$${encodeURIComponent(address)}`, '_blank'); },
+    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=0${encodeURIComponent(address)}`, '_blank'); },
     openVanHUD: function() {
         if(!window._mapEngine || !window._mapEngine.userMarker) return;
         const shift = CoreDB.getActiveShift(); if(!shift) return; const user = CoreDB.getActiveUser();
@@ -315,7 +336,14 @@ const AgentCtrl = {
         if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); }
         this.startBreadcrumbs(); 
     },
-    endShift: function() { if(confirm("Are you sure you want to end your patrol shift and log out?")) { CoreDB.closeShift(); this.releaseWakeLock(); this.stopBreadcrumbs(); window.location.href = 'index.html'; } },
+    endShift: function() { 
+        const user = CoreDB.getActiveUser();
+        const req = typeof user.requirePunchIn !== 'undefined' ? user.requirePunchIn : true;
+        const msg = req ? "Are you sure you want to end your patrol shift and log out?" : "Are you sure you want to log out?";
+        if(confirm(msg)) { 
+            CoreDB.closeShift(); this.releaseWakeLock(); this.stopBreadcrumbs(); window.location.href = 'index.html'; 
+        } 
+    },
     async requestWakeLock() { if ('wakeLock' in navigator) { try { this.wakeLock = await navigator.wakeLock.request('screen'); console.log('Wake Lock active.'); } catch (err) { console.warn('Wake Lock failed:', err); } } },
     releaseWakeLock() { if (this.wakeLock !== null) { this.wakeLock.release(); this.wakeLock = null; console.log('Wake Lock released.'); } },
     startBreadcrumbs() { this.breadcrumbInterval = setInterval(() => { if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) { CoreDB.addBreadcrumb(pos.lat, pos.lng); } } }, 30000); },
@@ -480,12 +508,14 @@ const AccountsCtrl = {
         this.closeEditForm(); const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
         if(activeUsers >= tenant.licenses) { alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`); return; }
         document.getElementById('new-acc-username').value = ''; document.getElementById('new-acc-password').value = ''; document.getElementById('new-acc-name').value = ''; document.getElementById('new-acc-contact').value = ''; document.getElementById('new-acc-role').value = 'agent'; document.getElementById('new-acc-status').value = 'ACTIVE'; 
+        document.getElementById('new-acc-punch').checked = true;
         this.generateLayerCheckboxes('new-acc-layers', []); document.getElementById('accounts-create-form').style.display = 'block'; 
     },
     closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
     openEditForm: function(id) {
         this.closeCreateForm(); const user = CoreDB.getUsers().find(u => u.id === id); if(!user) return;
         document.getElementById('edit-acc-id').value = user.id; document.getElementById('edit-acc-username').value = user.username; document.getElementById('edit-acc-password').value = user.password; document.getElementById('edit-acc-role').value = user.role; document.getElementById('edit-acc-name').value = user.name || ''; document.getElementById('edit-acc-contact').value = user.contact || ''; document.getElementById('edit-acc-status').value = user.status || 'ACTIVE'; 
+        document.getElementById('edit-acc-punch').checked = typeof user.requirePunchIn !== 'undefined' ? user.requirePunchIn : true;
         this.generateLayerCheckboxes('edit-acc-layers', user.allowedLayers || []); document.getElementById('accounts-edit-form').style.display = 'block';
     },
     closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
@@ -493,24 +523,26 @@ const AccountsCtrl = {
         const list = document.getElementById('accounts-list-render'); if(!list) return; const activeId = CoreDB.getActiveTenantId(); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId);
         if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
         list.innerHTML = users.map(u => {
-            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2980b9');
+            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : (u.role === 'reporter' ? '#f39c12' : '#2980b9'));
             return `<tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')"><td style="padding: 15px;"><strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br><span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${roleColor};">${u.role.toUpperCase()}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${statColor};">${u.status || 'ACTIVE'}</span></td></tr>`
         }).join(''); this.updateLicenseCounter();
     },
     createUser: function() {
         const u = document.getElementById('new-acc-username').value.trim().toLowerCase(); const p = document.getElementById('new-acc-password').value.trim(); const r = document.getElementById('new-acc-role').value; const n = document.getElementById('new-acc-name').value.trim(); const c = document.getElementById('new-acc-contact').value.trim(); const s = document.getElementById('new-acc-status').value; const activeId = CoreDB.getActiveTenantId();
+        const reqPunch = document.getElementById('new-acc-punch').checked;
         const allowedLayers = this.getCheckedLayers('new-acc-layers'); if(!u || !p) { alert("Username and Password are required."); return; }
         let db = CoreDB.getUsers(); if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
-        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s, allowedLayers: allowedLayers }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
+        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s, allowedLayers: allowedLayers, requirePunchIn: reqPunch }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
     },
     saveUser: function() {
         const id = document.getElementById('edit-acc-id').value; const u = document.getElementById('edit-acc-username').value.trim().toLowerCase(); const p = document.getElementById('edit-acc-password').value.trim(); const r = document.getElementById('edit-acc-role').value; const n = document.getElementById('edit-acc-name').value.trim(); const c = document.getElementById('edit-acc-contact').value.trim(); const s = document.getElementById('edit-acc-status').value;
+        const reqPunch = document.getElementById('edit-acc-punch').checked;
         const allowedLayers = this.getCheckedLayers('edit-acc-layers'); if(!u || !p) { alert("Username and Password are required."); return; }
         let db = CoreDB.getUsers(); const duplicate = db.find(user => user.username === u && user.id !== id); if(duplicate) { alert("Username already exists in the system."); return; }
         const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const userIndex = db.findIndex(user => user.id === id);
         if(userIndex !== -1) {
             if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') { const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length; if(activeUsers >= tenant.licenses) { alert(`Cannot activate user. License limit reached (${tenant.licenses}).`); return; } }
-            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; db[userIndex].allowedLayers = allowedLayers; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
+            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; db[userIndex].allowedLayers = allowedLayers; db[userIndex].requirePunchIn = reqPunch; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
         }
     },
     deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
@@ -560,7 +592,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=1$${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=0$$${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}
