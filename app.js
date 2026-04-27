@@ -1,25 +1,247 @@
 // ==========================================
-// VANGUARD V1.1.4 - GLOBAL SCHEMA & DB PATCH
+// VANGUARD V1.1.5 - MASTER SCHEMA INJECTION
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
 const CoreDB = {
     defaultSchema: [
-        // GENERAL INFO
-        { "id": "srn", "label": "Service Request Number (SRN)", "type": "text", "category": "General Info", "tenantVisible": true, "tenantMandatory": false, "options": null },
-        { "id": "asset_id", "label": "Council Asset ID", "type": "text", "category": "General Info", "tenantVisible": true, "tenantMandatory": false, "options": null },
-        
-        // SITE CONDITIONS
-        { "id": "surface_type", "label": "Surface Type", "type": "select", "category": "Site Conditions", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Brick", "visible": true }, { "name": "Concrete", "visible": true }, { "name": "Glass", "visible": true }, { "name": "Metal", "visible": true }, { "name": "Painted Surface", "visible": true }, { "name": "Wood", "visible": true } ] },
-        { "id": "graffiti_type", "label": "Graffiti Type", "type": "select", "category": "Site Conditions", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Tag (Marker/Pen)", "visible": true }, { "name": "Throw-up (Aerosol)", "visible": true }, { "name": "Piece (Mural)", "visible": true }, { "name": "Sticker/Poster", "visible": true }, { "name": "Etching/Scratch", "visible": true } ] },
-        
-        // WORK DETAILS
-        { "id": "removal_method", "label": "Removal Method", "type": "select", "category": "Work Details", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "Chemical & Wipe", "visible": true }, { "name": "Paint Over", "visible": true }, { "name": "Pressure Wash", "visible": true }, { "name": "Sandblasting", "visible": true } ] },
-        { "id": "paint_color", "label": "Paint Color (If Applicable)", "type": "select", "category": "Work Details", "tenantVisible": true, "tenantMandatory": false, "options": [ { "name": "N/A", "visible": true }, { "name": "Council Grey", "visible": true }, { "name": "White", "visible": true }, { "name": "Black", "visible": true }, { "name": "Custom Match", "visible": true } ] },
-        
-        // METRICS
-        { "id": "area", "label": "Repaired Area (m²)", "type": "select", "category": "Metrics", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "0.5", "visible": true }, { "name": "1.0", "visible": true }, { "name": "2.0", "visible": true }, { "name": "5.0", "visible": true }, { "name": "10.0+", "visible": true } ] },
-        { "id": "workers", "label": "Number of Workers", "type": "select", "category": "Metrics", "tenantVisible": true, "tenantMandatory": true, "options": [ { "name": "1 Worker", "visible": true }, { "name": "2 Workers", "visible": true }, { "name": "3+ Workers", "visible": true } ] }
+        {
+            "id": "srn",
+            "label": "Service Request Number (SRN)",
+            "type": "text",
+            "category": "General Info",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": null
+        },
+        {
+            "id": "asset_id",
+            "label": "Council Asset ID",
+            "type": "text",
+            "category": "General Info",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": null
+        },
+        {
+            "id": "property_owner",
+            "label": "Property Owner",
+            "type": "select",
+            "category": "General Info",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": [
+                { "name": "Porirua City Council", "visible": true },
+                { "name": "Private Residential", "visible": true },
+                { "name": "Wellington Electricity", "visible": true },
+                { "name": "Thompson Property Group", "visible": true },
+                { "name": "Kiwi Rail", "visible": true },
+                { "name": "Housing NZ", "visible": true },
+                { "name": "NZTA-Waka Kotahi", "visible": true }
+            ]
+        },
+        {
+            "id": "surface_type",
+            "label": "Surface Type",
+            "type": "select",
+            "category": "Site Conditions",
+            "tenantVisible": true,
+            "tenantMandatory": true,
+            "options": [
+                { "name": "Brick", "visible": true },
+                { "name": "Concrete", "visible": true },
+                { "name": "Glass", "visible": true },
+                { "name": "Metal", "visible": true },
+                { "name": "Painted Surface", "visible": true },
+                { "name": "Wood", "visible": true }
+            ]
+        },
+        {
+            "id": "graffiti_type",
+            "label": "Graffiti Type",
+            "type": "select",
+            "category": "Site Conditions",
+            "tenantVisible": true,
+            "tenantMandatory": true,
+            "options": [
+                { "name": "Etching/Scratch", "visible": true },
+                { "name": "Chalk", "visible": true },
+                { "name": "Crayon", "visible": true },
+                { "name": "Marker/Felt Tip Pen", "visible": true },
+                { "name": "Ink", "visible": true },
+                { "name": "Lipstick", "visible": true },
+                { "name": "Sticker", "visible": true },
+                { "name": "Poster", "visible": true },
+                { "name": "Mud", "visible": true },
+                { "name": "Nail Polish", "visible": true },
+                { "name": "Paint", "visible": true },
+                { "name": "Paint Bomb", "visible": true },
+                { "name": "Pencil", "visible": true },
+                { "name": "Poison/Weed Killer", "visible": true },
+                { "name": "Roller", "visible": true },
+                { "name": "Spray Painting", "visible": true },
+                { "name": "Stencil", "visible": true },
+                { "name": "Twink", "visible": true }
+            ]
+        },
+        {
+            "id": "property_type",
+            "label": "Property Type",
+            "type": "select",
+            "category": "Work Details",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": [
+                { "name": "Commercial Building", "visible": true },
+                { "name": "Suburban Shopping Center", "visible": true },
+                { "name": "Telecommunications", "visible": true },
+                { "name": "Community Center", "visible": true },
+                { "name": "CSL/Traffic Management Box", "visible": true },
+                { "name": "Mail Box", "visible": true },
+                { "name": "Car Park", "visible": true },
+                { "name": "Playground", "visible": true },
+                { "name": "Private Fence", "visible": true },
+                { "name": "Private Garage", "visible": true },
+                { "name": "Private House", "visible": true },
+                { "name": "Private Signage", "visible": true },
+                { "name": "Public Fence", "visible": true },
+                { "name": "Public Signage", "visible": true },
+                { "name": "Alley Way", "visible": true },
+                { "name": "Public Mural", "visible": true },
+                { "name": "Bridge", "visible": true },
+                { "name": "Underpass", "visible": true },
+                { "name": "Overpass", "visible": true },
+                { "name": "Bus Shelter", "visible": true },
+                { "name": "Power Pole", "visible": true },
+                { "name": "Light Pole", "visible": true },
+                { "name": "Coms Pole", "visible": true },
+                { "name": "Other Pole", "visible": true },
+                { "name": "Tunnel", "visible": true },
+                { "name": "Street Signage", "visible": true },
+                { "name": "Traffic Signage", "visible": true },
+                { "name": "Skate Ramp", "visible": true },
+                { "name": "Park Bench", "visible": true },
+                { "name": "Rubbish Bin", "visible": true },
+                { "name": "Road", "visible": true },
+                { "name": "Footpath", "visible": true },
+                { "name": "Picnic Table", "visible": true },
+                { "name": "Skip Bin", "visible": true },
+                { "name": "Shipping Container", "visible": true },
+                { "name": "Substation", "visible": true },
+                { "name": "Tree", "visible": true },
+                { "name": "Vehicle", "visible": true },
+                { "name": "Other", "visible": true }
+            ]
+        },
+        {
+            "id": "removal_method",
+            "label": "Removal Method",
+            "type": "select",
+            "category": "Work Details",
+            "tenantVisible": true,
+            "tenantMandatory": true,
+            "options": [
+                { "name": "Paint Over", "visible": true },
+                { "name": "Pressure Wash", "visible": true },
+                { "name": "Sandblasting", "visible": true },
+                { "name": "Chemical Removal", "visible": true },
+                { "name": "Mechanical Sanding", "visible": true },
+                { "name": "Steam Cleaning", "visible": true }
+            ]
+        },
+        {
+            "id": "paint_color",
+            "label": "Paint Color (If Applicable)",
+            "type": "select",
+            "category": "Work Details",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": [
+                { "name": "N/A", "visible": true },
+                { "name": "White", "visible": true },
+                { "name": "Black", "visible": true },
+                { "name": "Custom Match", "visible": true },
+                { "name": "Light Grey", "visible": true },
+                { "name": "Dark Grey", "visible": true },
+                { "name": "Tan", "visible": true },
+                { "name": "Brown", "visible": true },
+                { "name": "Green", "visible": true },
+                { "name": "Blue", "visible": true },
+                { "name": "Red", "visible": true },
+                { "name": "Yellow", "visible": true },
+                { "name": "Orange", "visible": true }
+            ]
+        },
+        {
+            "id": "chemical_brand",
+            "label": "Chemical Brand",
+            "type": "select",
+            "category": "Work Details",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": [
+                { "name": "EzyClean Blue", "visible": true },
+                { "name": "EzyClean Black", "visible": true },
+                { "name": "EzyClean Red", "visible": true },
+                { "name": "EzyClean Pink", "visible": true },
+                { "name": "EzyClean Sealer", "visible": true }
+            ]
+        },
+        {
+            "id": "area",
+            "label": "Repaired Area (m²)",
+            "type": "select",
+            "category": "Metrics",
+            "tenantVisible": true,
+            "tenantMandatory": true,
+            "options": [
+                { "name": "0.5", "visible": true },
+                { "name": "1.0", "visible": true },
+                { "name": "2.0", "visible": true },
+                { "name": "5.0", "visible": true },
+                { "name": "10.0+", "visible": true }
+            ]
+        },
+        {
+            "id": "size_of_damaged_area_",
+            "label": "Size of Damaged area.",
+            "type": "text",
+            "category": "Metrics",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": null
+        },
+        {
+            "id": "workers",
+            "label": "Number of Workers",
+            "type": "select",
+            "category": "Metrics",
+            "tenantVisible": true,
+            "tenantMandatory": true,
+            "options": [
+                { "name": "1 Worker", "visible": true },
+                { "name": "2 Workers", "visible": true },
+                { "name": "3+ Workers", "visible": true }
+            ]
+        },
+        {
+            "id": "chemicals_used__liters_",
+            "label": "Chemicals Used (liters)",
+            "type": "text",
+            "category": "Metrics",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": null
+        },
+        {
+            "id": "paint_used__liters_",
+            "label": "Paint Used (liters)",
+            "type": "text",
+            "category": "Metrics",
+            "tenantVisible": true,
+            "tenantMandatory": false,
+            "options": null
+        }
     ],
     defaultFlags: { liveTracking: true, directAssignment: true },
     defaultTenants: [
@@ -396,7 +618,6 @@ const AgentCtrl = {
         const containers = document.querySelectorAll('.dynamic-fields-render'); 
         let html = '';
         
-        // Group schema by category
         const schema = CoreDB.getSchema();
         const groups = {};
         schema.forEach(f => {
@@ -461,7 +682,6 @@ const AgentCtrl = {
 };
 
 const DispatchCtrl = {
-    // ... Standard Dispatch functions identical for length ...
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; } if(window.location.search.includes('iframe=true')) { const lo = document.getElementById('standalone-logout'); if(lo) lo.style.display = 'none'; } new MapEngine('dispatch-map', 'dispatch'); this.renderBank('PENDING'); },
     async searchAddress() {
@@ -536,7 +756,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=1${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=0$$${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}
@@ -651,7 +871,6 @@ ${r.notes}
 };
 
 const AdminCtrl = {
-    // Admin schema logic updated to render grouped categories
     init: function() { 
         this.renderSchema(); this.renderFlags();
         const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
@@ -747,7 +966,6 @@ const GodCtrl = {
     deleteTenant: function(id) { if(confirm("Are you sure you want to completely delete this tenant?")) { let tenants = CoreDB.getTenants().filter(x => x.id !== id); CoreDB.saveTenants(tenants); this.renderTenants(); } },
     impersonateTenant: function(id) { CoreDB.setActiveTenantId(id); window.location.href = 'admin.html'; },
     
-    // Admin schema logic updated to render grouped categories
     renderSchema: function() {
         const c = document.getElementById('god-schema-render'); if(!c) return; 
         let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="background:var(--nav-dark); color:white;"><th style="padding:12px 15px;">Global Field</th><th style="padding:12px 15px; width:100px;">Type</th><th style="padding:12px 15px; text-align:right; width:100px;">Action</th></tr>';
