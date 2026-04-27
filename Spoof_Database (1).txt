@@ -1,0 +1,48 @@
+const defaultSchema = [
+    {
+        "id": "srn",
+        "label": "Service Request Number (SRN)",
+        "type": "text",
+        "tenantVisible": true,
+        "tenantMandatory": false,
+        "options": null
+    },
+    {
+        "id": "workers",
+        "label": "Number of Workers",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            {
+                "name": "1 Worker (Default)",
+                "visible": true
+            },
+            {
+                "name": "2 Workers",
+                "visible": true
+            }
+        ]
+    },
+    {
+        "id": "area",
+        "label": "Repaired Area (m²)",
+        "type": "select",
+        "tenantVisible": true,
+        "tenantMandatory": true,
+        "options": [
+            {
+                "name": "0.5",
+                "visible": true
+            },
+            {
+                "name": "1",
+                "visible": true
+            },
+            {
+                "name": "5+",
+                "visible": true
+            }
+        ]
+    }
+];
