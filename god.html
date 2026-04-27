@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Core</title>
-    <link rel="stylesheet" href="styles.css?v=1.1.14" />
+    <link rel="stylesheet" href="styles.css?v=1.1.15" />
 </head>
 <body data-role="god" class="admin-bg">
     <nav class="admin-topbar">
@@ -18,7 +18,7 @@
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenant-metrics', event)">
                 <span class="icon">📊</span><span class="label">Tenant Metrics</span>
             </div>
-            <div class="admin-nav-item" onclick="location.href='law-enforcement.html'">
+            <div class="admin-nav-item" onclick="GodCtrl.switchTab('le-tracker', event)">
                 <span class="icon">🚔</span><span class="label">LE Tracker</span>
             </div>
             <div class="admin-nav-item" onclick="GodCtrl.switchTab('tenants', event)">
@@ -37,6 +37,43 @@
             <div class="login-frame" style="margin: 0 auto 30px;">🌍</div>
             <h1 style="font-size: 36px; font-weight: 900; margin: 0; text-transform: uppercase;">VanGuard Core</h1>
             <p style="font-size: 14px; font-weight: bold; color: #888;">System Node</p>
+        </div>
+
+        <!-- NEW LE TRACKER EMBED -->
+        <div id="tab-le-tracker" class="admin-tab-content" style="display:none; max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+            <div class="tenant-panel" style="margin-bottom:20px; border-top: 4px solid var(--nav-dark);">
+                <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Law Enforcement Tracker</h2>
+                <p style="font-size:13px; color:#666;">Aggregate specific metrics across all council borders.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; align-items:end; margin-top:20px;">
+                    <div>
+                        <label class="section-label" style="margin-top:0;">From Date</label>
+                        <input type="date" id="le-rep-from" class="std-input" style="margin-bottom:0;">
+                    </div>
+                    <div>
+                        <label class="section-label" style="margin-top:0;">To Date</label>
+                        <input type="date" id="le-rep-to" class="std-input" style="margin-bottom:0;">
+                    </div>
+                    <div>
+                        <label class="section-label" style="margin-top:0;">Target Tenant</label>
+                        <select id="le-rep-tenant" class="std-input" style="margin-bottom:0;"></select>
+                    </div>
+                </div>
+                <div style="margin-top:20px; display:flex; gap:10px; border-top:1px dashed #ccc; padding-top:20px;">
+                    <button class="std-btn green" style="width:auto; padding:10px 30px;" onclick="LawEnforcementCtrl.generateMacroReport()">Generate Aggregation</button>
+                    <button class="std-btn blue" style="width:auto; padding:10px 30px;" onclick="LawEnforcementCtrl.exportMacroCSV()">Download CSV</button>
+                </div>
+            </div>
+            
+            <div class="tenant-panel" style="padding:0; overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;" id="le-rep-table">
+                    <thead style="background:var(--nav-dark); color:white;">
+                        <tr><th style="padding:10px;">Tenant</th><th style="padding:10px;">Completed Jobs</th><th style="padding:10px;">Total Area (m²)</th><th style="padding:10px;">Chemicals (L)</th><th style="padding:10px;">Paint (L)</th></tr>
+                    </thead>
+                    <tbody id="le-rep-results">
+                        <tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">Select parameters and generate to view macro metrics.</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="tab-tenant-metrics" class="admin-tab-content" style="display:none; max-width: 1200px; margin: 40px auto; padding: 0 20px;">
@@ -63,6 +100,7 @@
                     <thead style="background:var(--nav-dark); color:white;">
                         <tr>
                             <th style="padding:15px;">Council / Tenant</th>
+                            <th style="padding:15px;">Type</th>
                             <th style="padding:15px;">Status</th>
                             <th style="padding:15px;">Licenses (Active/Cap)</th>
                             <th style="padding:15px;">Role Breakdown</th>
@@ -73,7 +111,7 @@
                         </tr>
                     </thead>
                     <tbody id="god-tenant-metrics-results">
-                        <tr><td colspan="8" style="padding:20px; text-align:center; color:#888;">Loading metrics...</td></tr>
+                        <tr><td colspan="9" style="padding:20px; text-align:center; color:#888;">Loading metrics...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -103,7 +141,7 @@
             <div class="tenant-panel">
                 <div id="god-schema-render"></div>
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px dashed #eee;">
-                    <h3 style="margin-top:0; color: var(--b);">➕ New Global Field</h3>
+                    <h3 style="margin:top:0; color: var(--b);">➕ New Global Field</h3>
                     <div style="display:flex; gap:10px;">
                         <input type="text" id="new-global-field-name" class="std-input" placeholder="Title" style="margin:0;">
                         <select id="new-global-field-type" class="std-input" style="margin:0; width:150px;">
@@ -136,7 +174,15 @@
             </div>
         </div>
     </main>
-    <div class="version-stamp">v1.1.14</div>
-    <script src="app.js?v=1.1.14"></script>
+    <div class="version-stamp">v1.1.15</div>
+    <script src="app.js?v=1.1.15"></script>
+    <script>
+        // Auto-init LE tracker when switching to it
+        const originalSwitchTab = GodCtrl.switchTab;
+        GodCtrl.switchTab = function(id, e) {
+            originalSwitchTab.call(GodCtrl, id, e);
+            if(id === 'le-tracker') LawEnforcementCtrl.init();
+        }
+    </script>
 </body>
 </html>

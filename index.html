@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VanGuard | Login</title>
-    <link rel="stylesheet" href="styles.css?v=1.1.14" />
+    <link rel="stylesheet" href="styles.css?v=1.1.15" />
 </head>
 <body class="login-wrapper">
     <div class="login-frame">🚐</div>
@@ -15,9 +15,9 @@
         <div id="login-error" style="color:#e74c3c; text-align:center; margin-top:5px; font-size:13px; font-weight:bold; display:none;">Invalid credentials</div>
     </form>
     <div class="login-brand">
-        <h1>VanGuard <span class="version">v1.1.14</span></h1>
+        <h1>VanGuard <span class="version">v1.1.15</span></h1>
     </div>
-    <script src="app.js?v=1.1.14"></script>
+    <script src="app.js?v=1.1.15"></script>
     <script>
         function handleLogin(e) { 
             e.preventDefault(); 
@@ -32,8 +32,15 @@
             
             if (userMatch) { 
                 if (userMatch.status === 'INACTIVE') { err.innerText = "Account is inactive."; err.style.display = 'block'; return; } 
+                
+                const tenant = CoreDB.getTenants().find(t => t.id === userMatch.tenantId);
+                if(!tenant) { err.innerText = "Invalid Tenant Mapping."; err.style.display = 'block'; return; }
+
                 CoreDB.setActiveTenantId(userMatch.tenantId); 
                 localStorage.setItem('vg_active_user', userMatch.username); 
+                
+                // LE Security Lock: If the tenant is designated as Law Enforcement, route directly to LE Tracker regardless of their role.
+                if (tenant.type === 'Law Enforcement') { window.location.href = 'law-enforcement.html'; return; }
                 
                 if (userMatch.role === 'admin') window.location.href = 'admin.html'; 
                 else if (userMatch.role === 'dispatch') window.location.href = 'dispatch.html'; 
