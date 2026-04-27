@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Agent</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.1.0" />
+    <link rel="stylesheet" href="styles.css?v=1.1.9" />
 </head>
 <body data-role="agent" style="margin:0; padding:0; overflow:hidden;">
     <div id="live-timer-widget">00:00</div>
@@ -26,6 +26,14 @@
         
         <div class="nav-item" onclick="UI.openOverlay('report-issue')" style="color:#e74c3c;">⚠️ Report Issue</div>
         
+        <!-- Rejected / Needs Attention Container -->
+        <div id="sidebar-rejected-container" style="display:none; margin-top:20px;">
+            <div style="border-bottom:2px solid #e74c3c; padding-bottom:5px; margin-bottom:10px;">
+                <strong style="color:#e74c3c; text-transform:uppercase; font-size:12px;">⚠️ Needs Correction</strong>
+            </div>
+            <div id="sidebar-rejected-bank" style="margin-bottom:20px; max-height:200px; overflow-y:auto; padding-right:5px;"></div>
+        </div>
+
         <div style="margin-top:20px; border-bottom:2px solid #ddd; padding-bottom:5px; margin-bottom:10px;">
             <strong style="color:var(--text-dark); text-transform:uppercase; font-size:12px;">Active Dispatch Queue</strong>
         </div>
@@ -61,7 +69,13 @@
             <input type="file" id="photo-before" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('before')">
             <input type="file" id="photo-after" accept="image/*" capture="environment" style="display:none;" onchange="AgentCtrl.handlePhoto('after')">
             <div id="dynamic-work-fields" class="dynamic-fields-render"></div>
-            <div class="footer-btns">
+            
+            <div id="edit-reason-container" style="display:none; margin-top:15px; background:#fff3cd; padding:15px; border-left:4px solid #f1c40f; border-radius:4px;">
+                <label class="section-label" style="margin-top:0; color:#d35400;">Reason for Edit (Required for Audit Log)</label>
+                <textarea id="edit-reason-input" class="std-input textarea" style="margin-bottom:0;" placeholder="Why are you changing this data?"></textarea>
+            </div>
+
+            <div class="footer-btns" style="margin-top:20px;">
                 <button class="std-btn red" onclick="AgentCtrl.cancelJob()">Cancel</button>
                 <button id="pause-work-btn" class="std-btn gray" disabled onclick="AgentCtrl.pauseJob()">Pause</button>
                 <button id="submit-work-btn" class="std-btn yellow" disabled onclick="AgentCtrl.submitWork()">Submit</button>
@@ -144,6 +158,6 @@
     <div id="map" class="full-map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=1.1.0"></script>
+    <script src="app.js?v=1.1.9"></script>
 </body>
 </html>

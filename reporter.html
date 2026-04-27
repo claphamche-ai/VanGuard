@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Reporter</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.1.8" />
+    <link rel="stylesheet" href="styles.css?v=1.1.9" />
     <style>
         body { background: transparent; overflow-y: auto; overflow-x: hidden; } 
         .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }
@@ -127,7 +127,7 @@
             <div class="tenant-panel" id="report-template-list" style="padding:0; overflow:hidden;"></div>
         </div>
 
-        <!-- JOB BANK -->
+        <!-- JOB BANK (EXISTING REPORTER FEED) -->
         <div id="rep-bank" class="rep-view" style="display:none;">
             <button class="std-btn gray" style="max-width: 150px; margin-bottom: 20px;" onclick="ReporterCtrl.switchView('menu')">⬅ Back to Menu</button>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -137,6 +137,7 @@
                 <div id="reports-list-render"></div>
             </div>
         </div>
+        
     </div> <!-- END MODULE CONTENT -->
 
     <!-- FULL SCREEN REPORT PREVIEW & APPROVAL OVERLAY -->
@@ -155,6 +156,14 @@
 
         <div id="report-preview-list" style="flex-grow:1; overflow-y:auto; padding:20px; max-width:900px; margin:0 auto; width:100%;">
             <!-- Generated Jobs go here -->
+        </div>
+    </div>
+    
+    <!-- FULL SCREEN AUDIT TRAIL MODAL -->
+    <div id="report-audit-overlay" class="full-overlay" style="z-index:9600; display:none; align-items:center; justify-content:center;">
+        <div style="background:#fff; width:90%; max-width:600px; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; max-height:90vh; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <div class="form-header" style="background:#e67e22; color:#fff;"><span>AUDIT TRAIL</span><button onclick="UI.closeOverlay('report-audit')" style="color:#fff;">✕</button></div>
+            <div id="audit-trail-content" class="form-content" style="overflow-y:auto; padding:20px;"></div>
         </div>
     </div>
 
@@ -197,9 +206,8 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js?v=1.1.8"></script>
+    <script src="app.js?v=1.1.9"></script>
     <script>
-        // Quick logic to hide the logout button if loaded in the Admin iFrame
         if(window.location.search.includes('iframe=true')) {
             const loBtn = document.getElementById('rep-logout-btn');
             if(loBtn) loBtn.style.display = 'none';
