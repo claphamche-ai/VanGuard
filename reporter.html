@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Reporter</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.1.3" />
+    <link rel="stylesheet" href="styles.css?v=1.1.6" />
     <style>
         body { background: transparent; overflow-y: auto; overflow-x: hidden; } 
         .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }
@@ -29,11 +29,16 @@
 
         <!-- MAIN MENU -->
         <div id="rep-menu" class="rep-view" style="display:none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <div>
-                    <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Reporting Desk</h2>
-                    <div style="font-size: 13px; font-weight: bold; color: var(--b); margin-top: 5px;">Select an operational tool</div>
+            <!-- Dual Branded Header with Logout -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--nav-dark); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div id="menu-tenant-logo" style="font-size: 30px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; overflow:hidden;">⚓</div>
+                    <div>
+                        <h3 id="menu-tenant-name" style="margin: 0; font-size: 16px; font-weight:900; text-transform:uppercase;">Council Name</h3>
+                        <div style="font-size: 11px; color: #aaa; margin-top:2px;">VanGuard Reporting Desk</div>
+                    </div>
                 </div>
+                <button class="std-btn red" id="rep-logout-btn" style="width: auto; padding: 8px 15px; font-size: 12px; margin:0;" onclick="location.href='index.html'">🚪 Log Out</button>
             </div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom:20px;">
@@ -135,6 +140,13 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js?v=1.1.3"></script>
+    <script src="app.js?v=1.1.6"></script>
+    <script>
+        // Quick logic to hide the logout button if loaded in the Admin iFrame
+        if(window.location.search.includes('iframe=true')) {
+            const loBtn = document.getElementById('rep-logout-btn');
+            if(loBtn) loBtn.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
