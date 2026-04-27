@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.0.2 - STATE SYNC & UX PATCH
+// VANGUARD V1.0.3 - KML POLYGON PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -113,20 +113,12 @@ const CoreDB = {
 const UI = {
     openLeftSidebar: () => document.getElementById('left-sidebar').classList.add('open'), closeLeftSidebar: () => document.getElementById('left-sidebar').classList.remove('open'),
     openRightSidebar: () => document.getElementById('right-sidebar').classList.add('open'), closeRightSidebar: () => document.getElementById('right-sidebar').classList.remove('open'),
-    
-    // UX Patch: Toggle arrow state and layer container visibility
     toggleLayerList: () => { 
         const el = document.getElementById('layer-container'); 
         const chevron = document.getElementById('layer-chevron');
-        if(el.style.display === 'block') {
-            el.style.display = 'none';
-            if(chevron) chevron.innerText = '▶';
-        } else {
-            el.style.display = 'block';
-            if(chevron) chevron.innerText = '▼';
-        }
+        if(el.style.display === 'block') { el.style.display = 'none'; if(chevron) chevron.innerText = '▶'; } 
+        else { el.style.display = 'block'; if(chevron) chevron.innerText = '▼'; }
     },
-    
     openOverlay: (id) => { document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none'); document.getElementById(id + '-overlay').style.display = 'flex'; },
     closeOverlay: (id) => { document.getElementById(id + '-overlay').style.display = 'none'; },
     openPopup: (id) => document.getElementById(id).style.display = 'block', closePopup: (id) => document.getElementById(id).style.display = 'none',
@@ -164,8 +156,7 @@ class MapEngine {
             
             this.map = L.map(this.mapId, { zoomControl: false }).setView([lat, lng], z);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-            this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null;
-            this.agentLiveMarkers = {}; 
+            this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null; this.agentLiveMarkers = {}; 
             
             this.loadKML(); 
             if(this.role === 'agent') this.initGPS(); 
@@ -187,7 +178,6 @@ class MapEngine {
             if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); count++; }
         });
         
-        // UX Patch: Clear missing layers text if empty
         if(count === 0) { 
             container.innerHTML = '<div style="padding:10px; color:#e74c3c; font-size:12px; font-weight:bold; background:#f9f9f9; border-left:4px solid #e74c3c; border-radius:3px;">No map layers assigned to your profile.</div>'; 
         }
@@ -203,22 +193,42 @@ class MapEngine {
             style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
             pointToLayer: function(feature, latlng) {
                 const marker = L.marker(latlng, { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                marker.on('click', function(e) { self.handleAssetClick(e, feature.properties?.name, item.label, feature.properties?.address || feature.properties?.description, false); }); return marker;
+                marker.on('click', function(e) { self.handleAssetClick(e, feature.properties?.name || "Mapped Asset", item.label, feature.properties?.address || feature.properties?.description || "", false); }); return marker;
             }
         });
+
+        // BUG FIX: Synchronous & Asynchronous polygon extraction
+        const extractCenters = function(lGroup) {
+            lGroup.eachLayer(function(layer) {
+                if (layer instanceof L.LayerGroup || layer instanceof L.FeatureGroup) {
+                    extractCenters(layer);
+                } else if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                    const name = layer.feature?.properties?.name || "Mapped Asset";
+                    const desc = layer.feature?.properties?.address || layer.feature?.properties?.description || "";
+                    
+                    // Make the colored shape itself clickable
+                    layer.on('click', function(e) { self.handleAssetClick(e, name, item.label, desc, false); });
+
+                    // Add the center marker icon
+                    const centerMarker = L.marker(layer.getBounds().getCenter(), { 
+                        icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) 
+                    });
+                    centerMarker.on('click', function(e) { self.handleAssetClick(e, name, item.label, desc, false); }); 
+                    group.addLayer(centerMarker);
+                }
+            });
+            self.map.addLayer(group);
+        };
         
         let runLayer;
-        if(isCustomStr) { runLayer = omnivore.kml.parse(item.kmlString, null, customLayer); } 
-        else { runLayer = omnivore.kml(item.file, null, customLayer); }
-        
-        runLayer.on('ready', function() {
-            runLayer.eachLayer(function(layer) {
-                if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                    const centerMarker = L.marker(layer.getBounds().getCenter(), { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                    centerMarker.on('click', function(e) { self.handleAssetClick(e, layer.feature?.properties?.name, item.label, layer.feature?.properties?.address || layer.feature?.properties?.description, false); }); group.addLayer(centerMarker);
-                }
-            }); self.map.addLayer(group);
-        }); group.addLayer(runLayer);
+        if(isCustomStr) { 
+            runLayer = omnivore.kml.parse(item.kmlString, null, customLayer); 
+            extractCenters(runLayer); 
+        } else { 
+            runLayer = omnivore.kml(item.file, null, customLayer); 
+            runLayer.on('ready', function() { extractCenters(runLayer); }); 
+        }
+        group.addLayer(runLayer);
     }
     toggleLayer(name, show) { if(show) this.map.addLayer(this.layers[name]); else this.map.removeLayer(this.layers[name]); }
     handleAssetClick(event, name, type, address, isOneOff) {
@@ -284,7 +294,7 @@ const AgentCtrl = {
         } catch (e) { console.error("Geocoding failed", e); }
     },
     acceptJob: function(jobId) { let bank = CoreDB.getJobBank(); const idx = bank.findIndex(j => j.jobId === jobId); if(idx !== -1) { bank[idx].assignedTo = CoreDB.getActiveUser().id; CoreDB.saveJobBank(bank); this.renderSidebarBank(); if(window._mapEngine && window._mapEngine.searchMarker) { window._mapEngine.searchMarker.closePopup(); } alert("Job accepted and assigned to your queue."); } },
-    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=0${encodeURIComponent(address)}`, '_blank'); },
+    routeTo: function(address) { window.open(`http://googleusercontent.com/maps.google.com/9${encodeURIComponent(address)}`, '_blank'); },
     openVanHUD: function() {
         if(!window._mapEngine || !window._mapEngine.userMarker) return;
         const shift = CoreDB.getActiveShift(); if(!shift) return; const user = CoreDB.getActiveUser();
@@ -303,12 +313,7 @@ const AgentCtrl = {
     },
     startShift: function() { 
         CoreDB.createShift(); UI.closeOverlay('shift'); this.requestWakeLock(); 
-        
-        // UX Patch: Instantly force the first GPS breadcrumb so Dispatch sees them immediately
-        if(window._mapEngine && window._mapEngine.userMarker) { 
-            const pos = window._mapEngine.userMarker.getLatLng(); 
-            if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); 
-        }
+        if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); }
         this.startBreadcrumbs(); 
     },
     endShift: function() { if(confirm("Are you sure you want to end your patrol shift and log out?")) { CoreDB.closeShift(); this.releaseWakeLock(); this.stopBreadcrumbs(); window.location.href = 'index.html'; } },
@@ -363,7 +368,6 @@ const AgentCtrl = {
 };
 
 const DispatchCtrl = {
-    // ... Keeping standard Dispatch functions identical for length ...
     activeSite: { name: "", type: "", address: "", isOneOff: false },
     init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; } if(window.location.search.includes('iframe=true')) { const lo = document.getElementById('standalone-logout'); if(lo) lo.style.display = 'none'; } new MapEngine('dispatch-map', 'dispatch'); this.renderBank('PENDING'); },
     async searchAddress() {
@@ -529,7 +533,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=1$${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=0$${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}
@@ -545,13 +549,12 @@ const GodCtrl = {
     exportBlankTemplate: function() { const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }]; const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`; UI.downloadTextFile('Blank_Database_Template.txt', data); },
     nukeDatabase: function() { if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) { localStorage.clear(); alert("System Reset Complete. Reloading interface."); window.location.href = 'index.html'; } },
     
-    // UX Patch: State Sync Tools
     exportState: function() {
         const state = {
             schema: CoreDB.getSchema(), flags: CoreDB.getFlags(), tenants: CoreDB.getTenants(), users: CoreDB.getUsers(),
             customKMLs: CoreDB.getCustomKMLs(), jobBank: CoreDB.getJobBank(), shifts: CoreDB.getShifts(), reports: CoreDB.getReports()
         };
-        const dump = btoa(JSON.stringify(state)); // Base64 encode it so it's a clean string
+        const dump = btoa(JSON.stringify(state)); 
         document.getElementById('state-sync-io').value = dump;
         alert("State exported to the text box. Copy this string and paste it into the tablet's God console.");
     },
