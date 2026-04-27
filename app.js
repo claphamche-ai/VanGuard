@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.1.1 - PUNCH-IN TOGGLE PATCH
+// VANGUARD V1.1.3 - REPORTER MAP REPLAY
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -95,12 +95,26 @@ const CoreDB = {
     createShift: function() {
         const user = this.getActiveUser(); if(!user) return null;
         let shifts = this.getShifts();
-        const newShift = { shiftId: 'SHIFT-' + Date.now(), tenantId: this.getActiveTenantId(), userId: user.id, username: user.name || user.username, startTime: new Date().toISOString(), endTime: null, status: 'OPEN', breadcrumbs: [] };
+        const newShift = { shiftId: 'SHIFT-' + Date.now(), tenantId: this.getActiveTenantId(), userId: user.id, username: user.name || user.username, startTime: new Date().toISOString(), endTime: null, status: 'OPEN', breadcrumbs: [], totalDistance: 0 };
         shifts.push(newShift); this.saveShifts(shifts); return newShift;
     },
     closeShift: function() {
         let shifts = this.getShifts(); const user = this.getActiveUser(); const idx = shifts.findIndex(s => s.userId === user.id && s.status === 'OPEN');
-        if(idx !== -1) { shifts[idx].status = 'CLOSED'; shifts[idx].endTime = new Date().toISOString(); this.saveShifts(shifts); }
+        if(idx !== -1) { 
+            let shift = shifts[idx];
+            shift.status = 'CLOSED'; shift.endTime = new Date().toISOString(); 
+            let dist = 0; const R = 6371;
+            if(shift.breadcrumbs && shift.breadcrumbs.length > 1) {
+                for(let i=1; i<shift.breadcrumbs.length; i++) {
+                    let p1 = shift.breadcrumbs[i-1], p2 = shift.breadcrumbs[i];
+                    let dLat = (p2.lat - p1.lat) * Math.PI / 180; let dLon = (p2.lng - p1.lng) * Math.PI / 180;
+                    let a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(p1.lat * Math.PI / 180) * Math.cos(p2.lat * Math.PI / 180) * Math.sin(dLon/2)*Math.sin(dLon/2);
+                    dist += R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+                }
+            }
+            shift.totalDistance = dist;
+            this.saveShifts(shifts); 
+        }
     },
     addBreadcrumb: function(lat, lng) {
         let shifts = this.getShifts(); const user = this.getActiveUser(); if(!user) return;
@@ -162,6 +176,7 @@ class MapEngine {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
             this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null;
             this.agentLiveMarkers = {}; 
+            this.agentLiveTrails = {}; 
             
             this.loadKML(); 
             if(this.role === 'agent') this.initGPS(); 
@@ -237,9 +252,19 @@ class MapEngine {
         else if (this.role === 'dispatch') { DispatchCtrl.activeSite = { name: safeName, type: type, address: safeAddr, isOneOff: isOneOff }; document.getElementById('s-name').innerText = safeName; document.getElementById('s-type').innerText = type; document.getElementById('s-address').value = safeAddr; UI.openPopup('site-info'); }
     }
     initGPS() {
-        this.userMarker = L.marker([0,0], { icon: L.divIcon({ className: '', html: '<div class="van-inner" style="font-size: 40px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));">🚐</div>', iconSize: [40,40], iconAnchor: [20,20] }) }).addTo(this.map);
+        this.userMarker = L.marker([0,0], { icon: L.divIcon({ className: '', html: '<div id="agent-van-icon" class="van-inner" style="font-size: 40px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); transition: transform 0.3s ease;">🚐</div>', iconSize: [40,40], iconAnchor: [20,20] }) }).addTo(this.map);
         this.userMarker.on('click', () => AgentCtrl.openVanHUD());
-        if(navigator.geolocation) { navigator.geolocation.watchPosition(pos => { this.userMarker.setLatLng([pos.coords.latitude, pos.coords.longitude]); }, err => console.warn(err), { enableHighAccuracy: true }); }
+        if(navigator.geolocation) { 
+            navigator.geolocation.watchPosition(pos => { 
+                const lat = pos.coords.latitude; const lng = pos.coords.longitude;
+                this.userMarker.setLatLng([lat, lng]); 
+                this.map.panTo([lat, lng]);
+                if(pos.coords.heading !== null) {
+                    const iconEl = document.getElementById('agent-van-icon');
+                    if(iconEl) iconEl.style.transform = `rotate(${pos.coords.heading + 90}deg)`;
+                }
+            }, err => console.warn(err), { enableHighAccuracy: true }); 
+        }
     }
     pollActiveAgents() {
         const shifts = CoreDB.getShifts().filter(s => s.tenantId === CoreDB.getActiveTenantId() && s.status === 'OPEN');
@@ -248,8 +273,20 @@ class MapEngine {
                 const lastPing = shift.breadcrumbs[shift.breadcrumbs.length - 1];
                 const ts = new Date(lastPing.ts).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 const popupContent = `<div style="text-align:center; padding:5px;"><h4 style="margin:0 0 5px 0; color:var(--b); font-size:14px; text-transform:uppercase;">${shift.username}</h4><div style="font-size:11px; color:#666; margin-bottom:10px;">Last Ping: ${ts}</div><button class="std-btn blue" style="padding:8px 15px; font-size:11px;" onclick="DispatchCtrl.openAgentTracker('${shift.userId}', '${shift.username}')">View Shift History</button></div>`;
-                if(this.agentLiveMarkers[shift.userId]) { this.agentLiveMarkers[shift.userId].setLatLng([lastPing.lat, lastPing.lng]).getPopup().setContent(popupContent); } 
-                else { const m = L.marker([lastPing.lat, lastPing.lng], { icon: L.divIcon({ className: '', html: `<div style="font-size: 30px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.8));">🚐</div>`, iconSize: [30,30], iconAnchor: [15,15] }) }).bindPopup(popupContent); this.agentLiveMarkers[shift.userId] = m; this.map.addLayer(m); }
+                
+                if(this.agentLiveMarkers[shift.userId]) { 
+                    this.agentLiveMarkers[shift.userId].setLatLng([lastPing.lat, lastPing.lng]).getPopup().setContent(popupContent); 
+                } else { 
+                    const m = L.marker([lastPing.lat, lastPing.lng], { icon: L.divIcon({ className: '', html: `<div style="font-size: 30px; transform: rotate(90deg); filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.8));">🚐</div>`, iconSize: [30,30], iconAnchor: [15,15] }) }).bindPopup(popupContent); 
+                    this.agentLiveMarkers[shift.userId] = m; this.map.addLayer(m); 
+                }
+
+                const latlngs = shift.breadcrumbs.map(b => [b.lat, b.lng]);
+                if(this.agentLiveTrails[shift.userId]) {
+                    this.agentLiveTrails[shift.userId].setLatLngs(latlngs);
+                } else {
+                    this.agentLiveTrails[shift.userId] = L.polyline(latlngs, {color: '#e74c3c', weight: 4, opacity: 0.7, dashArray: '5, 10'}).addTo(this.map);
+                }
             }
         });
     }
@@ -270,19 +307,14 @@ const AgentCtrl = {
         const openShift = CoreDB.getActiveShift();
 
         if(!reqPunch) {
-            // Auto-start shift silently if manual punch is OFF
             if(!openShift) { CoreDB.createShift(); }
             UI.closeOverlay('shift');
             this.startBreadcrumbs();
-            
-            // Attach a one-time document click to grab the wake lock, as browsers block it without interaction
             const wlh = () => { this.requestWakeLock(); document.removeEventListener('click', wlh); };
             document.addEventListener('click', wlh);
-            
             const loBtn = document.getElementById('agent-logout-btn');
             if(loBtn) loBtn.innerHTML = '🚪 Log Out';
         } else {
-            // Standard workflow
             if(openShift) { UI.closeOverlay('shift'); this.requestWakeLock(); this.startBreadcrumbs(); } 
             else { UI.openOverlay('shift'); }
         }
@@ -314,7 +346,7 @@ const AgentCtrl = {
         } catch (e) { console.error("Geocoding failed", e); }
     },
     acceptJob: function(jobId) { let bank = CoreDB.getJobBank(); const idx = bank.findIndex(j => j.jobId === jobId); if(idx !== -1) { bank[idx].assignedTo = CoreDB.getActiveUser().id; CoreDB.saveJobBank(bank); this.renderSidebarBank(); if(window._mapEngine && window._mapEngine.searchMarker) { window._mapEngine.searchMarker.closePopup(); } alert("Job accepted and assigned to your queue."); } },
-    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=0${encodeURIComponent(address)}`, '_blank'); },
+    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=0$$${encodeURIComponent(address)}`, '_blank'); },
     openVanHUD: function() {
         if(!window._mapEngine || !window._mapEngine.userMarker) return;
         const shift = CoreDB.getActiveShift(); if(!shift) return; const user = CoreDB.getActiveUser();
@@ -434,14 +466,162 @@ const DispatchCtrl = {
         const targetDateStr = new Date(dateInput).toLocaleDateString('en-NZ'); const jobs = CoreDB.getJobBank().filter(j => j.tenantId === CoreDB.getActiveTenantId() && j.type === 'COMPLETED');
         const shifts = CoreDB.getShifts().filter(s => s.userId === userId); const shiftOnDate = shifts.find(s => new Date(s.startTime).toLocaleDateString('en-NZ') === targetDateStr);
         let html = '';
-        if(shiftOnDate) { const st = new Date(shiftOnDate.startTime).toLocaleTimeString(); const et = shiftOnDate.endTime ? new Date(shiftOnDate.endTime).toLocaleTimeString() : 'Active/Open'; html += `<div style="background:#e3f2fd; border-left:4px solid var(--b); padding:15px; border-radius:8px; margin-bottom:15px;"><h4 style="margin:0 0 5px 0;">Shift Data: ${targetDateStr}</h4><div style="font-size:13px; color:#555;">Start: <strong>${st}</strong> | End: <strong>${et}</strong></div><div style="font-size:13px; color:#555;">Status: <strong>${shiftOnDate.status}</strong></div></div>`; } else { html += `<p style="color:#888; font-size:13px; text-align:center; padding:10px;">No shift punched for this date.</p>`; }
+        if(shiftOnDate) { 
+            const st = new Date(shiftOnDate.startTime).toLocaleTimeString(); 
+            const et = shiftOnDate.endTime ? new Date(shiftOnDate.endTime).toLocaleTimeString() : 'Active/Open'; 
+            const dist = shiftOnDate.totalDistance ? `${shiftOnDate.totalDistance.toFixed(2)} km` : (shiftOnDate.status === 'OPEN' ? 'Tracking live...' : '0 km');
+            html += `<div style="background:#e3f2fd; border-left:4px solid var(--b); padding:15px; border-radius:8px; margin-bottom:15px;"><h4 style="margin:0 0 5px 0;">Shift Data: ${targetDateStr}</h4><div style="font-size:13px; color:#555;">Start: <strong>${st}</strong> | End: <strong>${et}</strong></div><div style="font-size:13px; color:#555;">Distance: <strong>${dist}</strong></div><div style="font-size:13px; color:#555;">Status: <strong>${shiftOnDate.status}</strong></div></div>`; 
+        } else { html += `<p style="color:#888; font-size:13px; text-align:center; padding:10px;">No shift punched for this date.</p>`; }
         const userJobs = jobs.filter(j => j.assignedTo === userId && j.pausedAt.includes(targetDateStr));
         if(userJobs.length > 0) { html += `<h4 style="border-bottom:1px solid #ccc; padding-bottom:5px;">Completed Jobs</h4>`; html += userJobs.map(j => `<div style="padding:10px; background:#fff; border:1px solid #eee; margin-bottom:5px; border-radius:5px; font-size:12px;"><strong>${j.site}</strong><br><span style="color:#888;">${j.pausedAt}</span></div>`).join(''); } else { html += `<p style="color:#888; font-size:13px; text-align:center; padding:10px;">No assigned jobs completed on this date.</p>`; }
         resultsEl.innerHTML = html;
     }
 };
 
+const ReporterCtrl = {
+    replayMap: null, replayLayerGroup: null, replayMarkers: {}, currentReplayWorker: null,
+    
+    init: function() { 
+        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); 
+        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } 
+        if(t) {
+            const logoEl = document.getElementById('rep-tenant-logo'); if(logoEl) logoEl.innerHTML = t.logo ? `<img src="${t.logo}" style="max-height:80px; max-width:200px;">` : '⚓';
+            const nameEl = document.getElementById('rep-tenant-name'); if(nameEl) nameEl.innerText = t.name;
+        }
+        setTimeout(() => { const splash = document.getElementById('rep-splash'); const menu = document.getElementById('rep-menu'); if(splash && menu) { splash.style.display = 'none'; menu.style.display = 'block'; } }, 3000);
+        this.renderReports(); 
+    },
+    switchView: function(viewId) { document.querySelectorAll('.rep-view').forEach(el => el.style.display = 'none'); const view = document.getElementById('rep-' + viewId); if(view) view.style.display = 'block'; },
+    renderReports: function() {
+        const list = document.getElementById('reports-list-render'); if(!list) return; const reports = CoreDB.getReports().filter(r => r.tenantId === CoreDB.getActiveTenantId());
+        if (reports.length === 0) { list.innerHTML = '<p style="text-align:center; padding: 20px; color: #888;">No pending field reports.</p>'; return; }
+        list.innerHTML = reports.map(r => {
+            const statColor = r.status === 'NEW' ? '#e74c3c' : '#2ecc71';
+            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:20px; margin-bottom:10px; border-radius:8px; border-left: 4px solid ${statColor}; box-shadow:0 2px 5px rgba(0,0,0,0.05);"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;"><div><strong style="color: var(--b); font-size: 16px;">${r.type}</strong><br><span style="color: #666; font-size: 12px;">Logged: ${r.timestamp} by ${r.reportedBy}</span><br><span style="color: #666; font-size: 12px;">GPS: ${r.lat.toFixed(5)}, ${r.lng.toFixed(5)}</span></div><span class="badge" style="background: ${statColor};">${r.status}</span></div><div style="background:#f9f9f9; padding:10px; border-radius:5px; font-style:italic; color:#555; font-size:13px; margin-bottom:15px;">"${r.notes || 'No additional notes provided.'}"</div><div style="display:flex; gap:10px;"><button class="std-btn blue" style="width:auto; padding:8px 15px; font-size:12px;" onclick="ReporterCtrl.forwardReport('${r.id}')">Forward to Council ✉️</button><button class="std-btn green" style="width:auto; padding:8px 15px; font-size:12px;" onclick="ReporterCtrl.markResolved('${r.id}')">Mark Resolved ✓</button></div></div>`;
+        }).join('');
+    },
+    forwardReport: function(id) { const r = CoreDB.getReports().find(x => x.id === id); const t = CoreDB.getTenants().find(x => x.id === r.tenantId); const email = t.reportEmail || 'info@council.govt.nz'; const subject = encodeURIComponent(`Field Report: ${r.type}`); const body = encodeURIComponent(`VanGuard Field Report
+
+Issue Type: ${r.type}
+Reported By: ${r.reportedBy}
+Date: ${r.timestamp}
+GPS Coordinates: ${r.lat}, ${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=0$$${r.lat},${r.lng}
+
+Notes from Agent:
+${r.notes}
+
+(Note: Photos to be attached manually if required)`); window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; },
+    markResolved: function(id) { if(confirm("Mark this report as resolved/processed?")) { let reports = CoreDB.getReports(); const idx = reports.findIndex(x => x.id === id); if(idx !== -1) { reports[idx].status = 'RESOLVED'; CoreDB.saveReports(reports); this.renderReports(); } } },
+
+    openReplay: function() {
+        this.switchView('replay');
+        if(!this.replayMap) {
+            const t = CoreDB.getTenants().find(x => x.id === CoreDB.getActiveTenantId());
+            this.replayMap = L.map('replay-map', {zoomControl: false}).setView([t.homeLat, t.homeLng], t.defaultZoom);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.replayMap);
+            this.replayLayerGroup = L.layerGroup().addTo(this.replayMap);
+        }
+        setTimeout(() => this.replayMap.invalidateSize(), 200);
+        
+        const agents = CoreDB.getUsers().filter(u => u.role === 'agent' && u.tenantId === CoreDB.getActiveTenantId());
+        const list = document.getElementById('replay-worker-list');
+        list.innerHTML = agents.map(a => `<div style="background:#f4f6f8; border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:8px; cursor:pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="ReporterCtrl.selectReplayWorker('${a.id}', '${a.name || a.username}')"><strong style="color:var(--b); font-size:14px;">${a.name || a.username}</strong><br><span style="font-size:11px; color:#666;">ID: ${a.username}</span></div>`).join('');
+        
+        document.getElementById('replay-job-list').innerHTML = '<p style="color:#888; font-size:12px; text-align:center; padding:20px;">Select a worker and date to load history.</p>';
+        if(this.replayLayerGroup) this.replayLayerGroup.clearLayers();
+    },
+    selectReplayWorker: function(id, name) {
+        this.currentReplayWorker = {id: id, name: name};
+        document.getElementById('replay-cal-title').innerText = `History: ${name}`;
+        UI.openOverlay('replay-calendar');
+    },
+    loadReplayData: function() {
+        const dateVal = document.getElementById('replay-date').value;
+        if(!dateVal) { alert("Please select a date."); return; }
+        UI.closeOverlay('replay-calendar');
+        
+        const targetDateStr = new Date(dateVal).toLocaleDateString('en-NZ');
+        const shifts = CoreDB.getShifts().filter(s => s.userId === this.currentReplayWorker.id);
+        const targetShift = shifts.find(s => new Date(s.startTime).toLocaleDateString('en-NZ') === targetDateStr);
+        
+        this.replayLayerGroup.clearLayers();
+        this.replayMarkers = {};
+        
+        let breadcrumbs = [];
+        if(targetShift && targetShift.breadcrumbs) breadcrumbs = targetShift.breadcrumbs;
+        
+        if(breadcrumbs.length > 0) {
+            const latlngs = breadcrumbs.map(b => [b.lat, b.lng]);
+            L.polyline(latlngs, {color: '#2980b9', weight: 5, opacity: 0.8}).addTo(this.replayLayerGroup);
+            this.replayMap.fitBounds(L.polyline(latlngs).getBounds(), {padding: [50, 50]});
+        } else {
+            alert(`No GPS breadcrumbs found for ${this.currentReplayWorker.name} on ${targetDateStr}.`);
+            const t = CoreDB.getTenants().find(x => x.id === CoreDB.getActiveTenantId());
+            this.replayMap.setView([t.homeLat, t.homeLng], t.defaultZoom);
+        }
+        
+        const jobs = CoreDB.getJobBank().filter(j => j.tenantId === CoreDB.getActiveTenantId() && j.assignedTo === this.currentReplayWorker.id && j.pausedAt && j.pausedAt.includes(targetDateStr));
+        const sortedJobs = jobs.reverse(); // Chronological for replay
+        
+        const listEl = document.getElementById('replay-job-list');
+        if(sortedJobs.length === 0) {
+            listEl.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:12px;">No jobs recorded on this date.</div>';
+            return;
+        }
+        
+        listEl.innerHTML = sortedJobs.map(j => {
+            const icon = j.type === 'COMPLETED' ? '✓' : (j.type === 'PENDING' ? '⏳' : '🔧');
+            const col = j.type === 'COMPLETED' ? '#2ecc71' : (j.type === 'PENDING' ? '#3498db' : '#f1c40f');
+            return `<div id="replay-card-${j.jobId}" class="replay-card" style="background:#fff; border-left:4px solid ${col}; border-radius:5px; padding:10px; margin-bottom:10px; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition: background 0.2s;" onclick="ReporterCtrl.highlightReplayJob('${j.jobId}')">
+                <strong style="font-size:13px; color:var(--text-dark);">${j.site}</strong><br>
+                <span style="font-size:11px; font-weight:bold; color:${col};">${icon} ${j.type}</span>
+                <span style="font-size:11px; color:#888; float:right;">${j.pausedAt.split(', ')[1] || j.pausedAt}</span>
+                ${j.notes ? `<div style="font-size:11px; color:#666; margin-top:5px; padding-top:5px; border-top:1px dashed #eee;"><i>${j.notes}</i></div>` : ''}
+            </div>`;
+        }).join('');
+        
+        sortedJobs.forEach(async (j) => {
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(j.site)}&countrycodes=nz`); 
+                const data = await res.json();
+                if(data.length > 0) {
+                    const lat = parseFloat(data[0].lat); const lon = parseFloat(data[0].lon);
+                    const col = j.type === 'COMPLETED' ? '#2ecc71' : (j.type === 'PENDING' ? '#3498db' : '#f1c40f');
+                    const iconHtml = `<div class="marker-inner" style="background-color: ${col}; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.4); font-size: 14px; color:white; font-weight:bold;">${j.type === 'COMPLETED' ? '✓' : (j.type === 'PENDING' ? '⏳' : '🔧')}</div>`;
+                    const m = L.marker([lat, lon], { icon: L.divIcon({ className: '', html: iconHtml, iconSize: [32, 32], iconAnchor: [16, 16] }) });
+                    
+                    const popupHtml = `<div style="min-width:150px;">
+                        <h4 style="margin:0 0 5px 0; color:var(--b);">${j.site}</h4>
+                        <div style="font-size:11px; font-weight:bold; color:${col}; margin-bottom:5px;">${j.type}</div>
+                        <div style="font-size:11px; color:#666;">Time: ${j.pausedAt}</div>
+                        <div style="font-size:11px; color:#666;">SRN: ${j.srn || 'N/A'}</div>
+                    </div>`;
+                    
+                    m.bindPopup(popupHtml);
+                    m.on('click', () => { ReporterCtrl.highlightReplayJob(j.jobId, true); });
+                    m.addTo(this.replayLayerGroup);
+                    this.replayMarkers[j.jobId] = m;
+                }
+            } catch(e){ console.log("Replay Geocode Error:", e); }
+        });
+    },
+    highlightReplayJob: function(jobId, fromMap = false) {
+        document.querySelectorAll('.replay-card').forEach(el => el.style.background = '#fff');
+        const card = document.getElementById(`replay-card-${jobId}`);
+        if(card) {
+            card.style.background = '#e3f2fd';
+            if(fromMap) card.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+        if(!fromMap && this.replayMarkers[jobId]) {
+            this.replayMap.panTo(this.replayMarkers[jobId].getLatLng());
+            this.replayMarkers[jobId].openPopup();
+        }
+    }
+};
+
 const AdminCtrl = {
+    // Standard Admin logic
     init: function() { 
         this.renderSchema(); this.renderFlags();
         const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
@@ -468,6 +648,7 @@ const AdminCtrl = {
 };
 
 const ToolsCtrl = {
+    // Standard Tools logic
     tempFileObj: null,
     init: function() { this.renderCustomKMLs(); },
     switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
@@ -496,6 +677,7 @@ const ToolsCtrl = {
 };
 
 const AccountsCtrl = {
+    // Standard Accounts logic
     init: function() { this.renderUsers(); this.updateLicenseCounter(); },
     updateLicenseCounter: function() { const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE'); const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; } },
     generateLayerCheckboxes: function(containerId, activeAllowedLayers = []) {
@@ -546,59 +728,6 @@ const AccountsCtrl = {
         }
     },
     deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
-};
-
-const ReporterCtrl = {
-    init: function() { 
-        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); 
-        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } 
-        
-        // Splash Screen Branding Injection
-        if(t) {
-            const logoEl = document.getElementById('rep-tenant-logo');
-            if(logoEl) logoEl.innerHTML = t.logo ? `<img src="${t.logo}" style="max-height:80px; max-width:200px;">` : '⚓';
-            const nameEl = document.getElementById('rep-tenant-name');
-            if(nameEl) nameEl.innerText = t.name;
-        }
-
-        // 3-Second Splash Animation
-        setTimeout(() => {
-            const splash = document.getElementById('rep-splash');
-            const menu = document.getElementById('rep-menu');
-            if(splash && menu) {
-                splash.style.display = 'none';
-                menu.style.display = 'block';
-            }
-        }, 3000);
-
-        this.renderReports(); 
-    },
-    switchView: function(viewId) {
-        document.querySelectorAll('.rep-view').forEach(el => el.style.display = 'none');
-        const view = document.getElementById('rep-' + viewId);
-        if(view) view.style.display = 'block';
-    },
-    renderReports: function() {
-        const list = document.getElementById('reports-list-render'); if(!list) return; const reports = CoreDB.getReports().filter(r => r.tenantId === CoreDB.getActiveTenantId());
-        if (reports.length === 0) { list.innerHTML = '<p style="text-align:center; padding: 20px; color: #888;">No pending field reports.</p>'; return; }
-        list.innerHTML = reports.map(r => {
-            const statColor = r.status === 'NEW' ? '#e74c3c' : '#2ecc71';
-            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:20px; margin-bottom:10px; border-radius:8px; border-left: 4px solid ${statColor}; box-shadow:0 2px 5px rgba(0,0,0,0.05);"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;"><div><strong style="color: var(--b); font-size: 16px;">${r.type}</strong><br><span style="color: #666; font-size: 12px;">Logged: ${r.timestamp} by ${r.reportedBy}</span><br><span style="color: #666; font-size: 12px;">GPS: ${r.lat.toFixed(5)}, ${r.lng.toFixed(5)}</span></div><span class="badge" style="background: ${statColor};">${r.status}</span></div><div style="background:#f9f9f9; padding:10px; border-radius:5px; font-style:italic; color:#555; font-size:13px; margin-bottom:15px;">"${r.notes || 'No additional notes provided.'}"</div><div style="display:flex; gap:10px;"><button class="std-btn blue" style="width:auto; padding:8px 15px; font-size:12px;" onclick="ReporterCtrl.forwardReport('${r.id}')">Forward to Council ✉️</button><button class="std-btn green" style="width:auto; padding:8px 15px; font-size:12px;" onclick="ReporterCtrl.markResolved('${r.id}')">Mark Resolved ✓</button></div></div>`;
-        }).join('');
-    },
-    forwardReport: function(id) { const r = CoreDB.getReports().find(x => x.id === id); const t = CoreDB.getTenants().find(x => x.id === r.tenantId); const email = t.reportEmail || 'info@council.govt.nz'; const subject = encodeURIComponent(`Field Report: ${r.type}`); const body = encodeURIComponent(`VanGuard Field Report
-
-Issue Type: ${r.type}
-Reported By: ${r.reportedBy}
-Date: ${r.timestamp}
-GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=0$$${r.lat},${r.lng}
-
-Notes from Agent:
-${r.notes}
-
-(Note: Photos to be attached manually if required)`); window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; },
-    markResolved: function(id) { if(confirm("Mark this report as resolved/processed?")) { let reports = CoreDB.getReports(); const idx = reports.findIndex(x => x.id === id); if(idx !== -1) { reports[idx].status = 'RESOLVED'; CoreDB.saveReports(reports); this.renderReports(); } } }
 };
 
 const GodCtrl = {
