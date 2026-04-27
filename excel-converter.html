@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Excel to KML Converter</title>
+    <link rel="stylesheet" href="styles.css?v=1.1.18" />
+    <style>body { background: #f4f6f8; overflow-y: auto; } .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }</style>
+</head>
+<body data-role="excel-converter">
+    <div class="module-content" style="padding-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--b); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 30px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">📑</div>
+                <div><h3 style="margin: 0; font-size: 16px; font-weight:900; text-transform:uppercase;">Inventory Converter</h3><div style="font-size: 11px; color: #eee;">Excel/CSV to GPS-Mapped KML</div></div>
+            </div>
+            <button class="std-btn red" style="width: auto; padding: 8px 15px; font-size: 12px; margin:0;" onclick="window.close()">✕ Close Tool</button>
+        </div>
+
+        <div class="tenant-panel" style="text-align:center; padding:40px;">
+            <div style="font-size:50px; margin-bottom:20px;">🗺️</div>
+            <h2 style="margin-top:0; color:var(--text-dark);">Generate Map Layer from Inventory</h2>
+            <p style="color:#666; font-size:14px; max-width:500px; margin:0 auto 30px;">Upload your Council Artwork Inventory CSV. The engine will geocode the physical addresses and output a KML file with detailed asset popups.</p>
+            
+            <div style="background:#fff; border:2px dashed #ccc; padding:30px; border-radius:10px; max-width:400px; margin:0 auto;">
+                <input type="file" id="excel-file-input" accept=".csv" style="display:none;">
+                <button class="std-btn blue" onclick="document.getElementById('excel-file-input').click()">📁 Select CSV File</button>
+                <div id="excel-file-name" style="margin-top:10px; font-size:12px; font-weight:bold; color:var(--b);">No file selected</div>
+            </div>
+
+            <div style="margin-top:30px; display:none;">
+                <div id="excel-status" style="font-size:12px; font-weight:bold; margin-bottom:10px; color:#e67e22;">Geocoding Data...</div>
+                <div style="width:100%; max-width:400px; height:10px; background:#ddd; border-radius:5px; margin:0 auto; overflow:hidden;">
+                    <div id="excel-prog-bar" style="height:100%; background:var(--b); width:0; transition:width 0.3s;"></div>
+                </div>
+                <p style="font-size:10px; color:#888; margin-top:10px;">Please do not close this window. Rate-limited at 1 request/sec.</p>
+            </div>
+
+            <button class="std-btn green" style="margin-top:30px; width:auto; padding:15px 50px; font-size:16px;" onclick="ExcelConverterCtrl.processCSV()">Start Conversion ▶</button>
+        </div>
+    </div>
+    <script src="app.js?v=1.1.18"></script>
+</body>
+</html>
