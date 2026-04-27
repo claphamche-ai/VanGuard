@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VanGuard | Overlay Maker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css?v=1.1.20" />
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; display: flex; height: 100vh; font-family: Arial, sans-serif; }
+        .sidebar-panel { width: 320px; background: #fff; border-right: 1px solid #ccc; display: flex; flex-direction: column; z-index: 1000; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .header { background: var(--b); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .header h2 { margin: 0; font-size: 16px; text-transform: uppercase; }
+        .tool-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
+        .map-area { flex-grow: 1; position: relative; }
+        #overlay-map { width: 100%; height: 100%; }
+        
+        .mode-toggle { display: flex; margin-bottom: 20px; border-radius: 5px; overflow: hidden; border: 1px solid var(--b); }
+        .draw-mode-btn { flex: 1; padding: 10px; background: #fff; color: var(--b); border: none; cursor: pointer; font-weight: bold; font-size: 13px; outline: none; }
+        .draw-mode-btn.active { background: var(--b); color: #fff; }
+        
+        .feature-stats { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body data-role="overlay-maker">
+
+    <div class="sidebar-panel">
+        <div class="header">
+            <h2>🗺️ Overlay Maker</h2>
+            <button class="std-btn red" style="width: auto; padding: 5px 10px; font-size: 11px; margin: 0;" onclick="window.close()">✕ Close</button>
+        </div>
+        
+        <div class="tool-content">
+            <label class="section-label" style="margin-top:0;">Layer Name</label>
+            <input type="text" id="overlay-name" class="std-input" placeholder="e.g. Eastside Hotspot Zone">
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <div style="flex:1;">
+                    <label class="section-label" style="margin-top:0;">Color</label>
+                    <input type="color" id="overlay-color" class="std-input" value="#e74c3c" style="padding:2px; height:40px;" onchange="OverlayMakerCtrl.renderMap()">
+                </div>
+                <div style="flex:1;">
+                    <label class="section-label" style="margin-top:0;">Icon</label>
+                    <select id="overlay-icon" class="std-input" onchange="OverlayMakerCtrl.renderMap()">
+                        <option value="📍">📍 Pin</option>
+                        <option value="⚡">⚡ Power</option>
+                        <option value="🛣️">🛣️ Road</option>
+                        <option value="🏢">🏢 Building</option>
+                        <option value="🌳">🌳 Park</option>
+                        <option value="🛑">🛑 Alert</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="section-label">Drawing Tool</label>
+            <div class="mode-toggle">
+                <button id="btn-mode-point" class="draw-mode-btn active" onclick="OverlayMakerCtrl.setMode('point')">Drop Point</button>
+                <button id="btn-mode-polygon" class="draw-mode-btn" onclick="OverlayMakerCtrl.setMode('polygon')">Draw Area</button>
+            </div>
+            
+            <p style="font-size: 12px; color: #555; line-height: 1.4; margin-bottom: 20px;">
+                Click on the map to place markers or define the boundary points of an area.
+            </p>
+
+            <div id="poly-controls" style="display:none; margin-bottom:20px;">
+                <button class="std-btn green" onclick="OverlayMakerCtrl.completePolygon()">✓ Complete Current Area</button>
+            </div>
+            
+            <button class="std-btn gray" onclick="OverlayMakerCtrl.undoLast()">↩ Undo Last Click</button>
+
+            <div class="feature-stats">
+                <strong>Items Drawn:</strong> <span id="feature-count">0</span>
+            </div>
+        </div>
+
+        <div style="padding: 20px; background: #f4f6f8; border-top: 1px solid #ccc;">
+            <button class="std-btn blue" onclick="OverlayMakerCtrl.saveOverlay()">💾 Save Layer to Database</button>
+        </div>
+    </div>
+
+    <div class="map-area">
+        <div id="overlay-map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js?v=1.1.20"></script>
+</body>
+</html>
