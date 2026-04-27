@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V4.9.4 - MENU TOOLS & LAYER RBAC
+// VANGUARD V4.10.0 - SHIFT TRACKING & WAKE LOCK
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -20,6 +20,9 @@ const CoreDB = {
         { id: "U004", username: "admin2", password: "123", role: "admin", tenantId: "T002", name: "Wellington Admin", contact: "04 499 4444", status: "ACTIVE", allowedLayers: [] },
         { id: "U005", username: "worker2", password: "123", role: "agent", tenantId: "T002", name: "Bob Builder", contact: "027 555 0000", status: "ACTIVE", allowedLayers: [] },
         { id: "U006", username: "dispatch2", password: "123", role: "dispatch", tenantId: "T002", name: "Alice Dispatch", contact: "027 555 1111", status: "ACTIVE", allowedLayers: [] }
+    ],
+    kmlConfig: [
+        { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
     ],
 
     getSchema: function() { let mem = localStorage.getItem('vg_schema'); if(!mem) { localStorage.setItem('vg_schema', JSON.stringify(this.defaultSchema)); mem = localStorage.getItem('vg_schema'); } return JSON.parse(mem); },
@@ -43,7 +46,7 @@ const CoreDB = {
             if(typeof u.name === 'undefined') { u.name = ''; patched = true; } 
             if(typeof u.contact === 'undefined') { u.contact = ''; patched = true; } 
             if(typeof u.status === 'undefined') { u.status = 'ACTIVE'; patched = true; } 
-            if(typeof u.allowedLayers === 'undefined') { u.allowedLayers = []; patched = true; } // New array for RBAC
+            if(typeof u.allowedLayers === 'undefined') { u.allowedLayers = []; patched = true; }
         });
         if(patched) this.saveUsers(parsed); return parsed;
     },
@@ -54,18 +57,73 @@ const CoreDB = {
 
     getJobBank: function() { return JSON.parse(localStorage.getItem('tt_jobbank') || '[]'); },
     saveJobBank: function(data) { localStorage.setItem('tt_jobbank', JSON.stringify(data)); },
+    
+    getShifts: function() { return JSON.parse(localStorage.getItem('tt_shifts') || '[]'); },
+    saveShifts: function(data) { localStorage.setItem('tt_shifts', JSON.stringify(data)); },
+
     getActiveTenantId: function() { return localStorage.getItem('vg_active_tenant') || "T001"; },
     setActiveTenantId: function(id) { localStorage.setItem('vg_active_tenant', id); },
     getTenantJobs: function() { return this.getJobBank().filter(j => j.tenantId === this.getActiveTenantId()); },
     getJob: function(jobId) { return this.getJobBank().find(j => j.jobId === jobId); },
-    pushJob: function(jobObj) { let b = this.getJobBank(); jobObj.tenantId = this.getActiveTenantId(); jobObj.jobId = jobObj.jobId || ('J-' + Date.now() + '-' + Math.floor(Math.random() * 1000)); b.unshift(jobObj); this.saveJobBank(b); },
+    pushJob: function(jobObj) { 
+        let b = this.getJobBank(); 
+        jobObj.tenantId = this.getActiveTenantId(); 
+        jobObj.jobId = jobObj.jobId || ('J-' + Date.now() + '-' + Math.floor(Math.random() * 1000)); 
+        const activeShift = this.getActiveShift();
+        if(activeShift) { jobObj.shiftId = activeShift.shiftId; }
+        b.unshift(jobObj); 
+        this.saveJobBank(b); 
+    },
     removeJob: function(jobId) { let b = this.getJobBank(); b = b.filter(j => j.jobId !== jobId); this.saveJobBank(b); },
     
     getActiveUser: function() {
-        // Mock session retrieval based on a stored username in localStorage (set during login)
         const activeUsername = localStorage.getItem('vg_active_user');
         if(!activeUsername) return null;
         return this.getUsers().find(u => u.username === activeUsername);
+    },
+
+    getActiveShift: function() {
+        const user = this.getActiveUser();
+        if(!user) return null;
+        return this.getShifts().find(s => s.userId === user.id && s.status === 'OPEN');
+    },
+    createShift: function() {
+        const user = this.getActiveUser();
+        if(!user) return null;
+        let shifts = this.getShifts();
+        const newShift = {
+            shiftId: 'SHIFT-' + Date.now(),
+            tenantId: this.getActiveTenantId(),
+            userId: user.id,
+            username: user.username,
+            startTime: new Date().toISOString(),
+            endTime: null,
+            status: 'OPEN',
+            breadcrumbs: []
+        };
+        shifts.push(newShift);
+        this.saveShifts(shifts);
+        return newShift;
+    },
+    closeShift: function() {
+        let shifts = this.getShifts();
+        const user = this.getActiveUser();
+        const idx = shifts.findIndex(s => s.userId === user.id && s.status === 'OPEN');
+        if(idx !== -1) {
+            shifts[idx].status = 'CLOSED';
+            shifts[idx].endTime = new Date().toISOString();
+            this.saveShifts(shifts);
+        }
+    },
+    addBreadcrumb: function(lat, lng) {
+        let shifts = this.getShifts();
+        const user = this.getActiveUser();
+        if(!user) return;
+        const idx = shifts.findIndex(s => s.userId === user.id && s.status === 'OPEN');
+        if(idx !== -1) {
+            shifts[idx].breadcrumbs.push({ lat: lat, lng: lng, ts: new Date().toISOString() });
+            this.saveShifts(shifts);
+        }
     }
 };
 
@@ -74,7 +132,7 @@ const UI = {
     openRightSidebar: () => document.getElementById('right-sidebar').classList.add('open'), closeRightSidebar: () => document.getElementById('right-sidebar').classList.remove('open'),
     toggleLayerList: () => { const el = document.getElementById('layer-container'); el.style.display = (el.style.display === 'block') ? 'none' : 'block'; },
     openOverlay: (id) => { document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none'); document.getElementById(id + '-overlay').style.display = 'flex'; },
-    closeOverlay: (id) => document.getElementById(id + '-overlay').style.display = 'none',
+    closeOverlay: (id) => { document.getElementById(id + '-overlay').style.display = 'none'; },
     openPopup: (id) => document.getElementById(id).style.display = 'block', closePopup: (id) => document.getElementById(id).style.display = 'none',
     toggleFS: () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); },
     toggleSubRow: (rowId, iconId) => { const r = document.getElementById(rowId); const i = document.getElementById(iconId); if(!r) return; if(r.style.display === 'none' || r.style.display === '') { r.style.display = 'table-row'; i.innerText = '▼'; } else { r.style.display = 'none'; i.innerText = '▶'; } },
@@ -117,19 +175,13 @@ class MapEngine {
     loadKML() {
         const container = document.getElementById('layer-container'); if(!container) return;
         const activeUser = CoreDB.getActiveUser();
-        
-        // Admin gets all active layers. Others get RBAC filtered.
         const isAdmin = activeUser && activeUser.role === 'admin';
         const allowed = activeUser && activeUser.allowedLayers ? activeUser.allowedLayers : [];
 
-        // Load Custom Tenant KMLs (Only ACTIVE ones)
         const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
         customKMLs.forEach(item => { 
-            if(isAdmin || allowed.includes(item.id)) {
-                this.processKMLLayer(item, true); 
-            }
+            if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); }
         });
-        
         window._mapEngine = this; 
     }
     
@@ -169,19 +221,73 @@ class MapEngine {
     }
     initGPS() {
         this.userMarker = L.marker([0,0], { icon: L.divIcon({ className: '', html: '<div class="van-inner" style="font-size: 40px; transform: rotate(90deg);">🚐</div>', iconSize: [40,40], iconAnchor: [20,20] }) }).addTo(this.map);
-        if(navigator.geolocation) { navigator.geolocation.watchPosition(pos => { this.userMarker.setLatLng([pos.coords.latitude, pos.coords.longitude]); this.map.panTo([pos.coords.latitude, pos.coords.longitude]); }, err => console.warn(err), { enableHighAccuracy: true }); }
+        if(navigator.geolocation) { 
+            navigator.geolocation.watchPosition(pos => { 
+                this.userMarker.setLatLng([pos.coords.latitude, pos.coords.longitude]); 
+                this.map.panTo([pos.coords.latitude, pos.coords.longitude]); 
+            }, err => console.warn(err), { enableHighAccuracy: true }); 
+        }
     }
 }
 
 const AgentCtrl = {
-    activeSite: { name: "", type: "" }, workState: { startTime: null, accumulated: 0, photo1: null, photo2: null }, timerInterval: null,
+    activeSite: { name: "", type: "" }, 
+    workState: { startTime: null, accumulated: 0, photo1: null, photo2: null }, 
+    timerInterval: null,
+    wakeLock: null,
+    breadcrumbInterval: null,
+
     init: function() {
         const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
         if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('agent', t.status, t.name); return; }
         if(document.getElementById('page-title')) document.getElementById('page-title').innerText = `${BRAND_NAME} | Agent`;
         new MapEngine('map', 'agent'); this.renderFields();
         setInterval(() => { const el = document.getElementById('menu-clock'); if(el) el.innerText = new Date().toLocaleString('en-NZ', { dateStyle: 'medium', timeStyle: 'short' }); }, 1000);
+
+        // Shift State Check
+        const openShift = CoreDB.getActiveShift();
+        if(openShift) {
+            UI.closeOverlay('shift');
+            this.requestWakeLock();
+            this.startBreadcrumbs();
+        } else {
+            UI.openOverlay('shift');
+        }
     },
+    startShift: function() {
+        CoreDB.createShift();
+        UI.closeOverlay('shift');
+        this.requestWakeLock();
+        this.startBreadcrumbs();
+    },
+    endShift: function() {
+        if(confirm("Are you sure you want to end your patrol shift and log out?")) {
+            CoreDB.closeShift();
+            this.releaseWakeLock();
+            this.stopBreadcrumbs();
+            window.location.href = 'index.html';
+        }
+    },
+    async requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            try { this.wakeLock = await navigator.wakeLock.request('screen'); console.log('Wake Lock active.'); }
+            catch (err) { console.warn('Wake Lock failed:', err); }
+        }
+    },
+    releaseWakeLock() {
+        if (this.wakeLock !== null) { this.wakeLock.release(); this.wakeLock = null; console.log('Wake Lock released.'); }
+    },
+    startBreadcrumbs() {
+        // Drop a GPS ping every 30 seconds into the shift ledger
+        this.breadcrumbInterval = setInterval(() => {
+            if(window._mapEngine && window._mapEngine.userMarker) {
+                const pos = window._mapEngine.userMarker.getLatLng();
+                if(pos.lat !== 0 && pos.lng !== 0) { CoreDB.addBreadcrumb(pos.lat, pos.lng); }
+            }
+        }, 30000);
+    },
+    stopBreadcrumbs() { clearInterval(this.breadcrumbInterval); },
+
     renderFields: function() {
         const container = document.getElementById('dynamic-work-fields'); if(!container) return; let html = '';
         CoreDB.getSchema().forEach(f => {
@@ -209,284 +315,8 @@ const AgentCtrl = {
     centerGPS: function() { if(window._mapEngine) window._mapEngine.map.panTo(window._mapEngine.userMarker.getLatLng()); }
 };
 
-const DispatchCtrl = {
-    activeSite: { name: "", type: "", address: "", isOneOff: false },
-    init: function() {
-        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
-        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('dispatch', t.status, t.name); return; }
-        if(window.location.search.includes('iframe=true')) { const lo = document.getElementById('standalone-logout'); if(lo) lo.style.display = 'none'; }
-        new MapEngine('dispatch-map', 'dispatch'); this.renderBank('PENDING');
-    },
-    async searchAddress() {
-        const query = document.getElementById('dispatch-search').value; if(!query) return;
-        try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=nz`); const data = await res.json();
-            if(data.length > 0) {
-                const lat = parseFloat(data[0].lat); const lon = parseFloat(data[0].lon); window._mapEngine.map.setView([lat, lon], 17);
-                if(window._mapEngine.searchMarker) window._mapEngine.map.removeLayer(window._mapEngine.searchMarker);
-                const m = L.marker([lat, lon], { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: #34495e; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; font-size: 18px;">📍</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) }).addTo(window._mapEngine.map); window._mapEngine.searchMarker = m;
-                const cleanAddr = data[0].display_name.split(',')[0]; UI.closeLeftSidebar(); m.on('click', (e) => window._mapEngine.handleAssetClick(e, cleanAddr, "One-Off Location", data[0].display_name, true)); m.fire('click');
-            } else { alert("Location not found."); }
-        } catch(e) { console.error(e); }
-    },
-    openDispatchForm: function() { UI.closePopup('site-info'); document.getElementById('dispatch-target-name').innerText = this.activeSite.name; document.getElementById('permanent-asset-request').style.display = this.activeSite.isOneOff ? 'block' : 'none'; document.getElementById('dispatch-make-permanent').checked = false; document.getElementById('dispatch-srn').value = ''; document.getElementById('dispatch-notes').value = ''; UI.openOverlay('dispatch'); },
-    openHistory: function() { UI.closePopup('site-info'); document.getElementById('history-target-name').innerText = this.activeSite.name; UI.openOverlay('history'); },
-    submitJob: function() {
-        const srn = document.getElementById('dispatch-srn').value.trim(); const notes = document.getElementById('dispatch-notes').value.trim(); const reqPerm = document.getElementById('dispatch-make-permanent').checked; let finalNotes = notes;
-        if(reqPerm && this.activeSite.isOneOff) finalNotes = "[ADMIN REQ: Make site permanent] - " + notes;
-        CoreDB.pushJob({ site: this.activeSite.name, srn: srn || 'N/A', type: 'PENDING', notes: finalNotes, accumulated: 0, pausedAt: new Date().toLocaleString('en-NZ') }); UI.closeOverlay('dispatch'); UI.openRightSidebar(); this.renderBank('PENDING');
-    },
-    renderBank: function(filterType) {
-        const listEl = document.getElementById('dispatch-bank-list'); const data = CoreDB.getTenantJobs(); const filtered = data.filter(j => (filterType === 'PENDING' && j.type !== 'COMPLETED') || (filterType === 'COMPLETED' && j.type === 'COMPLETED') );
-        if(filtered.length === 0) { listEl.innerHTML = `<p style="text-align:center; color:#888; font-size:13px; margin-top:20px;">No ${filterType} jobs.</p>`; return; }
-        listEl.innerHTML = filtered.map(j => `<div style="background:var(--bg-white); border: 1px solid #ddd; margin-bottom:10px; padding:15px; border-radius:8px; font-size:13px; border-left: 4px solid ${j.type==='WORK'?'#f1c40f':(j.type==='PENDING'?'#9b59b6':'#e74c3c')};"><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><strong>${j.site}</strong><span class="badge blue" style="background:#333;">${j.srn}</span></div><div style="color:#666; margin-bottom: 5px;">Status: <strong style="color:var(--b);">${j.type}</strong></div><div style="color:#888; font-size: 11px;">${j.pausedAt}</div>${j.notes ? `<div style="margin-top:8px; padding:8px; background:#f9f9f9; border-radius:4px; font-style:italic; border:1px dashed #ccc;">"${j.notes}"</div>` : ''}</div>`).join('');
-    }
-};
-
-const ToolsCtrl = {
-    tempFileObj: null,
-    init: function() { this.renderCustomKMLs(); },
-    switchView: function(viewId) {
-        document.getElementById('tools-main-menu').style.display = 'none';
-        document.getElementById('tools-kml-manager').style.display = 'none';
-        document.getElementById('tools-' + viewId).style.display = 'block';
-    },
-    openUploadForm: function() {
-        document.getElementById('kml-upload-form').style.display = 'block';
-        document.getElementById('new-kml-label').value = '';
-        document.getElementById('kml-file-name').innerText = 'No file selected';
-        this.tempFileObj = null;
-    },
-    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
-    handleFileSelect: function(input) {
-        if(input.files && input.files[0]) {
-            this.tempFileObj = input.files[0];
-            document.getElementById('kml-file-name').innerText = this.tempFileObj.name;
-            if(!document.getElementById('new-kml-label').value) {
-                document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', '');
-            }
-        }
-    },
-    processUpload: function() {
-        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
-        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', '');
-        const color = document.getElementById('new-kml-color').value || '#ff00ff';
-        const icon = document.getElementById('new-kml-icon').value || '📍';
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const kmlString = e.target.result;
-            let custom = CoreDB.getCustomKMLs();
-            custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() });
-            CoreDB.saveCustomKMLs(custom);
-            this.closeUploadForm();
-            this.renderCustomKMLs();
-        };
-        reader.readAsText(this.tempFileObj);
-    },
-    renderCustomKMLs: function() {
-        const list = document.getElementById('kml-list-render');
-        if(!list) return;
-        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
-        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
-        
-        list.innerHTML = custom.map(k => {
-            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
-            return `
-            <div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center;">
-                        <span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span>
-                        <strong style="font-size:15px; color:var(--b);">${k.label}</strong>
-                    </div>
-                    <span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span>
-                </div>
-            </div>
-            <div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);">
-                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
-                    <div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div>
-                    <div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div>
-                    <div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div>
-                    <div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                    <button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button>
-                    <button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button>
-                </div>
-            </div>`;
-        }).join('');
-    },
-    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
-    updateKML: function(id) {
-        let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id);
-        if(idx !== -1) {
-            custom[idx].label = document.getElementById(`kml-lbl-${id}`).value;
-            custom[idx].color = document.getElementById(`kml-col-${id}`).value;
-            custom[idx].icon = document.getElementById(`kml-icn-${id}`).value;
-            custom[idx].status = document.getElementById(`kml-stat-${id}`).value;
-            CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs();
-        }
-    },
-    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
-};
-
-const AccountsCtrl = {
-    init: function() { this.renderUsers(); this.updateLicenseCounter(); },
-    updateLicenseCounter: function() {
-        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE');
-        const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; }
-    },
-    generateLayerCheckboxes: function(containerId, activeAllowedLayers = []) {
-        const container = document.getElementById(containerId); if(!container) return;
-        const tenantLayers = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
-        if(tenantLayers.length === 0) { container.innerHTML = '<span style="font-size:12px; color:#888;">No active custom layers available.</span>'; return; }
-        
-        container.innerHTML = tenantLayers.map(layer => {
-            const isChecked = activeAllowedLayers.includes(layer.id) ? 'checked' : '';
-            return `<label style="display:flex; align-items:center; cursor:pointer; font-size:13px; color:#333;"><input type="checkbox" value="${layer.id}" class="layer-rbac-cb" style="width:16px; height:16px; margin-right:5px;" ${isChecked}> ${layer.icon} ${layer.label}</label>`;
-        }).join('');
-    },
-    getCheckedLayers: function(containerId) {
-        const container = document.getElementById(containerId); if(!container) return [];
-        const checkboxes = container.querySelectorAll('.layer-rbac-cb:checked');
-        return Array.from(checkboxes).map(cb => cb.value);
-    },
-    openCreateForm: function() { 
-        this.closeEditForm(); const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
-        if(activeUsers >= tenant.licenses) { alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`); return; }
-        document.getElementById('new-acc-username').value = ''; document.getElementById('new-acc-password').value = ''; document.getElementById('new-acc-name').value = ''; document.getElementById('new-acc-contact').value = ''; document.getElementById('new-acc-role').value = 'agent'; document.getElementById('new-acc-status').value = 'ACTIVE'; 
-        this.generateLayerCheckboxes('new-acc-layers', []);
-        document.getElementById('accounts-create-form').style.display = 'block'; 
-    },
-    closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
-    openEditForm: function(id) {
-        this.closeCreateForm(); const user = CoreDB.getUsers().find(u => u.id === id); if(!user) return;
-        document.getElementById('edit-acc-id').value = user.id; document.getElementById('edit-acc-username').value = user.username; document.getElementById('edit-acc-password').value = user.password; document.getElementById('edit-acc-role').value = user.role; document.getElementById('edit-acc-name').value = user.name || ''; document.getElementById('edit-acc-contact').value = user.contact || ''; document.getElementById('edit-acc-status').value = user.status || 'ACTIVE'; 
-        this.generateLayerCheckboxes('edit-acc-layers', user.allowedLayers || []);
-        document.getElementById('accounts-edit-form').style.display = 'block';
-    },
-    closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
-    renderUsers: function() {
-        const list = document.getElementById('accounts-list-render'); if(!list) return; const activeId = CoreDB.getActiveTenantId(); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId);
-        if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
-        list.innerHTML = users.map(u => {
-            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : '#2980b9');
-            return `<tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')"><td style="padding: 15px;"><strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br><span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${roleColor};">${u.role.toUpperCase()}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${statColor};">${u.status || 'ACTIVE'}</span></td></tr>`
-        }).join(''); this.updateLicenseCounter();
-    },
-    createUser: function() {
-        const u = document.getElementById('new-acc-username').value.trim().toLowerCase(); const p = document.getElementById('new-acc-password').value.trim(); const r = document.getElementById('new-acc-role').value; const n = document.getElementById('new-acc-name').value.trim(); const c = document.getElementById('new-acc-contact').value.trim(); const s = document.getElementById('new-acc-status').value; const activeId = CoreDB.getActiveTenantId();
-        const allowedLayers = this.getCheckedLayers('new-acc-layers');
-        if(!u || !p) { alert("Username and Password are required."); return; }
-        let db = CoreDB.getUsers(); if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
-        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s, allowedLayers: allowedLayers }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
-    },
-    saveUser: function() {
-        const id = document.getElementById('edit-acc-id').value; const u = document.getElementById('edit-acc-username').value.trim().toLowerCase(); const p = document.getElementById('edit-acc-password').value.trim(); const r = document.getElementById('edit-acc-role').value; const n = document.getElementById('edit-acc-name').value.trim(); const c = document.getElementById('edit-acc-contact').value.trim(); const s = document.getElementById('edit-acc-status').value;
-        const allowedLayers = this.getCheckedLayers('edit-acc-layers');
-        if(!u || !p) { alert("Username and Password are required."); return; }
-        let db = CoreDB.getUsers(); const duplicate = db.find(user => user.username === u && user.id !== id); if(duplicate) { alert("Username already exists in the system."); return; }
-        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const userIndex = db.findIndex(user => user.id === id);
-        if(userIndex !== -1) {
-            if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') { const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length; if(activeUsers >= tenant.licenses) { alert(`Cannot activate user. License limit reached (${tenant.licenses}).`); return; } }
-            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; db[userIndex].allowedLayers = allowedLayers; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
-        }
-    },
-    deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
-};
-
-const AdminCtrl = {
-    init: function() { 
-        this.renderSchema(); const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
-        if(t) {
-            if(document.getElementById('admin-tenant-name')) document.getElementById('admin-tenant-name').innerText = t.name;
-            if(document.getElementById('admin-tenant-motto')) document.getElementById('admin-tenant-motto').innerText = t.motto || '';
-            const logoEl = document.getElementById('admin-tenant-logo'); if(logoEl) { if(t.logo) logoEl.innerHTML = `<img src="${t.logo}" style="max-height:80px; max-width:200px;">`; else logoEl.innerHTML = `⚓`; }
-        }
-    },
-    switchTab: function(id) { 
-        document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); 
-        document.getElementById('tab-' + id).style.display = 'block'; 
-        const contentArea = document.querySelector('.admin-content');
-        if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; }
-        if(id === 'settings') this.closeSubPanel(); 
-    },
-    loadModule: function(url, navElement) { document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); if(navElement) navElement.classList.add('active-nav'); this.switchTab('iframe'); document.getElementById('admin-module-frame').src = url; },
-    openSubPanel: function(id) { document.getElementById('settings-overview').style.display = 'none'; document.getElementById('panel-' + id).style.display = 'block'; },
-    closeSubPanel: function() { document.getElementById('panel-fields').style.display = 'none'; document.getElementById('settings-overview').style.display = 'block'; },
-    renderSchema: function() {
-        const c = document.getElementById('admin-schema-render'); if(!c) return;
-        let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="border-bottom:2px solid #ddd; color:#666;"><th style="padding:10px 5px;">Data Field</th><th style="padding:10px 5px; text-align:center; width:120px;">Visible</th><th style="padding:10px 5px; text-align:center; width:120px;">Mandatory</th></tr>';
-        CoreDB.getSchema().forEach(f => {
-            html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-            if(f.type === 'select') { html += `<td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="UI.toggleSubRow('adm-sub-${f.id}', 'adm-icon-${f.id}')"><span id="adm-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`; } else { html += `<td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`; }
-            html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantVisible?'checked':''} onchange="AdminCtrl.toggleVis('${f.id}')"><span class="slider"></span></label></td>`;
-            html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantMandatory?'checked':''} onchange="AdminCtrl.toggleMan('${f.id}')"><span class="slider"></span></label></td></tr>`;
-            if(f.type === 'select') { html += `<tr id="adm-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 15px 15px 20px 35px;"><div class="sub-options-list">`; f.options.forEach(opt => { html += `<div class="sub-option-row"><span>${opt.name}</span><label class="toggle-switch small"><input type="checkbox" ${opt.visible?'checked':''} onchange="AdminCtrl.toggleOptVis('${f.id}', '${opt.name}')"><span class="slider"></span></label></div>`; }); html += `</div></td></tr>`; }
-        }); c.innerHTML = html + '</table>';
-    },
-    toggleVis: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantVisible=!f.tenantVisible; CoreDB.saveSchema(db); this.renderSchema();} },
-    toggleMan: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantMandatory=!f.tenantMandatory; CoreDB.saveSchema(db); this.renderSchema();} },
-    toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} }
-};
-
-const GodCtrl = {
-    init: function() { this.renderSchema(); this.renderTenants(); },
-    switchTab: function(id) { 
-        document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); 
-        document.getElementById('tab-' + id).style.display = 'block'; 
-        const contentArea = document.querySelector('.admin-content');
-        if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; }
-        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); event.currentTarget.classList.add('active-nav'); 
-    },
-    exportDBText: function() { const data = `const defaultSchema = ${JSON.stringify(CoreDB.getSchema(), null, 4)};`; UI.downloadTextFile('Spoof_Database.txt', data); },
-    exportBlankTemplate: function() { const blank = [{ "id": "example_field", "label": "Example Label", "type": "text", "tenantVisible": true, "tenantMandatory": false, "options": [] }]; const data = `const defaultSchema = ${JSON.stringify(blank, null, 4)};`; UI.downloadTextFile('Blank_Database_Template.txt', data); },
-    nukeDatabase: function() { if(confirm("WARNING: This will completely wipe all local memory, job banks, and tenant configurations, resetting the system to factory defaults. Proceed?")) { localStorage.clear(); alert("System Reset Complete. Reloading interface."); window.location.href = 'index.html'; } },
-    renderTenants: function() {
-        const c = document.getElementById('god-tenant-list'); if(!c) return;
-        const tenants = CoreDB.getTenants(); const bank = CoreDB.getJobBank(); const allUsers = CoreDB.getUsers();
-        c.innerHTML = tenants.map(t => {
-            const tenantJobs = bank.filter(j => j.tenantId === t.id); const pendingCount = tenantJobs.filter(j => j.type !== 'COMPLETED').length; const completedCount = tenantJobs.filter(j => j.type === 'COMPLETED').length; const statColor = t.status === 'ACTIVE' ? '#2ecc71' : (t.status === 'SUSPENDED' ? '#f1c40f' : '#e74c3c'); const adminUser = allUsers.find(u => u.tenantId === t.id && u.role === 'admin') || { username: '', password: '' };
-            return `<div style="background:var(--bg-light); border:1px solid #ddd; border-radius:8px; margin-bottom:10px; overflow:hidden;"><div style="padding:15px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="UI.toggleSubRow('t-exp-${t.id}', 't-icon-${t.id}')"><div><span id="t-icon-${t.id}" style="display:inline-block; width:15px; font-size:12px;">▶</span><h4 style="margin:0; display:inline-block; color:var(--text-dark);">${t.name}</h4><span style="font-size:12px; color:#666; margin-left:10px;">ID: ${t.id} | Tier: ${t.tier}</span></div><div><span class="badge blue" style="background:${statColor};">${t.status}</span></div></div><div id="t-exp-${t.id}" style="display:none; padding:20px; border-top:1px solid #ddd; background:#fff;"><div style="display:flex; justify-content:space-between; margin-bottom:15px; background:#f4f6f8; padding:10px; border-radius:8px; align-items:center;"><div style="font-size:12px; color:#555;"><strong>Live Metrics:</strong> <span style="margin-left:10px; color:#e74c3c;">${pendingCount} Pending</span> | <span style="margin-left:10px; color:#2ecc71;">${completedCount} Completed</span></div><button class="std-btn gray" style="width:auto; padding:8px 15px; font-size:11px;" onclick="GodCtrl.impersonateTenant('${t.id}')">Enter Admin Dashboard</button></div><div style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid var(--b);"><h4 style="margin-top:0; color: var(--b); font-size: 13px; text-transform: uppercase;">Master Admin Credentials</h4><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"><div><label class="input-label">Admin Username</label><input type="text" id="t-admin-user-${t.id}" class="std-input" value="${adminUser.username}" style="margin-bottom:0;"></div><div><label class="input-label">Admin Password</label><input type="text" id="t-admin-pass-${t.id}" class="std-input" value="${adminUser.password}" style="margin-bottom:0;"></div></div></div><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr;"><div><label class="input-label">Council Name</label><input type="text" id="t-name-${t.id}" class="std-input" value="${t.name}"></div><div><label class="input-label">Subscription Tier</label><select id="t-tier-${t.id}" class="std-input"><option value="City A" ${t.tier==='City A'?'selected':''}>City A (Test)</option><option value="City B" ${t.tier==='City B'?'selected':''}>City B (Test)</option><option value="Municipal - Small" ${t.tier==='Municipal - Small'?'selected':''}>Municipal - Small</option><option value="Municipal - Large" ${t.tier==='Municipal - Large'?'selected':''}>Municipal - Large</option><option value="State Police" ${t.tier==='State Police'?'selected':''}>State Police</option></select></div><div><label class="input-label">Licenses</label><input type="number" id="t-lic-${t.id}" class="std-input" value="${t.licenses}"></div><div><label class="input-label">Primary Contact</label><input type="text" id="t-cname-${t.id}" class="std-input" value="${t.contactName || ''}" placeholder="Name"></div><div><label class="input-label">Contact Email</label><input type="email" id="t-cemail-${t.id}" class="std-input" value="${t.contactEmail || ''}" placeholder="Email"></div><div><label class="input-label">Contact Phone</label><input type="text" id="t-cphone-${t.id}" class="std-input" value="${t.contactPhone || ''}" placeholder="Phone"></div><div style="grid-column: span 3;"><label class="input-label">Tenant Logo (URL or Image Link)</label><input type="text" id="t-logo-${t.id}" class="std-input" placeholder="https://..." value="${t.logo || ''}"></div><div style="grid-column: span 3;"><label class="input-label">Motto / Slogan</label><input type="text" id="t-motto-${t.id}" class="std-input" value="${t.motto || ''}"></div><div><label class="input-label">Home Latitude</label><input type="text" id="t-lat-${t.id}" class="std-input" value="${t.homeLat || ''}" placeholder="-41.135"></div><div><label class="input-label">Home Longitude</label><input type="text" id="t-lng-${t.id}" class="std-input" value="${t.homeLng || ''}" placeholder="174.84"></div><div><label class="input-label">Default Zoom</label><input type="number" id="t-zoom-${t.id}" class="std-input" value="${t.defaultZoom || 14}" placeholder="14"></div><div><label class="input-label">Billing Cycle</label><select id="t-bill-${t.id}" class="std-input"><option value="Monthly" ${t.billingCycle==='Monthly'?'selected':''}>Monthly</option><option value="Annually" ${t.billingCycle==='Annually'?'selected':''}>Annually</option></select></div><div><label class="input-label">Account Status</label><select id="t-stat-${t.id}" class="std-input" style="border:2px solid ${statColor};"><option value="ACTIVE" ${t.status==='ACTIVE'?'selected':''}>Active</option><option value="SUSPENDED" ${t.status==='SUSPENDED'?'selected':''}>Suspended (Arrears)</option><option value="DEACTIVATED" ${t.status==='DEACTIVATED'?'selected':''}>Deactivated</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px dashed #eee; padding-top:15px;"><button class="std-btn red" style="width:auto; padding:10px 20px;" onclick="GodCtrl.deleteTenant('${t.id}')">Delete Tenant</button><button class="std-btn blue" style="width:auto; padding:10px 40px; font-size:16px;" onclick="GodCtrl.saveTenant('${t.id}')">Confirm Changes</button></div></div></div>`;
-        }).join('');
-    },
-    addTenant: function() { const name = prompt("Enter Council Name:"); if(!name) return; const tenants = CoreDB.getTenants(); const newId = 'T'+Math.floor(Math.random()*9000+1000); tenants.push({ id: newId, name: name, tier: "Municipal - Small", licenses: 4, status: "ACTIVE", motto: "", contactName: "", contactEmail: "", contactPhone: "", billingCycle: "Monthly", logo: "", homeLat: -41.135, homeLng: 174.84, defaultZoom: 14 }); CoreDB.saveTenants(tenants); this.renderTenants(); },
-    saveTenant: function(id) {
-        const tenants = CoreDB.getTenants(); const t = tenants.find(x => x.id === id);
-        if(t) {
-            t.name = document.getElementById(`t-name-${id}`).value; t.tier = document.getElementById(`t-tier-${id}`).value; t.licenses = parseInt(document.getElementById(`t-lic-${id}`).value) || 0; t.status = document.getElementById(`t-stat-${id}`).value; t.motto = document.getElementById(`t-motto-${id}`).value; t.contactName = document.getElementById(`t-cname-${id}`).value; t.contactEmail = document.getElementById(`t-cemail-${id}`).value; t.contactPhone = document.getElementById(`t-cphone-${id}`).value; t.billingCycle = document.getElementById(`t-bill-${id}`).value; t.logo = document.getElementById(`t-logo-${id}`).value;
-            t.homeLat = document.getElementById(`t-lat-${id}`).value; t.homeLng = document.getElementById(`t-lng-${id}`).value; t.defaultZoom = document.getElementById(`t-zoom-${id}`).value;
-            CoreDB.saveTenants(tenants);
-            const adminU = document.getElementById(`t-admin-user-${id}`).value.trim().toLowerCase(); const adminP = document.getElementById(`t-admin-pass-${id}`).value.trim();
-            if (adminU && adminP) { let users = CoreDB.getUsers(); let existingAdmin = users.find(u => u.tenantId === id && u.role === 'admin'); if (existingAdmin) { existingAdmin.username = adminU; existingAdmin.password = adminP; } else { users.push({ id: 'U' + Date.now().toString().slice(-6), username: adminU, password: adminP, role: 'admin', tenantId: id }); } CoreDB.saveUsers(users); }
-            this.renderTenants(); alert("Tenant details confirmed and updated.");
-        }
-    },
-    deleteTenant: function(id) { if(confirm("Are you sure you want to completely delete this tenant?")) { let tenants = CoreDB.getTenants().filter(x => x.id !== id); CoreDB.saveTenants(tenants); this.renderTenants(); } },
-    impersonateTenant: function(id) { CoreDB.setActiveTenantId(id); window.location.href = 'admin.html'; },
-    renderSchema: function() {
-        const c = document.getElementById('god-schema-render'); if(!c) return;
-        let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="background:var(--nav-dark); color:white;"><th style="padding:12px 15px;">Global Field</th><th style="padding:12px 15px; width:100px;">Type</th><th style="padding:12px 15px; text-align:right; width:100px;">Action</th></tr>';
-        CoreDB.getSchema().forEach(f => {
-            html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-            if(f.type === 'select') { html += `<td style="padding: 15px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="UI.toggleSubRow('god-sub-${f.id}', 'god-icon-${f.id}')"><span id="god-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`; } else { html += `<td style="padding: 15px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`; }
-            html += `<td style="padding: 15px; color: #666;">${f.type}</td><td style="padding: 15px; text-align: right;"><button class="std-btn red" style="padding: 6px 12px; font-size: 11px; width: auto;" onclick="GodCtrl.delField('${f.id}')">Delete</button></td></tr>`;
-            if(f.type === 'select') { html += `<tr id="god-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 20px 20px 25px 45px;"><div class="sub-options-list">`; f.options.forEach(opt => { html += `<div class="sub-option-row"><span>${opt.name}</span><button class="std-btn red" style="padding: 4px 10px; font-size: 10px; width: auto;" onclick="GodCtrl.delOpt('${f.id}', '${opt.name}')">✕</button></div>`; }); html += `<div style="display: flex; gap: 10px; margin-top: 10px;"><input type="text" id="god-opt-${f.id}" class="std-input" style="margin-bottom: 0; padding: 10px;"><button class="std-btn green" style="width: auto; padding: 0 20px;" onclick="GodCtrl.addOpt('${f.id}')">➕</button></div></div></td></tr>`; }
-        }); c.innerHTML = html + '</table>';
-    },
-    delField: function(id) { if(confirm("Delete root field globally?")) { let db=CoreDB.getSchema().filter(x=>x.id!==id); CoreDB.saveSchema(db); this.renderSchema(); } },
-    delOpt: function(fid, opt) { if(confirm("Delete option globally?")) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){f.options=f.options.filter(y=>y.name!==opt); CoreDB.saveSchema(db); this.renderSchema(); } } },
-    addOpt: function(fid) { let v = document.getElementById(`god-opt-${fid}`).value.trim(); if(!v) return; let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f && !f.options.find(o=>o.name===v)){f.options.push({name:v, visible:true}); CoreDB.saveSchema(db); this.renderSchema();} },
-    addField: function() { let l = document.getElementById('new-global-field-name').value.trim(); let t = document.getElementById('new-global-field-type').value; if(!l) return; let id=l.toLowerCase().replace(/[^a-z0-9]/g, '_'); let db=CoreDB.getSchema(); if(db.find(f=>f.id===id)) return; db.push({id:id, label:l, type:t, tenantVisible:true, tenantMandatory:false, options: t==='select'?[]:null}); CoreDB.saveSchema(db); this.renderSchema(); document.getElementById('new-global-field-name').value=''; }
-};
-
+// Expose necessary global objects
 document.addEventListener('DOMContentLoaded', () => {
     const role = document.body.dataset.role;
-    if(role === 'agent') AgentCtrl.init(); if(role === 'dispatch') DispatchCtrl.init();
-    if(role === 'admin') AdminCtrl.init(); if(role === 'god') GodCtrl.init(); 
-    if(role === 'accounts') AccountsCtrl.init(); if(role === 'tools') ToolsCtrl.init();
+    if(role === 'agent') AgentCtrl.init(); 
 });
-
-function storeActiveUser(username) {
-    localStorage.setItem('vg_active_user', username);
-}

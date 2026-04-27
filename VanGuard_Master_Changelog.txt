@@ -1,10 +1,9 @@
 VANGUARD MASTER CHANGELOG
 -------------------------
-v4.9.4 - Menu Tools & Layer RBAC (Current Build)
-- Tools Dashboard (`tools.html`) refactored from a stacked list into a grid menu.
-- Historical Data module stubbed and visually deactivated to prevent UI clutter.
-- KML Manager UI refactored to use expandable rows (like God Mode tenants).
-- `CoreDB.getUsers` modified to include an `allowedLayers` array for Role-Based Access Control (RBAC).
-- `AccountsCtrl` modified to dynamically generate KML checkboxes during user creation/editing. The admin can now explicitly assign which layers each user is allowed to load.
-- `index.html` updated to cache the logged-in username into local storage (`vg_active_user`) so the MapEngine knows whose permissions to apply.
-- `MapEngine.loadKML` modified to intercept the active user's permissions. Admins bypass the lock and see everything; Agents and Dispatchers only see the layers checked in their Accounts profile.
+v4.10.0 - Shift Tracking & Wake Lock (Current Build)
+- `tt_shifts` table added to CoreDB. Generates Shift IDs tracking start/end times and GPS breadcrumbs.
+- Agent Dashboard (`agent.html`) now defaults to a locked "PUNCH IN" overlay state on load if no active shift is open.
+- Sidebar updated: "Log Out" replaced with "🛑 End Shift".
+- `AgentCtrl` integrated with native `navigator.wakeLock.request('screen')` to force the tablet/phone screen to stay awake while the shift is active.
+- Automated Background Breadcrumbs: While a shift is open, VanGuard grabs the GPS coordinates directly from Leaflet's marker every 30 seconds and pushes them into the `tt_shifts` array.
+- Job Submission stamping logic updated: Every time `CoreDB.pushJob()` is called, it actively queries for an OPEN shift and permanently binds the `shiftId` to the job payload.
