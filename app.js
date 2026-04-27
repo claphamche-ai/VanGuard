@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.0.0 RELEASE CANDIDATE - MASTER CORE
+// VANGUARD V1.0.1 - FULL MASTER + PATCHES
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -171,9 +171,11 @@ class MapEngine {
         const allowed = activeUser && activeUser.allowedLayers ? activeUser.allowedLayers : [];
 
         const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
+        let count = 0;
         customKMLs.forEach(item => { 
-            if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); }
+            if(isAdmin || allowed.includes(item.id)) { this.processKMLLayer(item, true); count++; }
         });
+        if(count === 0) { container.innerHTML = '<div style="padding:10px; color:#888; font-size:12px; font-style:italic;">No map layers assigned to your profile.</div>'; }
         window._mapEngine = this; 
     }
     processKMLLayer(item, isCustomStr) {
@@ -267,7 +269,7 @@ const AgentCtrl = {
         } catch (e) { console.error("Geocoding failed", e); }
     },
     acceptJob: function(jobId) { let bank = CoreDB.getJobBank(); const idx = bank.findIndex(j => j.jobId === jobId); if(idx !== -1) { bank[idx].assignedTo = CoreDB.getActiveUser().id; CoreDB.saveJobBank(bank); this.renderSidebarBank(); if(window._mapEngine && window._mapEngine.searchMarker) { window._mapEngine.searchMarker.closePopup(); } alert("Job accepted and assigned to your queue."); } },
-    routeTo: function(address) { window.open(`http://googleusercontent.com/maps.google.com/9${encodeURIComponent(address)}`, '_blank'); },
+    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=0${encodeURIComponent(address)}`, '_blank'); },
     openVanHUD: function() {
         if(!window._mapEngine || !window._mapEngine.userMarker) return;
         const shift = CoreDB.getActiveShift(); if(!shift) return; const user = CoreDB.getActiveUser();
@@ -284,10 +286,14 @@ const AgentCtrl = {
         if(jobs.length === 0) { listEl.innerHTML = `<p style="color:#666; font-size:13px;">No jobs completed on this shift yet.</p>`; } else { listEl.innerHTML = jobs.map(j => `<div style="background:#f4f6f8; border:1px solid #ddd; padding:10px; border-radius:5px; margin-bottom:10px; font-size:12px;"><strong style="color:var(--b);">${j.site}</strong><br><span style="color:#888;">Time: ${j.pausedAt} | SRN: ${j.srn}</span>${j.notes ? `<div style="margin-top:5px; font-style:italic; border-top:1px dashed #ccc; padding-top:5px;">${j.notes}</div>` : ''}</div>`).join(''); }
         UI.openOverlay('agent-history');
     },
-    startShift: function() { CoreDB.createShift(); UI.closeOverlay('shift'); this.requestWakeLock(); this.startBreadcrumbs(); },
+    startShift: function() { 
+        CoreDB.createShift(); UI.closeOverlay('shift'); this.requestWakeLock(); 
+        if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) CoreDB.addBreadcrumb(pos.lat, pos.lng); }
+        this.startBreadcrumbs(); 
+    },
     endShift: function() { if(confirm("Are you sure you want to end your patrol shift and log out?")) { CoreDB.closeShift(); this.releaseWakeLock(); this.stopBreadcrumbs(); window.location.href = 'index.html'; } },
-    async requestWakeLock() { if ('wakeLock' in navigator) { try { this.wakeLock = await navigator.wakeLock.request('screen'); } catch (err) { console.warn('Wake Lock failed:', err); } } },
-    releaseWakeLock() { if (this.wakeLock !== null) { this.wakeLock.release(); this.wakeLock = null; } },
+    async requestWakeLock() { if ('wakeLock' in navigator) { try { this.wakeLock = await navigator.wakeLock.request('screen'); console.log('Wake Lock active.'); } catch (err) { console.warn('Wake Lock failed:', err); } } },
+    releaseWakeLock() { if (this.wakeLock !== null) { this.wakeLock.release(); this.wakeLock = null; console.log('Wake Lock released.'); } },
     startBreadcrumbs() { this.breadcrumbInterval = setInterval(() => { if(window._mapEngine && window._mapEngine.userMarker) { const pos = window._mapEngine.userMarker.getLatLng(); if(pos.lat !== 0 && pos.lng !== 0) { CoreDB.addBreadcrumb(pos.lat, pos.lng); } } }, 30000); },
     stopBreadcrumbs() { clearInterval(this.breadcrumbInterval); },
     renderFields: function() {
@@ -306,13 +312,14 @@ const AgentCtrl = {
             btn.classList.add('done'); btn.style.backgroundImage = `url(${dataUrl})`; btn.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ ${step.toUpperCase()}</div>`;
             if(step === 'before' || step === 'start') { this.workState.startTime = now; this.startTimer(); if(document.getElementById('pause-work-btn')) document.getElementById('pause-work-btn').disabled = false; if(document.getElementById('pause-insp-btn')) document.getElementById('pause-insp-btn').disabled = false; } 
             else if(step === 'after' || step === 'end') { if(document.getElementById('submit-work-btn')) document.getElementById('submit-work-btn').disabled = false; if(document.getElementById('submit-insp-btn')) document.getElementById('submit-insp-btn').disabled = false; }
+            if(step.startsWith('rep-')) { btn.innerHTML = `<div style="background:rgba(0,0,0,0.7); display:inline-block; padding:5px 10px; border-radius:5px; color:#fff;">✓ DONE</div>`; }
         });
     },
     startTimer: function() { const widget = document.getElementById('live-timer-widget'); widget.style.display = 'block'; this.timerInterval = setInterval(() => { const secs = Math.floor((new Date() - this.workState.startTime + this.workState.accumulated) / 1000); widget.innerText = `${Math.floor(secs / 60).toString().padStart(2,'0')}:${(secs % 60).toString().padStart(2,'0')}`; }, 1000); },
     stopTimer: function() { clearInterval(this.timerInterval); document.getElementById('live-timer-widget').style.display = 'none'; },
     cancelJob: function() { if(!confirm("Cancel this job?")) return; this.stopTimer(); this.workState = { startTime: null, accumulated: 0 }; UI.closeOverlay('work'); },
     pauseJob: function() { const elapsed = new Date() - this.workState.startTime; CoreDB.pushJob({ site: this.activeSite.name, type: 'WORK', accumulated: this.workState.accumulated + elapsed, pausedAt: new Date().toLocaleString('en-NZ') }); this.stopTimer(); UI.closeOverlay('work'); this.renderSidebarBank(); },
-    submitWork: function() { let failed = false; CoreDB.getSchema().forEach(f => { if(f.tenantVisible && f.tenantMandatory) { const el = document.getElementById(`work-field-${f.id}`); if(el && !el.value) failed = true; } }); if(failed) { alert("Please complete required fields."); return; } alert("Work Submitted."); this.stopTimer(); UI.closeOverlay('work'); this.renderSidebarBank(); },
+    submitWork: function() { let failed = false; CoreDB.getSchema().forEach(f => { if(f.tenantVisible && f.tenantMandatory) { const el = document.querySelectorAll(`#work-overlay #field-${f.id}`)[0]; if(el && !el.value) failed = true; } }); if(failed) { alert("Please complete required fields."); return; } alert("Work Submitted."); this.stopTimer(); UI.closeOverlay('work'); this.renderSidebarBank(); },
     cancelInsp: function() { this.stopTimer(); UI.closeOverlay('inspection'); },
     pauseInsp: function() { this.stopTimer(); UI.closeOverlay('inspection'); },
     submitInsp: function() {
@@ -408,34 +415,6 @@ const AdminCtrl = {
     toggleFlag: function(key) { let flags = CoreDB.getFlags(); flags[key] = !flags[key]; CoreDB.saveFlags(flags); this.renderFlags(); }
 };
 
-const ToolsCtrl = {
-    tempFileObj: null,
-    init: function() { this.renderCustomKMLs(); },
-    switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
-    openUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'block'; document.getElementById('new-kml-label').value = ''; document.getElementById('kml-file-name').innerText = 'No file selected'; this.tempFileObj = null; },
-    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
-    handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
-    processUpload: function() {
-        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
-        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', ''); const color = document.getElementById('new-kml-color').value || '#ff00ff'; const icon = document.getElementById('new-kml-icon').value || '📍';
-        const reader = new FileReader();
-        reader.onload = (e) => { const kmlString = e.target.result; let custom = CoreDB.getCustomKMLs(); custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() }); CoreDB.saveCustomKMLs(custom); this.closeUploadForm(); this.renderCustomKMLs(); };
-        reader.readAsText(this.tempFileObj);
-    },
-    renderCustomKMLs: function() {
-        const list = document.getElementById('kml-list-render'); if(!list) return;
-        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
-        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
-        list.innerHTML = custom.map(k => {
-            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
-            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span><strong style="font-size:15px; color:var(--b);">${k.label}</strong></div><span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span></div></div><div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);"><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;"><div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div><div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div><div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div><div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:10px;"><button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button><button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button></div></div>`;
-        }).join('');
-    },
-    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
-    updateKML: function(id) { let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id); if(idx !== -1) { custom[idx].label = document.getElementById(`kml-lbl-${id}`).value; custom[idx].color = document.getElementById(`kml-col-${id}`).value; custom[idx].icon = document.getElementById(`kml-icn-${id}`).value; custom[idx].status = document.getElementById(`kml-stat-${id}`).value; CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } },
-    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
-};
-
 const AccountsCtrl = {
     init: function() { this.renderUsers(); this.updateLicenseCounter(); },
     updateLicenseCounter: function() { const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE'); const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; } },
@@ -485,6 +464,34 @@ const AccountsCtrl = {
     deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
 };
 
+const ToolsCtrl = {
+    tempFileObj: null,
+    init: function() { this.renderCustomKMLs(); },
+    switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
+    openUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'block'; document.getElementById('new-kml-label').value = ''; document.getElementById('kml-file-name').innerText = 'No file selected'; this.tempFileObj = null; },
+    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
+    handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
+    processUpload: function() {
+        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
+        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', ''); const color = document.getElementById('new-kml-color').value || '#ff00ff'; const icon = document.getElementById('new-kml-icon').value || '📍';
+        const reader = new FileReader();
+        reader.onload = (e) => { const kmlString = e.target.result; let custom = CoreDB.getCustomKMLs(); custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() }); CoreDB.saveCustomKMLs(custom); this.closeUploadForm(); this.renderCustomKMLs(); };
+        reader.readAsText(this.tempFileObj);
+    },
+    renderCustomKMLs: function() {
+        const list = document.getElementById('kml-list-render'); if(!list) return;
+        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
+        list.innerHTML = custom.map(k => {
+            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
+            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span><strong style="font-size:15px; color:var(--b);">${k.label}</strong></div><span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span></div></div><div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);"><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;"><div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div><div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div><div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div><div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:10px;"><button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button><button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button></div></div>`;
+        }).join('');
+    },
+    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
+    updateKML: function(id) { let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id); if(idx !== -1) { custom[idx].label = document.getElementById(`kml-lbl-${id}`).value; custom[idx].color = document.getElementById(`kml-col-${id}`).value; custom[idx].icon = document.getElementById(`kml-icn-${id}`).value; custom[idx].status = document.getElementById(`kml-stat-${id}`).value; CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } },
+    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
+};
+
 const ReporterCtrl = {
     init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } this.renderReports(); },
     renderReports: function() {
@@ -501,7 +508,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=0${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=1${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}
