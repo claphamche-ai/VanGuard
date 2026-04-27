@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.0.3 - KML POLYGON PATCH
+// VANGUARD V1.1.0 - REPORTER DASHBOARD & MASTER CORE
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -20,7 +20,9 @@ const CoreDB = {
         { id: "U003", username: "dispatch", password: "123", role: "dispatch", tenantId: "T001", name: "Jane Smith", contact: "021 555 5678", status: "ACTIVE", allowedLayers: [] },
         { id: "U007", username: "reporter", password: "123", role: "reporter", tenantId: "T001", name: "Desk Reporter", contact: "021 000 000", status: "ACTIVE", allowedLayers: [] }
     ],
-    kmlConfig: [ { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' } ],
+    kmlConfig: [
+        { file: 'Assets Map- Alleyway sites.csv.kml', label: 'Alleyway', color: '#ff00ff', icon: '🛣️' }
+    ],
 
     getFlags: function() { let mem = localStorage.getItem('vg_flags'); if(!mem) { localStorage.setItem('vg_flags', JSON.stringify(this.defaultFlags)); mem = localStorage.getItem('vg_flags'); } return JSON.parse(mem); },
     saveFlags: function(data) { localStorage.setItem('vg_flags', JSON.stringify(data)); },
@@ -128,6 +130,7 @@ const UI = {
     lockoutScreen: function(role, tenantStatus, tenantName) {
         if (role === 'agent') { document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">🛑</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">SERVICE UNAVAILABLE</h2><p style="color:#555; font-weight:bold;">Report to dispatch error code: <br><span style="color:#000; font-size:18px; display:inline-block; margin-top:10px; padding:5px 10px; background:#eee; border-radius:5px;">ERR-${tenantStatus}</span></p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`; }
         else if (role === 'dispatch') { document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">💳</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">ACCOUNT ${tenantStatus}</h2><p style="color:#555; font-weight:bold; line-height:1.5;">Please contact Accounts Payable to restore VanGuard dispatch services for ${tenantName}.</p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`; }
+        else if (role === 'reporter') { document.body.innerHTML = `<div style="display:flex; height:100vh; width:100vw; background:#f4f6f8; align-items:center; justify-content:center; padding:20px; box-sizing:border-box;"><div style="background:#fff; padding:40px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; max-width:400px;"><div style="font-size:50px; margin-bottom:20px;">🛑</div><h2 style="color:#e74c3c; margin-top:0; text-transform:uppercase;">SERVICE UNAVAILABLE</h2><p style="color:#555; font-weight:bold;">Account locked. Code: <br><span style="color:#000; font-size:18px; display:inline-block; margin-top:10px; padding:5px 10px; background:#eee; border-radius:5px;">ERR-${tenantStatus}</span></p><button class="std-btn gray" style="margin-top:20px;" onclick="location.href='index.html'">Return to Login</button></div></div>`; }
     },
     processAndWatermarkImage: function(file, callback) {
         const reader = new FileReader(); reader.onload = function(e) {
@@ -156,7 +159,8 @@ class MapEngine {
             
             this.map = L.map(this.mapId, { zoomControl: false }).setView([lat, lng], z);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
-            this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null; this.agentLiveMarkers = {}; 
+            this.layers = {}; this.role = role; this.userMarker = null; this.searchMarker = null;
+            this.agentLiveMarkers = {}; 
             
             this.loadKML(); 
             if(this.role === 'agent') this.initGPS(); 
@@ -197,7 +201,6 @@ class MapEngine {
             }
         });
 
-        // BUG FIX: Synchronous & Asynchronous polygon extraction
         const extractCenters = function(lGroup) {
             lGroup.eachLayer(function(layer) {
                 if (layer instanceof L.LayerGroup || layer instanceof L.FeatureGroup) {
@@ -205,11 +208,7 @@ class MapEngine {
                 } else if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
                     const name = layer.feature?.properties?.name || "Mapped Asset";
                     const desc = layer.feature?.properties?.address || layer.feature?.properties?.description || "";
-                    
-                    // Make the colored shape itself clickable
                     layer.on('click', function(e) { self.handleAssetClick(e, name, item.label, desc, false); });
-
-                    // Add the center marker icon
                     const centerMarker = L.marker(layer.getBounds().getCenter(), { 
                         icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) 
                     });
@@ -294,7 +293,7 @@ const AgentCtrl = {
         } catch (e) { console.error("Geocoding failed", e); }
     },
     acceptJob: function(jobId) { let bank = CoreDB.getJobBank(); const idx = bank.findIndex(j => j.jobId === jobId); if(idx !== -1) { bank[idx].assignedTo = CoreDB.getActiveUser().id; CoreDB.saveJobBank(bank); this.renderSidebarBank(); if(window._mapEngine && window._mapEngine.searchMarker) { window._mapEngine.searchMarker.closePopup(); } alert("Job accepted and assigned to your queue."); } },
-    routeTo: function(address) { window.open(`http://googleusercontent.com/maps.google.com/9${encodeURIComponent(address)}`, '_blank'); },
+    routeTo: function(address) { window.open(`https://www.google.com/maps/dir/?api=1&destination=1$${encodeURIComponent(address)}`, '_blank'); },
     openVanHUD: function() {
         if(!window._mapEngine || !window._mapEngine.userMarker) return;
         const shift = CoreDB.getActiveShift(); if(!shift) return; const user = CoreDB.getActiveUser();
@@ -518,7 +517,35 @@ const AccountsCtrl = {
 };
 
 const ReporterCtrl = {
-    init: function() { const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } this.renderReports(); },
+    init: function() { 
+        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId); 
+        if (t && t.status !== 'ACTIVE') { UI.lockoutScreen('reporter', t.status, t.name); return; } 
+        
+        // Splash Screen Branding Injection
+        if(t) {
+            const logoEl = document.getElementById('rep-tenant-logo');
+            if(logoEl) logoEl.innerHTML = t.logo ? `<img src="${t.logo}" style="max-height:80px; max-width:200px;">` : '⚓';
+            const nameEl = document.getElementById('rep-tenant-name');
+            if(nameEl) nameEl.innerText = t.name;
+        }
+
+        // 3-Second Splash Animation
+        setTimeout(() => {
+            const splash = document.getElementById('rep-splash');
+            const menu = document.getElementById('rep-menu');
+            if(splash && menu) {
+                splash.style.display = 'none';
+                menu.style.display = 'block';
+            }
+        }, 3000);
+
+        this.renderReports(); 
+    },
+    switchView: function(viewId) {
+        document.querySelectorAll('.rep-view').forEach(el => el.style.display = 'none');
+        const view = document.getElementById('rep-' + viewId);
+        if(view) view.style.display = 'block';
+    },
     renderReports: function() {
         const list = document.getElementById('reports-list-render'); if(!list) return; const reports = CoreDB.getReports().filter(r => r.tenantId === CoreDB.getActiveTenantId());
         if (reports.length === 0) { list.innerHTML = '<p style="text-align:center; padding: 20px; color: #888;">No pending field reports.</p>'; return; }
@@ -533,7 +560,7 @@ Issue Type: ${r.type}
 Reported By: ${r.reportedBy}
 Date: ${r.timestamp}
 GPS Coordinates: ${r.lat}, ${r.lng}
-Map Link: https://www.google.com/maps/dir/?api=1&destination=0$${r.lat},${r.lng}
+Map Link: https://www.google.com/maps/dir/?api=1&destination=1$${r.lat},${r.lng}
 
 Notes from Agent:
 ${r.notes}

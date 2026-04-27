@@ -2,23 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Reporter</title>
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
-    <style>body { background: transparent; overflow-y: auto; } .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }</style>
+    <link rel="stylesheet" href="styles.css?v=1.1.0" />
+    <style>
+        body { background: transparent; overflow-y: auto; } 
+        .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }
+        @keyframes loadbar { 0% { width: 0; } 100% { width: 100%; } }
+    </style>
 </head>
 <body data-role="reporter">
-    <div class="module-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-                <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Council Reporting Desk</h2>
-                <div style="font-size: 13px; font-weight: bold; color: var(--b); margin-top: 5px;">Internal Issue Escalation & Forwarding</div>
+    <div class="module-content" style="padding-top: 20px;">
+        
+        <!-- SPLASH SCREEN -->
+        <div id="rep-splash" class="rep-view admin-welcome-box" style="margin-top: 5vh !important;">
+            <div id="rep-tenant-logo" style="font-size: 60px; margin-bottom: 10px;">⚓</div>
+            <h2 id="rep-tenant-name" style="color: var(--b); margin: 0 0 5px 0; text-transform: uppercase;">Council</h2>
+            <h1 style="font-size: 32px; font-weight: 900; margin: 20px 0 10px 0; text-transform: uppercase;">VanGuard Reporter</h1>
+            <p style="font-size: 14px; font-weight: bold; color: #888;">Initializing Reporting Desk...</p>
+            <div style="width: 100%; max-width: 300px; height: 8px; background: #eee; border-radius: 4px; margin: 30px auto; overflow: hidden;">
+                <div style="height: 100%; background: var(--b); width: 0; animation: loadbar 3s ease-in-out forwards;"></div>
             </div>
         </div>
-        <div class="tenant-panel" style="padding:0; overflow:hidden; background:transparent; border:none;">
-            <div id="reports-list-render"></div>
+
+        <!-- MAIN MENU -->
+        <div id="rep-menu" class="rep-view" style="display:none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Reporting Desk</h2>
+                    <div style="font-size: 13px; font-weight: bold; color: var(--b); margin-top: 5px;">Select an operational tool</div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <div class="tenant-panel" style="text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="ReporterCtrl.switchView('create')">
+                    <div style="font-size: 50px; margin-bottom: 15px;">📝</div>
+                    <h3 style="margin:0 0 10px 0; color: var(--text-dark);">Create Report</h3>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Draft a new manual incident report.</p>
+                </div>
+                
+                <div class="tenant-panel" style="text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="ReporterCtrl.switchView('load')">
+                    <div style="font-size: 50px; margin-bottom: 15px;">📂</div>
+                    <h3 style="margin:0 0 10px 0; color: var(--text-dark);">Load Report</h3>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Open and edit an existing draft.</p>
+                </div>
+
+                <div class="tenant-panel" style="text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="ReporterCtrl.switchView('bank')">
+                    <div style="font-size: 50px; margin-bottom: 15px;">📋</div>
+                    <h3 style="margin:0 0 10px 0; color: var(--text-dark);">Job Bank</h3>
+                    <p style="font-size: 13px; color: #666; margin: 0;">Live feed of field agent issue logs.</p>
+                </div>
+            </div>
         </div>
+
+        <!-- CREATE REPORT TOOL (PLACEHOLDER) -->
+        <div id="rep-create" class="rep-view" style="display:none;">
+            <button class="std-btn gray" style="max-width: 150px; margin-bottom: 20px;" onclick="ReporterCtrl.switchView('menu')">⬅ Back to Menu</button>
+            <div class="tenant-panel">
+                <h3 style="margin-top:0; color: var(--b);">Create Manual Report</h3>
+                <p style="color:#666; font-size:13px;">Tool infrastructure pending configuration.</p>
+            </div>
+        </div>
+
+        <!-- LOAD REPORT TOOL (PLACEHOLDER) -->
+        <div id="rep-load" class="rep-view" style="display:none;">
+            <button class="std-btn gray" style="max-width: 150px; margin-bottom: 20px;" onclick="ReporterCtrl.switchView('menu')">⬅ Back to Menu</button>
+            <div class="tenant-panel">
+                <h3 style="margin-top:0; color: var(--b);">Load Existing Report</h3>
+                <p style="color:#666; font-size:13px;">Tool infrastructure pending configuration.</p>
+            </div>
+        </div>
+
+        <!-- JOB BANK (EXISTING REPORTER FEED) -->
+        <div id="rep-bank" class="rep-view" style="display:none;">
+            <button class="std-btn gray" style="max-width: 150px; margin-bottom: 20px;" onclick="ReporterCtrl.switchView('menu')">⬅ Back to Menu</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin:0; font-weight: 900; text-transform: uppercase; color: var(--text-dark);">Internal Escalation Feed</h2>
+            </div>
+            <div class="tenant-panel" style="padding:0; overflow:hidden; background:transparent; border:none;">
+                <div id="reports-list-render"></div>
+            </div>
+        </div>
+
     </div>
-    <script src="app.js?v=1.0.1"></script>
+    <script src="app.js?v=1.1.0"></script>
 </body>
 </html>
