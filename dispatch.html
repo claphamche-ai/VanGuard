@@ -5,95 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Dispatch</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=1.0.2" />
+    <link rel="stylesheet" href="styles.css?v=1.1.14" />
 </head>
-<body data-role="dispatch" style="margin:0; padding:0; overflow:hidden;">
+<body data-role="dispatch">
     <div class="menu-trigger" onclick="UI.openLeftSidebar()"><span></span><span></span><span></span></div>
     <div class="jobbank-trigger" onclick="UI.openRightSidebar()">📋 BANK</div>
+    <button class="map-control-btn fs-btn" onclick="UI.toggleFS()">⛶</button>
     
     <div id="left-sidebar" class="sidebar">
         <div class="sidebar-close" onclick="UI.closeLeftSidebar()">✕</div>
         <div class="sidebar-header">VanGuard</div>
-        <div class="sidebar-version">DISPATCH</div>
-        
-        <div style="margin-top: 20px; padding-bottom: 15px;">
-            <input type="text" id="dispatch-search" class="std-input" placeholder="Search...">
-            <button class="std-btn blue" onclick="DispatchCtrl.searchAddress()">🔍 Search</button>
-        </div>
+        <div class="sidebar-version">DISPATCH MODULE</div>
         
         <div class="nav-item" onclick="UI.toggleLayerList()" style="justify-content:space-between;">
-            <div>🗺️ Layers</div><div id="layer-chevron" style="font-size:12px;">▶</div>
+            <div>🗺️ Map Layers</div><div id="layer-chevron" style="font-size:12px;">▶</div>
         </div>
         <div id="layer-container" class="layer-list" style="display:none; padding:10px 0;"></div>
         
-        <div id="standalone-logout" class="nav-item logout-item" style="margin-top:20px;" onclick="location.href='index.html'">🚪 Log Out</div>
+        <div style="padding: 15px;">
+            <input type="text" id="dispatch-search" class="std-input" placeholder="Search Address...">
+            <button class="std-btn blue" onclick="DispatchCtrl.searchAddress()">Locate</button>
+        </div>
+
+        <div id="standalone-logout" class="nav-item logout-item" style="margin-top:20px; border-top: 1px solid rgba(0,0,0,0.1);" onclick="location.href='index.html'">🚪 Log Out</div>
     </div>
     
     <div id="right-sidebar" class="sidebar-right">
         <div class="sidebar-close" onclick="UI.closeRightSidebar()">✕</div>
-        <div class="sidebar-header" style="text-align:right;">Job Bank</div>
-        <div style="display: flex; gap: 5px; margin: 15px 0;">
-            <button class="std-btn blue" onclick="DispatchCtrl.renderBank('PENDING')">Pending</button>
-            <button class="std-btn gray" onclick="DispatchCtrl.renderBank('COMPLETED')">Completed</button>
+        <div class="sidebar-header" style="text-align: right;">Job Bank</div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0;">
+            <button class="std-btn blue" style="font-size:11px; padding:5px; margin:0;" onclick="DispatchCtrl.renderBank('PENDING')">Pending</button>
+            <button class="std-btn green" style="font-size:11px; padding:5px; margin:0;" onclick="DispatchCtrl.renderBank('COMPLETED')">Completed</button>
         </div>
-        <div id="dispatch-bank-list"></div>
+        <div id="dispatch-bank-list" style="margin-top: 10px;"></div>
     </div>
-    
+
     <div id="site-info" class="popup-box">
         <div class="info-header"><span id="s-name">Site</span><button onclick="UI.closePopup('site-info')">✕</button></div>
         <div class="info-body">
-            <div class="site-meta">
-                <div class="meta-row"><span id="s-type">--</span></div>
-                <div class="meta-row"><input type="text" id="s-address" class="inline-input" readonly></div>
+            <div class="site-meta" style="margin-bottom:10px;">
+                <div class="meta-row"><span class="meta-label">Type:</span> <span id="s-type" class="meta-value">--</span></div>
+                <div class="meta-row"><span class="meta-label">Address:</span> <input type="text" id="s-address" class="inline-input" readonly></div>
             </div>
         </div>
-        <div class="action-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="action-grid">
+            <button class="std-btn yellow" onclick="DispatchCtrl.openDispatchForm()">Dispatch</button>
             <button class="std-btn gray" onclick="DispatchCtrl.openHistory()">History</button>
-            <button class="std-btn green" onclick="DispatchCtrl.openDispatchForm()">Dispatch</button>
         </div>
     </div>
-    
+
     <div id="dispatch-overlay" class="full-overlay">
-        <div class="form-header"><span>DISPATCH</span><button onclick="UI.closeOverlay('dispatch')">✕</button></div>
+        <div class="form-header"><span>NEW DISPATCH</span><button onclick="UI.closeOverlay('dispatch')">✕</button></div>
         <div class="form-content">
-            <p>Site: <strong id="dispatch-target-name">--</strong></p>
-            <input type="text" id="dispatch-srn" class="std-input" placeholder="SRN">
-            <div id="assign-container" style="display:none; margin-bottom:10px;">
-                <label class="section-label" style="margin-top:0;">Assign To:</label>
-                <select id="dispatch-assign" class="std-input"><option value="UNASSIGNED">Open Pool (Any Active Worker)</option></select>
+            <p>Target: <strong id="dispatch-target-name">--</strong></p>
+            <input type="text" id="dispatch-srn" class="std-input" placeholder="Enter Council SRN (Optional)">
+            <textarea id="dispatch-notes" class="std-input textarea" placeholder="Dispatch instructions or notes..."></textarea>
+            
+            <div id="assign-container" style="display:none; margin-bottom:15px;">
+                <label class="section-label">Assign Worker (Optional)</label>
+                <select id="dispatch-assign" class="std-input"></select>
             </div>
-            <textarea id="dispatch-notes" class="std-input textarea" placeholder="Notes..."></textarea>
-            <div id="permanent-asset-request" style="display:none;"><label><input type="checkbox" id="dispatch-make-permanent"> Request Admin mapped asset</label></div>
-            <div class="footer-btns">
+
+            <div id="permanent-asset-request" style="background:#f4f6f8; padding:10px; border-radius:5px; margin-bottom:15px; border-left:3px solid var(--b);">
+                <label style="display:flex; align-items:center; cursor:pointer; font-size:12px;">
+                    <input type="checkbox" id="dispatch-make-permanent" style="margin-right:10px;"> Request Admin to add this as a permanent asset
+                </label>
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-top:20px;">
                 <button class="std-btn red" onclick="UI.closeOverlay('dispatch')">Cancel</button>
-                <button class="std-btn yellow" onclick="DispatchCtrl.submitJob()">Push</button>
+                <button class="std-btn yellow" onclick="DispatchCtrl.submitJob()">Send to Field</button>
             </div>
         </div>
     </div>
-    
-    <div id="history-overlay" class="full-overlay">
-        <div class="form-header"><span>SITE HISTORY</span><button onclick="UI.closeOverlay('history')">✕</button></div>
+
+    <!-- V1.1.14 - EDIT PENDING JOB OVERLAY -->
+    <div id="dispatch-edit-overlay" class="full-overlay" style="z-index: 9500;">
+        <div class="form-header" style="background:#f1c40f; color:#000;"><span>EDIT PENDING JOB</span><button onclick="UI.closeOverlay('dispatch-edit')" style="color:#000;">✕</button></div>
         <div class="form-content">
-            <p>Site: <strong id="history-target-name">--</strong></p>
-            <div>No previous logs.</div>
+            <p>Target: <strong id="edit-pend-site">--</strong></p>
+            <label class="section-label">Update SRN</label>
+            <input type="text" id="edit-pend-srn" class="std-input" placeholder="SRN">
+            
+            <label class="section-label">Update Notes</label>
+            <textarea id="edit-pend-notes" class="std-input textarea" placeholder="Instructions..."></textarea>
+            
+            <label class="section-label">Reassign Worker</label>
+            <select id="edit-pend-assign" class="std-input"></select>
+            
+            <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px dashed #ccc; padding-top:15px;">
+                <button class="std-btn red" style="width:auto; padding:10px 15px; font-size:12px;" onclick="DispatchCtrl.cancelPendingJob()">🛑 Cancel / Delete Job</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="std-btn gray" style="width:auto; padding:10px 20px;" onclick="UI.closeOverlay('dispatch-edit')">Discard</button>
+                    <button class="std-btn blue" style="width:auto; padding:10px 20px;" onclick="DispatchCtrl.saveEditJob()">💾 Save Edits</button>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div id="agent-tracker-overlay" class="full-overlay">
-        <div class="form-header"><span id="tracker-name-title">Agent Logs</span><button onclick="UI.closeOverlay('agent-tracker')">✕</button></div>
+
+    <div id="history-overlay" class="full-overlay">
+        <div class="form-header"><span>ASSET HISTORY</span><button onclick="UI.closeOverlay('history')">✕</button></div>
+        <div class="form-content">
+            <p>Target: <strong id="history-target-name">--</strong></p>
+            <div style="background:#f9f9f9; border:1px solid #ddd; padding:20px; text-align:center; color:#888; border-radius:5px;">
+                No historical work data found for this asset.
+            </div>
+        </div>
+    </div>
+
+    <div id="agent-tracker-overlay" class="full-overlay" style="z-index: 9200;">
+        <div class="form-header"><span id="tracker-name-title">Agent History</span><button onclick="UI.closeOverlay('agent-tracker')">✕</button></div>
         <div class="form-content">
             <input type="hidden" id="tracker-user-id">
-            <div style="background:#f4f6f8; padding:15px; border-radius:8px; margin-bottom:20px;">
-                <label style="font-weight:bold; font-size:12px; color:#555; text-transform:uppercase;">Select Date to View Shift Data:</label>
-                <input type="date" id="tracker-date" class="std-input" style="margin-top:5px; margin-bottom:0;" onchange="DispatchCtrl.renderAgentTracker()">
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="date" id="tracker-date" class="std-input" style="margin-bottom:0;">
+                <button class="std-btn blue" style="margin:0; width:auto;" onclick="DispatchCtrl.renderAgentTracker()">Load</button>
             </div>
-            <div id="tracker-results"></div>
+            <div id="tracker-results" style="max-height:60vh; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:5px; background:#f9f9f9;">
+                <p style="text-align:center; color:#888;">Select a date to view agent performance.</p>
+            </div>
         </div>
     </div>
-    
+
     <div id="dispatch-map" class="full-map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js"></script>
-    <script src="app.js?v=1.0.2"></script>
+    <script src="app.js?v=1.1.14"></script>
 </body>
 </html>
