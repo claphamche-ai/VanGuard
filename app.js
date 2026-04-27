@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V4.9.2 - TOOLS UI & GEO-ANCHORS
+// VANGUARD V4.9.3 - ADMIN TOOLS (KML & CSV)
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -46,13 +46,17 @@ const CoreDB = {
         if(patched) this.saveUsers(parsed); return parsed;
     },
     saveUsers: function(data) { localStorage.setItem('tt_users', JSON.stringify(data)); },
+    
+    getCustomKMLs: function() { return JSON.parse(localStorage.getItem('tt_custom_kmls') || '[]'); },
+    saveCustomKMLs: function(data) { localStorage.setItem('tt_custom_kmls', JSON.stringify(data)); },
+
     getJobBank: function() { return JSON.parse(localStorage.getItem('tt_jobbank') || '[]'); },
     saveJobBank: function(data) { localStorage.setItem('tt_jobbank', JSON.stringify(data)); },
     getActiveTenantId: function() { return localStorage.getItem('vg_active_tenant') || "T001"; },
     setActiveTenantId: function(id) { localStorage.setItem('vg_active_tenant', id); },
     getTenantJobs: function() { return this.getJobBank().filter(j => j.tenantId === this.getActiveTenantId()); },
     getJob: function(jobId) { return this.getJobBank().find(j => j.jobId === jobId); },
-    pushJob: function(jobObj) { let b = this.getJobBank(); jobObj.tenantId = this.getActiveTenantId(); jobObj.jobId = 'J-' + Date.now() + '-' + Math.floor(Math.random() * 1000); b.unshift(jobObj); this.saveJobBank(b); },
+    pushJob: function(jobObj) { let b = this.getJobBank(); jobObj.tenantId = this.getActiveTenantId(); jobObj.jobId = jobObj.jobId || ('J-' + Date.now() + '-' + Math.floor(Math.random() * 1000)); b.unshift(jobObj); this.saveJobBank(b); },
     removeJob: function(jobId) { let b = this.getJobBank(); b = b.filter(j => j.jobId !== jobId); this.saveJobBank(b); }
 };
 
@@ -103,28 +107,48 @@ class MapEngine {
     }
     loadKML() {
         const container = document.getElementById('layer-container'); if(!container) return;
-        CoreDB.kmlConfig.forEach(item => {
-            const div = document.createElement('div'); div.className = 'layer-item';
-            div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="window._mapEngine.toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
-            container.appendChild(div); const group = L.featureGroup(); this.layers[item.label] = group; const self = this;
-            const customLayer = L.geoJson(null, {
-                style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
-                pointToLayer: function(feature, latlng) {
-                    const marker = L.marker(latlng, { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                    marker.on('click', function(e) { self.handleAssetClick(e, feature.properties?.name, item.label, feature.properties?.address || feature.properties?.description, false); }); return marker;
-                }
-            });
-            const runLayer = omnivore.kml(item.file, null, customLayer);
-            runLayer.on('ready', function() {
-                runLayer.eachLayer(function(layer) {
-                    if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                        const centerMarker = L.marker(layer.getBounds().getCenter(), { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
-                        centerMarker.on('click', function(e) { self.handleAssetClick(e, layer.feature?.properties?.name, item.label, layer.feature?.properties?.address || layer.feature?.properties?.description, false); }); group.addLayer(centerMarker);
-                    }
-                }); self.map.addLayer(group);
-            }); group.addLayer(runLayer);
-        }); window._mapEngine = this; 
+        
+        // Load Static defaults
+        CoreDB.kmlConfig.forEach(item => { this.processKMLLayer(item, false); });
+        
+        // Load Custom Tenant KMLs
+        const customKMLs = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        customKMLs.forEach(item => { this.processKMLLayer(item, true); });
+        
+        window._mapEngine = this; 
     }
+    
+    processKMLLayer(item, isCustomStr) {
+        const container = document.getElementById('layer-container');
+        const div = document.createElement('div'); div.className = 'layer-item';
+        div.innerHTML = `<label style="display:flex; align-items:center; cursor:pointer;"><input type="checkbox" checked onchange="window._mapEngine.toggleLayer('${item.label}', this.checked)" style="margin-right:10px; width:18px; height:18px;"> <span style="font-size:18px; margin-right:8px;">${item.icon}</span> ${item.label}</label>`;
+        container.appendChild(div); const group = L.featureGroup(); this.layers[item.label] = group; const self = this;
+        
+        const customLayer = L.geoJson(null, {
+            style: function() { return { color: item.color, weight: 6, opacity: 0.7 }; },
+            pointToLayer: function(feature, latlng) {
+                const marker = L.marker(latlng, { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
+                marker.on('click', function(e) { self.handleAssetClick(e, feature.properties?.name, item.label, feature.properties?.address || feature.properties?.description, false); }); return marker;
+            }
+        });
+        
+        let runLayer;
+        if(isCustomStr) {
+            runLayer = omnivore.kml.parse(item.kmlString, null, customLayer);
+        } else {
+            runLayer = omnivore.kml(item.file, null, customLayer);
+        }
+        
+        runLayer.on('ready', function() {
+            runLayer.eachLayer(function(layer) {
+                if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                    const centerMarker = L.marker(layer.getBounds().getCenter(), { icon: L.divIcon({ className: '', html: `<div class="marker-inner" style="background-color: ${item.color}; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 18px;">${item.icon}</div>`, iconSize: [38, 38], iconAnchor: [19, 19] }) });
+                    centerMarker.on('click', function(e) { self.handleAssetClick(e, layer.feature?.properties?.name, item.label, layer.feature?.properties?.address || layer.feature?.properties?.description, false); }); group.addLayer(centerMarker);
+                }
+            }); self.map.addLayer(group);
+        }); group.addLayer(runLayer);
+    }
+    
     toggleLayer(name, show) { if(show) this.map.addLayer(this.layers[name]); else this.map.removeLayer(this.layers[name]); }
     handleAssetClick(event, name, type, address, isOneOff) {
         L.DomEvent.stopPropagation(event); const safeName = name || "Unknown Site"; const safeAddr = address || "No address data";
@@ -242,6 +266,99 @@ const AdminCtrl = {
     toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} }
 };
 
+const ToolsCtrl = {
+    init: function() { this.renderCustomKMLs(); },
+    triggerCSV: function() { document.getElementById('csv-upload').click(); },
+    processCSV: function(input) {
+        if(!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        
+        if (typeof Papa === 'undefined') { alert("Parser engine not loaded. Check internet connection."); return; }
+        
+        Papa.parse(file, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                const data = results.data;
+                let count = 0;
+                const tenantId = CoreDB.getActiveTenantId();
+                let bank = CoreDB.getJobBank();
+                
+                data.forEach(row => {
+                    let siteName = row['Site'] || row['Address'] || row['Location'] || row['Street'] || 'Historical Site';
+                    let srn = row['SRN'] || row['ID'] || row['Job Number'] || 'HISTORICAL';
+                    let notes = JSON.stringify(row); 
+                    
+                    let job = {
+                        jobId: 'H-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
+                        tenantId: tenantId,
+                        site: siteName,
+                        srn: srn,
+                        type: 'COMPLETED',
+                        notes: "[HISTORICAL IMPORT] Data mapping: " + notes,
+                        accumulated: 0,
+                        pausedAt: row['Date'] || new Date().toLocaleString('en-NZ')
+                    };
+                    bank.unshift(job);
+                    count++;
+                });
+                CoreDB.saveJobBank(bank);
+                alert(`Successfully imported ${count} historical records directly into the Job Bank.`);
+                input.value = ''; 
+            }
+        });
+    },
+    triggerKML: function() { document.getElementById('kml-upload').click(); },
+    processKML: function(input) {
+        if(!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const label = document.getElementById('kml-label').value || file.name.split('.')[0];
+        const color = document.getElementById('kml-color').value || '#ff00ff';
+        const icon = document.getElementById('kml-icon').value || '📍';
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const kmlString = e.target.result;
+            let custom = CoreDB.getCustomKMLs();
+            custom.push({ 
+                id: 'KML'+Date.now(), 
+                label: label, 
+                color: color, 
+                icon: icon, 
+                kmlString: kmlString, 
+                tenantId: CoreDB.getActiveTenantId() 
+            });
+            CoreDB.saveCustomKMLs(custom);
+            alert("KML Map Layer successfully ingested and saved to system memory.");
+            document.getElementById('kml-label').value = '';
+            ToolsCtrl.renderCustomKMLs();
+        };
+        reader.readAsText(file);
+        input.value = '';
+    },
+    renderCustomKMLs: function() {
+        const list = document.getElementById('custom-kml-list');
+        if(!list) return;
+        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        
+        if(custom.length === 0) { list.innerHTML = '<p style="font-size:13px; color:#888; font-style:italic;">No custom layers loaded.</p>'; return; }
+        
+        list.innerHTML = custom.map(k => `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f6f8; padding:10px; margin-top:10px; border-radius:5px; font-size:13px; border-left: 4px solid ${k.color};">
+                <div><strong>${k.icon} ${k.label}</strong></div>
+                <button class="std-btn red" style="width:auto; padding:5px 10px; font-size:11px;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete</button>
+            </div>
+        `).join('');
+    },
+    deleteKML: function(id) {
+        if(confirm("Remove this custom map layer from the system?")) {
+            let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id);
+            CoreDB.saveCustomKMLs(custom);
+            this.renderCustomKMLs();
+        }
+    }
+};
+
 const AccountsCtrl = {
     init: function() { this.renderUsers(); this.updateLicenseCounter(); },
     updateLicenseCounter: function() {
@@ -339,5 +456,6 @@ const GodCtrl = {
 document.addEventListener('DOMContentLoaded', () => {
     const role = document.body.dataset.role;
     if(role === 'agent') AgentCtrl.init(); if(role === 'dispatch') DispatchCtrl.init();
-    if(role === 'admin') AdminCtrl.init(); if(role === 'god') GodCtrl.init(); if(role === 'accounts') AccountsCtrl.init();
+    if(role === 'admin') AdminCtrl.init(); if(role === 'god') GodCtrl.init(); 
+    if(role === 'accounts') AccountsCtrl.init(); if(role === 'tools') ToolsCtrl.init();
 });
