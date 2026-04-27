@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.1.6 - REPORTER BRANDING & LOGOUT
+// VANGUARD V1.1.7 - RESTORATION PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -503,6 +503,141 @@ const DispatchCtrl = {
     }
 };
 
+const ToolsCtrl = {
+    tempFileObj: null,
+    init: function() { this.renderCustomKMLs(); },
+    switchView: function(viewId) { document.getElementById('tools-main-menu').style.display = 'none'; document.getElementById('tools-kml-manager').style.display = 'none'; document.getElementById('tools-' + viewId).style.display = 'block'; },
+    openUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'block'; document.getElementById('new-kml-label').value = ''; document.getElementById('kml-file-name').innerText = 'No file selected'; this.tempFileObj = null; },
+    closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
+    handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
+    processUpload: function() {
+        if(!this.tempFileObj) { alert("Please select a KML file first."); return; }
+        const label = document.getElementById('new-kml-label').value || this.tempFileObj.name.replace('.kml', ''); const color = document.getElementById('new-kml-color').value || '#ff00ff'; const icon = document.getElementById('new-kml-icon').value || '📍';
+        const reader = new FileReader();
+        reader.onload = (e) => { const kmlString = e.target.result; let custom = CoreDB.getCustomKMLs(); custom.push({ id: 'KML'+Date.now(), label: label, color: color, icon: icon, status: 'ACTIVE', kmlString: kmlString, tenantId: CoreDB.getActiveTenantId() }); CoreDB.saveCustomKMLs(custom); this.closeUploadForm(); this.renderCustomKMLs(); };
+        reader.readAsText(this.tempFileObj);
+    },
+    renderCustomKMLs: function() {
+        const list = document.getElementById('kml-list-render'); if(!list) return;
+        const custom = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId());
+        if(custom.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; padding: 20px;">No custom layers loaded.</p>'; return; }
+        list.innerHTML = custom.map(k => {
+            const statColor = k.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6';
+            return `<div style="background:#fff; border-bottom:1px solid #eee; padding:15px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="ToolsCtrl.toggleEditRow('kml-edit-${k.id}')"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="display:flex; align-items:center;"><span style="font-size:24px; margin-right:15px; display:inline-block; width:40px; height:40px; border-radius:50%; background:${k.color}; color:#fff; text-align:center; line-height:40px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">${k.icon}</span><strong style="font-size:15px; color:var(--b);">${k.label}</strong></div><span class="badge" style="background:${statColor};">${k.status || 'ACTIVE'}</span></div></div><div id="kml-edit-${k.id}" style="display:none; background:#fafafa; border-bottom:2px solid #ddd; padding:20px; box-shadow:inset 0 3px 5px rgba(0,0,0,0.05);"><div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;"><div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="kml-lbl-${k.id}" class="std-input" value="${k.label}"></div><div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="kml-col-${k.id}" class="std-input" value="${k.color}" style="padding:5px; height:48px;"></div><div><label class="section-label" style="margin-top:0;">Icon</label><select id="kml-icn-${k.id}" class="std-input"><option value="📍" ${k.icon==='📍'?'selected':''}>📍 Pin</option><option value="⚡" ${k.icon==='⚡'?'selected':''}>⚡ Electric</option><option value="🛣️" ${k.icon==='🛣️'?'selected':''}>🛣️ Road</option><option value="🌉" ${k.icon==='🌉'?'selected':''}>🌉 Bridge</option><option value="🏢" ${k.icon==='🏢'?'selected':''}>🏢 Building</option><option value="🌳" ${k.icon==='🌳'?'selected':''}>🌳 Park</option></select></div><div><label class="section-label" style="margin-top:0;">Status</label><select id="kml-stat-${k.id}" class="std-input"><option value="ACTIVE" ${k.status==='ACTIVE'?'selected':''}>Active</option><option value="INACTIVE" ${k.status==='INACTIVE'?'selected':''}>Inactive</option></select></div></div><div style="display:flex; justify-content:space-between; margin-top:10px;"><button class="std-btn red" style="width:auto;" onclick="ToolsCtrl.deleteKML('${k.id}')">Delete Layer</button><button class="std-btn blue" style="width:auto;" onclick="ToolsCtrl.updateKML('${k.id}')">Save Changes</button></div></div>`;
+        }).join('');
+    },
+    toggleEditRow: function(id) { const el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'none') ? 'block' : 'none'; },
+    updateKML: function(id) { let custom = CoreDB.getCustomKMLs(); const idx = custom.findIndex(k => k.id === id); if(idx !== -1) { custom[idx].label = document.getElementById(`kml-lbl-${id}`).value; custom[idx].color = document.getElementById(`kml-col-${id}`).value; custom[idx].icon = document.getElementById(`kml-icn-${id}`).value; custom[idx].status = document.getElementById(`kml-stat-${id}`).value; CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } },
+    deleteKML: function(id) { if(confirm("Remove this custom map layer entirely?")) { let custom = CoreDB.getCustomKMLs().filter(k => k.id !== id); CoreDB.saveCustomKMLs(custom); this.renderCustomKMLs(); } }
+};
+
+const AccountsCtrl = {
+    init: function() { this.renderUsers(); this.updateLicenseCounter(); },
+    updateLicenseCounter: function() { const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE'); const el = document.getElementById('license-counter'); if(el && tenant) { el.innerText = `Licenses: ${users.length} of ${tenant.licenses} Used`; if(users.length >= tenant.licenses) el.style.color = '#e74c3c'; else el.style.color = 'var(--b)'; } },
+    generateLayerCheckboxes: function(containerId, activeAllowedLayers = []) {
+        const container = document.getElementById(containerId); if(!container) return; const tenantLayers = CoreDB.getCustomKMLs().filter(k => k.tenantId === CoreDB.getActiveTenantId() && k.status === 'ACTIVE');
+        if(tenantLayers.length === 0) { container.innerHTML = '<span style="font-size:12px; color:#888;">No active custom layers available.</span>'; return; }
+        container.innerHTML = tenantLayers.map(layer => { const isChecked = activeAllowedLayers.includes(layer.id) ? 'checked' : ''; return `<label style="display:flex; align-items:center; cursor:pointer; font-size:13px; color:#333;"><input type="checkbox" value="${layer.id}" class="layer-rbac-cb" style="width:16px; height:16px; margin-right:5px;" ${isChecked}> ${layer.icon} ${layer.label}</label>`; }).join('');
+    },
+    getCheckedLayers: function(containerId) { const container = document.getElementById(containerId); if(!container) return []; const checkboxes = container.querySelectorAll('.layer-rbac-cb:checked'); return Array.from(checkboxes).map(cb => cb.value); },
+    openCreateForm: function() { 
+        this.closeEditForm(); const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const activeUsers = CoreDB.getUsers().filter(u => u.tenantId === activeId && u.status === 'ACTIVE').length;
+        if(activeUsers >= tenant.licenses) { alert(`License limit reached (${tenant.licenses}). Please deactivate an existing user or request more licenses from Core Administration.`); return; }
+        document.getElementById('new-acc-username').value = ''; document.getElementById('new-acc-password').value = ''; document.getElementById('new-acc-name').value = ''; document.getElementById('new-acc-contact').value = ''; document.getElementById('new-acc-role').value = 'agent'; document.getElementById('new-acc-status').value = 'ACTIVE'; 
+        
+        // V1.1.7 Fix: Verify punch-in element exists before setting it
+        const punchEl = document.getElementById('new-acc-punch');
+        if(punchEl) punchEl.checked = true;
+        
+        this.generateLayerCheckboxes('new-acc-layers', []); document.getElementById('accounts-create-form').style.display = 'block'; 
+    },
+    closeCreateForm: function() { document.getElementById('accounts-create-form').style.display = 'none'; },
+    openEditForm: function(id) {
+        this.closeCreateForm(); const user = CoreDB.getUsers().find(u => u.id === id); if(!user) return;
+        document.getElementById('edit-acc-id').value = user.id; document.getElementById('edit-acc-username').value = user.username; document.getElementById('edit-acc-password').value = user.password; document.getElementById('edit-acc-role').value = user.role; document.getElementById('edit-acc-name').value = user.name || ''; document.getElementById('edit-acc-contact').value = user.contact || ''; document.getElementById('edit-acc-status').value = user.status || 'ACTIVE'; 
+        
+        // V1.1.7 Fix: Verify punch-in element exists
+        const punchEl = document.getElementById('edit-acc-punch');
+        if(punchEl) punchEl.checked = typeof user.requirePunchIn !== 'undefined' ? user.requirePunchIn : true;
+        
+        this.generateLayerCheckboxes('edit-acc-layers', user.allowedLayers || []); document.getElementById('accounts-edit-form').style.display = 'block';
+    },
+    closeEditForm: function() { document.getElementById('accounts-edit-form').style.display = 'none'; },
+    renderUsers: function() {
+        const list = document.getElementById('accounts-list-render'); if(!list) return; const activeId = CoreDB.getActiveTenantId(); const users = CoreDB.getUsers().filter(u => u.tenantId === activeId);
+        if (users.length === 0) { list.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: #888;">No accounts provisioned.</td></tr>'; return; }
+        list.innerHTML = users.map(u => {
+            const statColor = u.status === 'ACTIVE' ? '#2ecc71' : '#95a5a6'; const roleColor = u.role === 'admin' ? '#e74c3c' : (u.role === 'dispatch' ? '#9b59b6' : (u.role === 'reporter' ? '#f39c12' : '#2980b9'));
+            return `<tr style="border-bottom: 1px solid #eee; background: #fff; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f4f6f8'" onmouseout="this.style.background='#fff'" onclick="AccountsCtrl.openEditForm('${u.id}')"><td style="padding: 15px;"><strong style="color: var(--b); font-size: 15px;">${u.name || u.username}</strong><br><span style="color: #666; font-size: 12px;">Login: ${u.username} ${u.contact ? '| '+u.contact : ''}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${roleColor};">${u.role.toUpperCase()}</span></td><td style="padding: 15px;"><span class="badge" style="background: ${statColor};">${u.status || 'ACTIVE'}</span></td></tr>`
+        }).join(''); this.updateLicenseCounter();
+    },
+    createUser: function() {
+        const u = document.getElementById('new-acc-username').value.trim().toLowerCase(); const p = document.getElementById('new-acc-password').value.trim(); const r = document.getElementById('new-acc-role').value; const n = document.getElementById('new-acc-name').value.trim(); const c = document.getElementById('new-acc-contact').value.trim(); const s = document.getElementById('new-acc-status').value; const activeId = CoreDB.getActiveTenantId();
+        
+        const punchEl = document.getElementById('new-acc-punch');
+        const reqPunch = punchEl ? punchEl.checked : true;
+        
+        const allowedLayers = this.getCheckedLayers('new-acc-layers'); if(!u || !p) { alert("Username and Password are required."); return; }
+        let db = CoreDB.getUsers(); if(db.find(user => user.username === u)) { alert("Username already exists in the system."); return; }
+        const newId = 'U' + Date.now().toString().slice(-6); db.push({ id: newId, username: u, password: p, role: r, tenantId: activeId, name: n, contact: c, status: s, allowedLayers: allowedLayers, requirePunchIn: reqPunch }); CoreDB.saveUsers(db); this.closeCreateForm(); this.renderUsers();
+    },
+    saveUser: function() {
+        const id = document.getElementById('edit-acc-id').value; const u = document.getElementById('edit-acc-username').value.trim().toLowerCase(); const p = document.getElementById('edit-acc-password').value.trim(); const r = document.getElementById('edit-acc-role').value; const n = document.getElementById('edit-acc-name').value.trim(); const c = document.getElementById('edit-acc-contact').value.trim(); const s = document.getElementById('edit-acc-status').value;
+        
+        const punchEl = document.getElementById('edit-acc-punch');
+        const reqPunch = punchEl ? punchEl.checked : true;
+        
+        const allowedLayers = this.getCheckedLayers('edit-acc-layers'); if(!u || !p) { alert("Username and Password are required."); return; }
+        let db = CoreDB.getUsers(); const duplicate = db.find(user => user.username === u && user.id !== id); if(duplicate) { alert("Username already exists in the system."); return; }
+        const activeId = CoreDB.getActiveTenantId(); const tenant = CoreDB.getTenants().find(t => t.id === activeId); const userIndex = db.findIndex(user => user.id === id);
+        if(userIndex !== -1) {
+            if(db[userIndex].status !== 'ACTIVE' && s === 'ACTIVE') { const activeUsers = db.filter(user => user.tenantId === activeId && user.status === 'ACTIVE').length; if(activeUsers >= tenant.licenses) { alert(`Cannot activate user. License limit reached (${tenant.licenses}).`); return; } }
+            db[userIndex].username = u; db[userIndex].password = p; db[userIndex].role = r; db[userIndex].name = n; db[userIndex].contact = c; db[userIndex].status = s; db[userIndex].allowedLayers = allowedLayers; db[userIndex].requirePunchIn = reqPunch; CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers();
+        }
+    },
+    deleteUserFromEdit: function() { const id = document.getElementById('edit-acc-id').value; if(confirm("Are you sure you want to permanently delete this user account?")) { let db = CoreDB.getUsers().filter(u => u.id !== id); CoreDB.saveUsers(db); this.closeEditForm(); this.renderUsers(); } }
+};
+
+const AdminCtrl = {
+    init: function() { 
+        this.renderSchema(); this.renderFlags();
+        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
+        if(t) { if(document.getElementById('admin-tenant-name')) document.getElementById('admin-tenant-name').innerText = t.name; if(document.getElementById('admin-tenant-motto')) document.getElementById('admin-tenant-motto').innerText = t.motto || ''; const logoEl = document.getElementById('admin-tenant-logo'); if(logoEl) { if(t.logo) logoEl.innerHTML = `<img src="${t.logo}" style="max-height:80px; max-width:200px;">`; else logoEl.innerHTML = `⚓`; } }
+    },
+    switchTab: function(id) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); document.getElementById('tab-' + id).style.display = 'block'; const contentArea = document.querySelector('.admin-content'); if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; } if(id === 'settings') { this.closeSubPanel('fields'); this.closeSubPanel('flags'); } },
+    loadModule: function(url, navElement) { document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); if(navElement) navElement.classList.add('active-nav'); this.switchTab('iframe'); document.getElementById('admin-module-frame').src = url; },
+    openSubPanel: function(id) { document.getElementById('settings-overview').style.display = 'none'; document.getElementById('panel-' + id).style.display = 'block'; },
+    closeSubPanel: function(id) { document.getElementById('panel-' + id).style.display = 'none'; document.getElementById('settings-overview').style.display = 'block'; },
+    renderSchema: function() {
+        const c = document.getElementById('admin-schema-render'); if(!c) return; 
+        let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="border-bottom:2px solid #ddd; color:#666;"><th style="padding:10px 5px;">Data Field</th><th style="padding:10px 5px; text-align:center; width:120px;">Visible</th><th style="padding:10px 5px; text-align:center; width:120px;">Mandatory</th></tr>';
+        
+        const schema = CoreDB.getSchema();
+        const groups = {};
+        schema.forEach(f => {
+            const cat = f.category || 'General Info';
+            if(!groups[cat]) groups[cat] = [];
+            groups[cat].push(f);
+        });
+
+        for(const [cat, fields] of Object.entries(groups)) {
+            html += `<tr style="background:#f4f6f8;"><td colspan="3" style="padding:8px 5px; font-weight:900; color:#555; text-transform:uppercase; font-size:11px;">${cat}</td></tr>`;
+            fields.forEach(f => {
+                html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
+                if(f.type === 'select') { html += `<td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="UI.toggleSubRow('adm-sub-${f.id}', 'adm-icon-${f.id}')"><span id="adm-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`; } else { html += `<td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`; }
+                html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantVisible?'checked':''} onchange="AdminCtrl.toggleVis('${f.id}')"><span class="slider"></span></label></td><td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantMandatory?'checked':''} onchange="AdminCtrl.toggleMan('${f.id}')"><span class="slider"></span></label></td></tr>`;
+                if(f.type === 'select') { html += `<tr id="adm-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 15px 15px 20px 35px;"><div class="sub-options-list">`; f.options.forEach(opt => { html += `<div class="sub-option-row"><span>${opt.name}</span><label class="toggle-switch small"><input type="checkbox" ${opt.visible?'checked':''} onchange="AdminCtrl.toggleOptVis('${f.id}', '${opt.name}')"><span class="slider"></span></label></div>`; }); html += `</div></td></tr>`; }
+            });
+        }
+        c.innerHTML = html + '</table>';
+    },
+    renderFlags: function() { const c = document.getElementById('admin-flags-render'); if(!c) return; const flags = CoreDB.getFlags(); c.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;"><div><strong style="color:var(--text-dark);">Live Agent Tracking</strong><br><span style="font-size:12px; color:#666;">Shows active vans on Dispatch map.</span></div><label class="toggle-switch"><input type="checkbox" ${flags.liveTracking?'checked':''} onchange="AdminCtrl.toggleFlag('liveTracking')"><span class="slider"></span></label></div><div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;"><div><strong style="color:var(--text-dark);">Direct Dispatch Assignment</strong><br><span style="font-size:12px; color:#666;">Allows dispatching jobs to specific agents.</span></div><label class="toggle-switch"><input type="checkbox" ${flags.directAssignment?'checked':''} onchange="AdminCtrl.toggleFlag('directAssignment')"><span class="slider"></span></label></div>`; },
+    toggleVis: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantVisible=!f.tenantVisible; CoreDB.saveSchema(db); this.renderSchema();} },
+    toggleMan: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantMandatory=!f.tenantMandatory; CoreDB.saveSchema(db); this.renderSchema();} },
+    toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} },
+    toggleFlag: function(key) { let flags = CoreDB.getFlags(); flags[key] = !flags[key]; CoreDB.saveFlags(flags); this.renderFlags(); }
+};
+
 const ReporterCtrl = {
     replayMap: null, replayLayerGroup: null, replayMarkers: {}, currentReplayWorker: null,
     
@@ -513,7 +648,6 @@ const ReporterCtrl = {
             const logoEl = document.getElementById('rep-tenant-logo'); if(logoEl) logoEl.innerHTML = t.logo ? `<img src="${t.logo}" style="max-height:80px; max-width:200px;">` : '⚓';
             const nameEl = document.getElementById('rep-tenant-name'); if(nameEl) nameEl.innerText = t.name;
 
-            // Update top bar menu branding
             const menuLogoEl = document.getElementById('menu-tenant-logo'); if(menuLogoEl) menuLogoEl.innerHTML = t.logo ? `<img src="${t.logo}" style="max-height:40px; max-width:40px; border-radius:50%;">` : '⚓';
             const menuNameEl = document.getElementById('menu-tenant-name'); if(menuNameEl) menuNameEl.innerText = t.name;
         }
@@ -647,46 +781,6 @@ ${r.notes}
             this.replayMarkers[jobId].openPopup();
         }
     }
-};
-
-const AdminCtrl = {
-    init: function() { 
-        this.renderSchema(); this.renderFlags();
-        const activeId = CoreDB.getActiveTenantId(); const t = CoreDB.getTenants().find(x => x.id === activeId);
-        if(t) { if(document.getElementById('admin-tenant-name')) document.getElementById('admin-tenant-name').innerText = t.name; if(document.getElementById('admin-tenant-motto')) document.getElementById('admin-tenant-motto').innerText = t.motto || ''; const logoEl = document.getElementById('admin-tenant-logo'); if(logoEl) { if(t.logo) logoEl.innerHTML = `<img src="${t.logo}" style="max-height:80px; max-width:200px;">`; else logoEl.innerHTML = `⚓`; } }
-    },
-    switchTab: function(id) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); document.getElementById('tab-' + id).style.display = 'block'; const contentArea = document.querySelector('.admin-content'); if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; } if(id === 'settings') { this.closeSubPanel('fields'); this.closeSubPanel('flags'); } },
-    loadModule: function(url, navElement) { document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); if(navElement) navElement.classList.add('active-nav'); this.switchTab('iframe'); document.getElementById('admin-module-frame').src = url; },
-    openSubPanel: function(id) { document.getElementById('settings-overview').style.display = 'none'; document.getElementById('panel-' + id).style.display = 'block'; },
-    closeSubPanel: function(id) { document.getElementById('panel-' + id).style.display = 'none'; document.getElementById('settings-overview').style.display = 'block'; },
-    renderSchema: function() {
-        const c = document.getElementById('admin-schema-render'); if(!c) return; 
-        let html = '<table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;"><tr style="border-bottom:2px solid #ddd; color:#666;"><th style="padding:10px 5px;">Data Field</th><th style="padding:10px 5px; text-align:center; width:120px;">Visible</th><th style="padding:10px 5px; text-align:center; width:120px;">Mandatory</th></tr>';
-        
-        const schema = CoreDB.getSchema();
-        const groups = {};
-        schema.forEach(f => {
-            const cat = f.category || 'General Info';
-            if(!groups[cat]) groups[cat] = [];
-            groups[cat].push(f);
-        });
-
-        for(const [cat, fields] of Object.entries(groups)) {
-            html += `<tr style="background:#f4f6f8;"><td colspan="3" style="padding:8px 5px; font-weight:900; color:#555; text-transform:uppercase; font-size:11px;">${cat}</td></tr>`;
-            fields.forEach(f => {
-                html += `<tr style="border-bottom: 1px solid #eee; background: #fff;">`;
-                if(f.type === 'select') { html += `<td style="padding: 12px 5px; font-weight:bold; cursor: pointer; color: var(--b);" onclick="UI.toggleSubRow('adm-sub-${f.id}', 'adm-icon-${f.id}')"><span id="adm-icon-${f.id}" style="display:inline-block; width: 15px;">▶</span> ${f.label}</td>`; } else { html += `<td style="padding: 12px 5px; font-weight:bold; color: #333;"><span style="display:inline-block; width: 15px;"></span> ${f.label}</td>`; }
-                html += `<td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantVisible?'checked':''} onchange="AdminCtrl.toggleVis('${f.id}')"><span class="slider"></span></label></td><td style="padding: 12px 5px; text-align: center;"><label class="toggle-switch"><input type="checkbox" ${f.tenantMandatory?'checked':''} onchange="AdminCtrl.toggleMan('${f.id}')"><span class="slider"></span></label></td></tr>`;
-                if(f.type === 'select') { html += `<tr id="adm-sub-${f.id}" style="display: none; background: #fafafa; border-bottom: 2px solid #ddd;"><td colspan="3" style="padding: 15px 15px 20px 35px;"><div class="sub-options-list">`; f.options.forEach(opt => { html += `<div class="sub-option-row"><span>${opt.name}</span><label class="toggle-switch small"><input type="checkbox" ${opt.visible?'checked':''} onchange="AdminCtrl.toggleOptVis('${f.id}', '${opt.name}')"><span class="slider"></span></label></div>`; }); html += `</div></td></tr>`; }
-            });
-        }
-        c.innerHTML = html + '</table>';
-    },
-    renderFlags: function() { const c = document.getElementById('admin-flags-render'); if(!c) return; const flags = CoreDB.getFlags(); c.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;"><div><strong style="color:var(--text-dark);">Live Agent Tracking</strong><br><span style="font-size:12px; color:#666;">Shows active vans on Dispatch map.</span></div><label class="toggle-switch"><input type="checkbox" ${flags.liveTracking?'checked':''} onchange="AdminCtrl.toggleFlag('liveTracking')"><span class="slider"></span></label></div><div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;"><div><strong style="color:var(--text-dark);">Direct Dispatch Assignment</strong><br><span style="font-size:12px; color:#666;">Allows dispatching jobs to specific agents.</span></div><label class="toggle-switch"><input type="checkbox" ${flags.directAssignment?'checked':''} onchange="AdminCtrl.toggleFlag('directAssignment')"><span class="slider"></span></label></div>`; },
-    toggleVis: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantVisible=!f.tenantVisible; CoreDB.saveSchema(db); this.renderSchema();} },
-    toggleMan: function(id) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===id); if(f){f.tenantMandatory=!f.tenantMandatory; CoreDB.saveSchema(db); this.renderSchema();} },
-    toggleOptVis: function(fid, opt) { let db=CoreDB.getSchema(); let f=db.find(x=>x.id===fid); if(f){let o=f.options.find(y=>y.name===opt); if(o){o.visible=!o.visible; CoreDB.saveSchema(db); this.renderSchema();}} },
-    toggleFlag: function(key) { let flags = CoreDB.getFlags(); flags[key] = !flags[key]; CoreDB.saveFlags(flags); this.renderFlags(); }
 };
 
 const GodCtrl = {
