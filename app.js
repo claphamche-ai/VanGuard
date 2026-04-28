@@ -1,5 +1,5 @@
 // ==========================================
-// VANGUARD V1.1.21 - FATAL SYNTAX PATCH
+// VANGUARD V1.1.22 - IMPERSONATION PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
 
@@ -193,14 +193,8 @@ const UI = {
             <div style="position:absolute; top:20px; right:20px; color:white; font-size:30px; cursor:pointer; z-index:10001; text-shadow:0 2px 4px rgba(0,0,0,0.5);" onclick="UI.closeLightbox()">✕</div>
             <div id="lb-prev" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); color:white; font-size:50px; cursor:pointer; z-index:10001; text-shadow:0 2px 4px rgba(0,0,0,0.5);" onclick="UI.changeLightbox(-1)">❮</div>
             <div id="lb-next" style="position:absolute; right:20px; top:50%; transform:translateY(-50%); color:white; font-size:50px; cursor:pointer; z-index:10001; text-shadow:0 2px 4px rgba(0,0,0,0.5);" onclick="UI.changeLightbox(1)">❯</div>
-            <div style="position:relative; width:90%; height:80%; display:flex; align-items:center; justify-content:center; overflow:hidden;" id="lb-img-container">
-                <img id="lb-img" src="" draggable="false" style="max-width:100%; max-height:100%; transition: transform 0.1s ease-out; cursor:grab;" onwheel="UI.zoomLightbox(event)">
-            </div>
-            <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:white; font-family:monospace; display:flex; justify-content:center; gap:20px; align-items:center;">
-                <span id="lb-counter" style="background:rgba(255,255,255,0.2); padding:5px 10px; border-radius:5px;">1/1</span>
-                <span id="lb-caption" style="text-transform:uppercase; color:#ffea00; font-size:16px; font-weight:bold; letter-spacing:1px;"></span>
-                <button class="std-btn gray" style="padding:5px 10px; font-size:12px; margin:0;" onclick="UI.resetZoom()">Reset Zoom</button>
-            </div>
+            <div style="position:relative; width:90%; height:80%; display:flex; align-items:center; justify-content:center; overflow:hidden;" id="lb-img-container"><img id="lb-img" src="" draggable="false" style="max-width:100%; max-height:100%; transition: transform 0.1s ease-out; cursor:grab;" onwheel="UI.zoomLightbox(event)"></div>
+            <div style="position:absolute; bottom:20px; width:100%; text-align:center; color:white; font-family:monospace; display:flex; justify-content:center; gap:20px; align-items:center;"><span id="lb-counter" style="background:rgba(255,255,255,0.2); padding:5px 10px; border-radius:5px;">1/1</span><span id="lb-caption" style="text-transform:uppercase; color:#ffea00; font-size:16px; font-weight:bold; letter-spacing:1px;"></span><button class="std-btn gray" style="padding:5px 10px; font-size:12px; margin:0;" onclick="UI.resetZoom()">Reset Zoom</button></div>
         `;
         document.body.appendChild(lb);
         let img = document.getElementById('lb-img'); let isDragging = false, startX, startY;
@@ -571,6 +565,19 @@ const GodCtrl = {
     init: function() { this.renderSchema(); this.renderTenants(); this.renderTenantMetrics(false); },
     switchTab: function(id, e) { document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none'); const targetTab = document.getElementById('tab-' + id); if(targetTab) targetTab.style.display = 'block'; const contentArea = document.querySelector('.admin-content'); if(contentArea) { contentArea.style.overflowY = (id === 'iframe') ? 'hidden' : 'auto'; } if(e && e.currentTarget) { document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-nav')); e.currentTarget.classList.add('active-nav'); } if(id === 'tenant-metrics') this.renderTenantMetrics(false); },
     currentMetricsData: [],
+    
+    // V1.1.22: FIXED IMPERSONATE TENANT LOGIC
+    impersonateTenant: function(id) { 
+        const adminUser = CoreDB.getUsers().find(u => u.tenantId === id && u.role === 'admin');
+        if(adminUser) {
+            CoreDB.setActiveTenantId(id); 
+            localStorage.setItem('vg_active_user', adminUser.username);
+            window.open('admin.html', '_blank'); 
+        } else {
+            alert("No Admin account configured for this tenant. Please set a Master Admin Username and Password below, save changes, and try again.");
+        }
+    },
+
     renderTenantMetrics: function(useDates = false) {
         const container = document.getElementById('god-tenant-metrics-results'); if(!container) return;
         let fTime = 0, tTime = Date.now() + 31536000000;
