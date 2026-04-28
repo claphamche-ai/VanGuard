@@ -1,7 +1,9 @@
 // ==========================================
-// VANGUARD V1.1.27 - PRISTINE MASTER SCRIPT
+// VANGUARD V1.1.28 - GLOBAL VERSIONING PATCH
 // ==========================================
 const BRAND_NAME = "VanGuard";
+const APP_VERSION = "v1.1.28";
+
 
 const ASSET_ICONS = [
     {val: '🏢', label: 'Commercial Building'}, {val: '🛍️', label: 'Suburban Shopping Center'},
@@ -25,6 +27,7 @@ const ASSET_ICONS = [
     {val: '🌳', label: 'Tree'}, {val: '🚐', label: 'Vehicle'},
     {val: '❓', label: 'Other'}
 ];
+
 
 const CoreDB = {
     defaultSchema: [
@@ -675,8 +678,11 @@ const ToolsCtrl = {
         document.getElementById('new-kml-label').value = ''; 
         document.getElementById('kml-file-name').innerText = 'No file selected'; 
         this.tempFileObj = null; 
+        
         const sel = document.getElementById('new-kml-icon');
-        if(sel) { sel.innerHTML = ASSET_ICONS.map(ic => `<option value="${ic.val}">${ic.val} ${ic.label}</option>`).join(''); }
+        if(sel) {
+            sel.innerHTML = ASSET_ICONS.map(ic => `<option value="${ic.val}">${ic.val} ${ic.label}</option>`).join('');
+        }
     },
     closeUploadForm: function() { document.getElementById('kml-upload-form').style.display = 'none'; this.tempFileObj = null; },
     handleFileSelect: function(input) { if(input.files && input.files[0]) { this.tempFileObj = input.files[0]; document.getElementById('kml-file-name').innerText = this.tempFileObj.name; if(!document.getElementById('new-kml-label').value) { document.getElementById('new-kml-label').value = this.tempFileObj.name.replace('.kml', ''); } } },
@@ -786,6 +792,15 @@ const OverlayMakerCtrl = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic Version Injection
+    const versionEl = document.createElement('div');
+    versionEl.innerText = `${APP_VERSION}`;
+    versionEl.style.cssText = 'position:fixed; bottom:5px; right:10px; color:#999; font-size:10px; font-family:monospace; z-index:99999; pointer-events:none; opacity:0.8;';
+    document.body.appendChild(versionEl);
+
+    // Auto-update login screen elements
+    document.querySelectorAll('.version').forEach(el => el.innerText = APP_VERSION);
+
     const role = document.body.dataset.role;
     if(role === 'agent') AgentCtrl.init(); 
     if(role === 'dispatch') DispatchCtrl.init();
