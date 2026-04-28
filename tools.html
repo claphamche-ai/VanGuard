@@ -4,63 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VanGuard | Tools</title>
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
-    <style>body{background:transparent;} .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }</style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=1.1.21" />
+    <style>
+        body { background: #f4f6f8; overflow-y: auto; } 
+        .admin-content { padding: 0; margin-top: 0; min-height: auto; width: 100%; align-items: flex-start; }
+    </style>
 </head>
 <body data-role="tools">
-    <div class="module-content">
-        <div id="tools-main-menu">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div class="module-content" style="padding-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #34495e; color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 30px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; overflow:hidden;">🧰</div>
                 <div>
-                    <h2 style="margin:0; font-weight: 900; text-transform: uppercase;">Admin Tools</h2>
-                    <div style="font-size: 13px; font-weight: bold; color: var(--b);">System Utilities</div>
-                </div>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="tenant-panel" style="text-align: center; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="ToolsCtrl.switchView('kml-manager')">
-                    <div style="font-size: 50px; margin-bottom: 15px;">🗺️</div>
-                    <h3 style="margin:0 0 10px 0; color: var(--text-dark);">KML Manager</h3>
-                    <p style="font-size: 13px; color: #666; margin: 0;">Upload, edit, and configure dynamic map layers.</p>
-                </div>
-                <div class="tenant-panel" style="text-align: center; opacity: 0.5;">
-                    <div style="font-size: 50px; margin-bottom: 15px;">📊</div>
-                    <h3 style="margin:0 0 10px 0; color: var(--text-dark);">Historical Data</h3>
-                    <p style="font-size: 13px; color: #666; margin: 0;">Pending DB Integration.</p>
+                    <h3 style="margin: 0; font-size: 16px; font-weight:900; text-transform:uppercase;">Admin Tools</h3>
+                    <div style="font-size: 11px; color: #aaa; margin-top:2px;">Layer Management & Conversions</div>
                 </div>
             </div>
         </div>
 
-        <div id="tools-kml-manager" style="display: none;">
-            <button class="std-btn gray" style="max-width: 150px; margin-bottom: 20px;" onclick="ToolsCtrl.switchView('main-menu')">⬅ Back to Tools</button>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin:0; font-weight: 900; text-transform: uppercase;">KML Manager</h2>
-                <button class="std-btn green" style="width: auto; padding: 10px 20px;" onclick="ToolsCtrl.openUploadForm()">➕ Upload Layer</button>
-            </div>
-            <div id="kml-upload-form" class="tenant-panel" style="display: none; background: #e3f2fd; border-color: var(--b); margin-bottom: 20px; padding: 20px;">
-                <h3 style="margin-top:0; color: var(--b); font-size: 14px; text-transform: uppercase;">New Map Layer</h3>
-                <div class="form-grid" style="grid-template-columns: 2fr 1fr 1fr;">
-                    <div><label class="section-label" style="margin-top:0;">Layer Name</label><input type="text" id="new-kml-label" class="std-input" placeholder="e.g., Sub-stations"></div>
-                    <div><label class="section-label" style="margin-top:0;">Color</label><input type="color" id="new-kml-color" class="std-input" value="#e74c3c" style="padding: 5px; height: 48px;"></div>
-                    <div><label class="section-label" style="margin-top:0;">Icon</label>
-                        <select id="new-kml-icon" class="std-input"><option value="📍">📍 Pin</option><option value="⚡">⚡ Electric</option><option value="🛣️">🛣️ Road</option><option value="🌉">🌉 Bridge</option><option value="🏢">🏢 Building</option><option value="🌳">🌳 Park</option></select>
+        <div id="tools-main-menu">
+            <div class="tenant-panel" style="margin-bottom:20px;">
+                <h2 style="margin-top:0; color:var(--b); text-transform:uppercase;">Map Engine Management</h2>
+                <p style="font-size:13px; color:#666;">Manage custom KML layers and visual overlays for your field agents and dispatchers.</p>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
+                    <div style="background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                        <div style="font-size:40px; margin-bottom:10px;">🗺️</div>
+                        <h3 style="margin:0 0 10px 0; color:var(--b);">Custom KML Manager</h3>
+                        <p style="font-size:12px; color:#666; margin-bottom:15px;">Upload and manage raw KML map files.</p>
+                        <button class="std-btn blue" onclick="ToolsCtrl.switchView('kml-manager')">Open Manager</button>
+                    </div>
+                    
+                    <div style="background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                        <div style="font-size:40px; margin-bottom:10px;">📑</div>
+                        <h3 style="margin:0 0 10px 0; color:var(--b);">Inventory to KML</h3>
+                        <p style="font-size:12px; color:#666; margin-bottom:15px;">Convert a CSV address list to a map layer.</p>
+                        <button class="std-btn yellow" onclick="window.open('excel-converter.html', '_blank')">Launch Tool</button>
+                    </div>
+                    
+                    <div style="background:#fff; border:1px solid #ddd; padding:20px; border-radius:8px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                        <div style="font-size:40px; margin-bottom:10px;">✏️</div>
+                        <h3 style="margin:0 0 10px 0; color:var(--b);">Manual Overlay Maker</h3>
+                        <p style="font-size:12px; color:#666; margin-bottom:15px;">Draw custom zones or points on a map.</p>
+                        <button class="std-btn green" onclick="window.open('overlay-maker.html', '_blank')">Launch Tool</button>
                     </div>
                 </div>
-                <input type="file" id="kml-file-input" accept=".kml" style="display:none;" onchange="ToolsCtrl.handleFileSelect(this)">
-                <div style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
-                    <button class="std-btn yellow" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('kml-file-input').click()">📁 Select .KML File</button>
-                    <span id="kml-file-name" style="font-size: 12px; color: #666; font-style: italic;">No file selected</span>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
-                    <button class="std-btn blue" style="width: auto; padding: 10px 30px;" onclick="ToolsCtrl.processUpload()">Save Layer</button>
-                    <button class="std-btn red" style="width: auto; padding: 10px 30px;" onclick="ToolsCtrl.closeUploadForm()">Cancel</button>
-                </div>
             </div>
-            <div class="tenant-panel" style="padding: 0; overflow: hidden; background: transparent; border: none;">
+        </div>
+
+        <div id="tools-kml-manager" style="display:none;">
+            <div class="tenant-panel">
+                <div style="display:flex; justify-content:space-between; border-bottom: 2px dashed #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button class="std-btn gray" style="width:auto; padding:8px 15px; font-size:12px; margin:0;" onclick="ToolsCtrl.switchView('main-menu')">⬅ Back</button>
+                        <h3 style="margin:0; color: var(--b);">Custom Map Layers</h3>
+                    </div>
+                    <button class="std-btn blue" style="width:auto; padding:10px 20px;" onclick="ToolsCtrl.openUploadForm()">➕ Upload New Layer</button>
+                </div>
+                
+                <div id="kml-upload-form" style="display:none; background:#e3f2fd; border:2px solid var(--b); border-radius:8px; padding:20px; margin-bottom:20px;">
+                    <h4 style="margin-top:0; color:var(--b);">Upload KML File</h4>
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div>
+                            <label class="section-label" style="margin-top:0;">1. Select File</label>
+                            <input type="file" id="kml-file-input" accept=".kml" style="display:none;" onchange="ToolsCtrl.handleFileSelect(this)">
+                            <button class="std-btn gray" onclick="document.getElementById('kml-file-input').click()">Browse...</button>
+                            <div id="kml-file-name" style="font-size:11px; margin-top:5px; color:#555;">No file selected</div>
+                        </div>
+                        <div>
+                            <label class="section-label" style="margin-top:0;">2. Display Label</label>
+                            <input type="text" id="new-kml-label" class="std-input" placeholder="e.g. Substation Network">
+                        </div>
+                        <div>
+                            <label class="section-label" style="margin-top:0;">3. Base Color</label>
+                            <input type="color" id="new-kml-color" class="std-input" value="#9b59b6" style="padding:2px; height:40px;">
+                        </div>
+                        <div>
+                            <label class="section-label" style="margin-top:0;">4. Display Icon</label>
+                            <select id="new-kml-icon" class="std-input">
+                                <option value="📍">📍 Default Pin</option>
+                                <option value="⚡">⚡ Power/Electric</option>
+                                <option value="🛣️">🛣️ Road/Transit</option>
+                                <option value="🌉">🌉 Bridge</option>
+                                <option value="🏢">🏢 Building</option>
+                                <option value="🌳">🌳 Park</option>
+                                <option value="🛑">🛑 Alert</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px; border-top:1px dashed #ccc; padding-top:15px;">
+                        <button class="std-btn red" style="width:auto; padding:8px 15px;" onclick="ToolsCtrl.closeUploadForm()">Cancel</button>
+                        <button class="std-btn green" style="width:auto; padding:8px 25px;" onclick="ToolsCtrl.processUpload()">Save Layer</button>
+                    </div>
+                </div>
+
                 <div id="kml-list-render"></div>
             </div>
         </div>
+
     </div>
-    <script src="app.js?v=1.0.1"></script>
+    <script src="app.js?v=1.1.21"></script>
 </body>
 </html>
